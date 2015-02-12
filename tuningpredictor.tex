@@ -1,145 +1,36 @@
-% THIS IS SIGPROC-SP.TEX - VERSION 3.1
-% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
-% APRIL 2009
-%
-% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
-% LaTeX2e document class file for Conference Proceedings submissions.
-% ----------------------------------------------------------------------------------------------------------------
-% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
-%       1) The Permission Statement
-%       2) The Conference (location) Info information
-%       3) The Copyright Line with ACM data
-%       4) Page numbering
-% ---------------------------------------------------------------------------------------------------------------
-% It is an example which *does* use the .bib file (from which the .bbl file
-% is produced).
-% REMEMBER HOWEVER: After having produced the .bbl file,
-% and prior to final submission,
-% you need to 'insert'  your .bbl file into your source .tex file so as to provide
-% ONE 'self-contained' source file.
-%
-% Questions regarding SIGS should be sent to
-% Adrienne Griscti ---> griscti@acm.org
-%
-% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
-% Gerald Murray ---> murray@hq.acm.org
-%
-% For tracking purposes - this is V3.1SP - APRIL 2009
+
 
 \documentclass{acm_proc_article-sp}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{picture}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\quart}[3]{\begin{picture}(100,6)%1
+{\color{black}\put(#3,3){\circle*{4}}\put(#1,3){\line(1,0){#2}}}\end{picture}}
+
 
 \begin{document}
-
-\title{Tuning Learners before Predicitting: New Reflection in Defect Prediction }
-
-
-%
-% You need the command \numberofauthors to handle the 'placement
-% and alignment' of the authors beneath the title.
-%
-% For aesthetic reasons, we recommend 'three authors at a time'
-% i.e. three 'name/affiliation blocks' be placed beneath the title.
-%
-% NOTE: You are NOT restricted in how many 'rows' of
-% "name/affiliations" may appear. We just ask that you restrict
-% the number of 'columns' to three.
-%
-% Because of the available 'opening page real-estate'
-% we ask you to refrain from putting more than six authors
-% (two rows with three columns) beneath the article title.
-% More than six makes the first-page appear very cluttered indeed.
-%
-% Use the \alignauthor commands to handle the names
-% and affiliations for an 'aesthetic maximum' of six authors.
-% Add names, affiliations, addresses for
-% the seventh etc. author(s) as the argument for the
-% \additionalauthors command.
-% These 'additional authors' will be output/set for you
-% without further effort on your part as the last section in
-% the body of your article BEFORE References or any Appendices.
-
-%\numberofauthors{8} %  in this sample file, there are a *total*
-% of EIGHT authors. SIX appear on the 'first-page' (for formatting
-% reasons) and the remaining two appear in the \additionalauthors section.
-%
-\author{ A, B, C
-% You can go ahead and credit any number of authors here,
-% e.g. one 'row of three' or two rows (consisting of one row of three
-% and a second row of one, two or three).
-%
-% The command \alignauthor (no curly braces needed) should
-% precede each author name, affiliation/snail-mail address and
-% e-mail address. Additionally, tag each line of
-% affiliation/address with \affaddr, and tag the
-% e-mail address with \email.
-%
-% 1st. author
-%\alignauthor
-%Ben Trovato\titlenote{Dr.~Trovato insisted his name be first.}\\
-%       \affaddr{Institute for Clarity in Documentation}\\
-%       \affaddr{1932 Wallamaloo Lane}\\
-%       \affaddr{Wallamaloo, New Zealand}\\
-%       \email{trovato@corporation.com}
-%% 2nd. author
-%\alignauthor
-%G.K.M. Tobin\titlenote{The secretary disavows
-%any knowledge of this author's actions.}\\
-%       \affaddr{Institute for Clarity in Documentation}\\
-%       \affaddr{P.O. Box 1212}\\
-%       \affaddr{Dublin, Ohio 43017-6221}\\
-%       \email{webmaster@marysville-ohio.com}
-%% 3rd. author
-%\alignauthor Lars Th{\o}rv{\"a}ld\titlenote{This author is the
-%one who did all the really hard work.}\\
-%       \affaddr{The Th{\o}rv{\"a}ld Group}\\
-%       \affaddr{1 Th{\o}rv{\"a}ld Circle}\\
-%       \affaddr{Hekla, Iceland}\\
-%       \email{larst@affiliation.org}
-%\and  % use '\and' if you need 'another row' of author names
-%% 4th. author
-%\alignauthor Lawrence P. Leipuner\\
-%       \affaddr{Brookhaven Laboratories}\\
-%       \affaddr{Brookhaven National Lab}\\
-%       \affaddr{P.O. Box 5000}\\
-%       \email{lleipuner@researchlabs.org}
-%% 5th. author
-%\alignauthor Sean Fogarty\\
-%       \affaddr{NASA Ames Research Center}\\
-%       \affaddr{Moffett Field}\\
-%       \affaddr{California 94035}\\
-%       \email{fogartys@amesres.org}
-%% 6th. author
-%\alignauthor Charles Palmer\\
-%       \affaddr{Palmer Research Laboratories}\\
-%       \affaddr{8600 Datapoint Drive}\\
-%       \affaddr{San Antonio, Texas 78229}\\
-%       \email{cpalmer@prl.com}
-%}
-% There's nothing stopping you putting the seventh, eighth, etc.
-% author on the opening page (as the 'third row') but we ask,
-% for aesthetic reasons that you place these 'additional authors'
-% in the \additional authors block, viz.
-%\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
-%email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
-%(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
-%\date{30 July 1999}
-% Just remember to make sure that the TOTAL number of authors
-% is the number that will appear on the first page PLUS the
-% number that will appear in the \additionalauthors section.
-}
+\title{Tuning Learners before Applying: New Reflection in Defect Prediction }
+\author{ A, B, C}
 \maketitle
 \begin{abstract}
 Data mining techniques have been widely applied to software defect prediction with various 
 empirical data sets. Those proposed leaners are always evaluated against the state of the art 
 predictors by performing statistical analysis. Undoubtedly, given the bias from data sets and 
 accuracy indicators, the newer predictors outperform counterparts in selected experimental 
-settings. However,  most of data mining algorithm based predictors (e.g. CART, random forest, 
+settings. However,  most of data mining algorithm based predictors (e.g. CART, random 
+forest, 
 neural networks, SVM) have built-in {\it magic} parameters, like the number of trees in random 
 forest algorithm. the impact of internal parameters in those methods have been neglected 
 during evaluation. In this paper, we investigate this impact by tuning parameters in defect 
 predictors with search-based software engineering algorithm. Specifically, we used differential 
 evolution to tune the CART and a new predictor based on WHERE algorithm with local data, 
-and then predictors with optimal parameters obtained from tuning preocess will be applied to 
+and then predictors with optimal parameters obtained from tuning process will be applied to 
 predict defects. By comparing the performance of predictors with and without tuning process,  
 we observe that tuning improves the predictors' performance and predictors woking with 
 different data sets need different parameters. Our results also suggest that we should not use 
@@ -157,8 +48,8 @@ combined with any predictor with built-in parameters.
 
 \terms{Experimentation, Algorithm}
 
-\keywords{Defect prediction, Data Mining, Tuning Parameters, CART, WHERE} % NOT 
-required for Proceedings
+\keywords{Defect prediction, Data Mining, Tuning Parameters, CART, WHERE} 
+% NOT required for Proceedings
 
 \section{Introduction}
 
@@ -166,9 +57,49 @@ Software has becoming a large and complex system and delivering reliable and qua
 software is imperative for development teams. Empirical study shows that the longer the 
 defects exist in software systems, the more the cost of time and money it will take to fix it 
 \textbf{ [need a ref]}. Therefore, project managers and software programers strive to find 
-defects in their system as early as possible. Defect prediction has been investigated extensively in industrial and academia during the past two decades. As an important research field, building data miners  \cite{lessmann2008benchmarking, mccabe1976complexity, menzies2007data, menzies2010defect, jiang2008can, menzies2011local, song2011general} over static code features of software system has been demonstrated to be a way to predict which models are more likely to contain defects.
+defects in their system as early as possible. Defect prediction has been investigated 
+extensively in industrial and academia during the past two decades. As an important research 
+field, building data miners  \cite{lessmann2008benchmarking, mccabe1976complexity, 
+menzies2007data, menzies2010defect, jiang2008can, menzies2011local, song2011general} 
+over static code features of software system has been demonstrated to be a way to predict 
+which models are more likely to contain defects.
 
-Classification is an important approach to predict whether some modules in the projects are defective or non-defective. The general idea is to train the learners by using parts of data sets(e.g. ant 1.3, 1.4 in PROMISE\footnote{http://openscience.us/repo/}) and predict with remaining ones(ant 1.5, 1.6 and 1.7). Many types of defect predictors have been proposed based an different data mining classifier, including 
+Classification is an important approach to predict whether some modules in the projects are 
+defective or non-defective. The general idea is to train the learners by using parts of data 
+sets(e.g. ant 1.3, 1.4 in PROMISE\footnote{http://openscience.us/repo/}) and predict with 
+remaining ones(ant 1.5, 1.6 and 1.7). Many types of defect predictors have been proposed 
+based an different data mining classifiers, including CART, Random Forest 
+\cite{guo2004robust},  Naive Bayes\cite{menzies2007data},Logistic Regression 
+\cite{khoshgoftaar1999logistic}. During the past years, authors claimed that their new 
+defective learner outperformed others according to their experiment and statistical analysis. 
+To evalute those learners objectively in terms of accuracy, Lessmann et al
+\cite{lessmann2008benchmarking} carried out a study to compare 22 classifiers over 10 public 
+domain data sets from the NASA Metrics Data repository. By using Nemenyi's post hoc test 
+with $\alpha = 0.05$, they concluded that the predictive accuracy of most learners didn't differ 
+significantly in terms of the area under the receiver operating characteristics curve(AUC). 
+Furthermore, according to the fig.2 in \cite{lessmann2008benchmarking}, Random Forest is 
+significantly better than CART. Lessmann's paper motivates us to investigate whether tuning 
+those CART's parameters by search-based software engineering method can improve the 
+performance. Even though Lessmann considered unpruned tree and pruned tree, They didn't 
+consider other possible parameters in CART which would have impact on the structure of 
+trees, like the depth of the tree, the maximum and minimum number of leafs of the tree.
+
+Software metrics are the core of all the defective prediction model. Many types of metics
+are used to build models, like process metrics, McCabe and Halsted metrics  and CK metrics.
+By building prediction modes across 85 releases of 12 open source projects, Rahman et al
+\cite{rahman2013how}  concluded that code metrics are generally less useful than process
+metrics for prediction. And also the code metrics don't change much from release to release
+and lead to stagnation in the prediction model. In \cite{Radjenovi?20131397}, Radjenovi? et al
+\cite{Radjenovi?20131397} reviewed 106 papers regarding software prediction metrics. They found
+that CK objected-oriented and process metrics have been reported to be more successful in
+finding defects compared to traditional size and complexity metrics. Moreover, not all the CK
+metrics perform well equally. The best metrics from CK are CBO, WMC and RFC based on their 
+observation. It seems that the relationship between software metrics and defective prediction is
+still an open question and need to be addressed. This motivates us to see : whether the impact
+rankings of those metrics will change after tuning parameters
+is applied to model learners.
+
+
 
 What's the problem in those result?
 
@@ -179,24 +110,369 @@ briefly describe our study and  our result; observation
 structure of this paper.
 
 
-\section{Learner and Tuner}
+\section{Algorithm: Predictor and Tuner}
 
-Description of WHERE-based predictor
+In order to conduct the experiment of this paper, we need one tool that can predict defects 
+from the empirical data sets and a second tool to tune the built-in parameters associated with 
+predictor. To compare the effects of the tuning process, we have three different predictors: 
+WHERE-based Predictor, CART and Random Forest. Different Evolution(DE) as an optimizer 
+is used as a tuner in this paper.
 
-brief description of CART, Randforest (????)
+We choose CART and Random Forest as a predictor in this paper is motivated by 
+\cite{lessmann2008benchmarking}, where the performance of both tools as predictors are 
+significantly different based on authors' experiment as mentioned before. We'd like to 
+investigate whether tuning can change such conclusion. WHERE-based Predictor is a new 
+defect predictor based on WHERE\cite{menzies2013local} algorithm. A comparison with 
+standard predictor like CART and Random Forest will better evaluate and judge the 
+performance such new predictor. As for the tuner, there're many heuristic optimization 
+algorithms in wild. However, DE is a good but maybe not the best candidate for the tuning 
+process considering different performance measurements. To determine which optimizer is 
+fitable and results in better performance is beyond this work scope. We leave it to future 
+works. The rest of this section will describe each tool applied in this work.
+
+\subsection{WHERE-based Learner}
+\textbf{WHERE-based Learner} is composed of WHERE clustering algorithm and CART 
+decision tree algorithm. The key idea of WHERE-based learner is that  instead of training the 
+CART decision tree based on the class labels associated with each training sample, it's using 
+CART to build decision trees based on the cluster labels, which are generated by the WHERE 
+clustering algorithm.
+ 
+ 
+% Given N instances, instead of building decision tree directly with CART, we use WHERE to 
+%cluster instances. 
+WHERE is a fast clustering algorithm designed by {\it menzies} for finding software artifacts 
+with similar attributes. It clusters data on dimensions synthesized along the axis of greatest 
+variability in the data. The way WHERE used to find such dimension is a linear-time heuristic 
+called ``FASTMAP" proposed by Faloutsos \& Lin\cite{faloutsos1995fastmap}. ``FASTMAP" 
+randomly picks one instance Z; find the instance {\it east} X that's furthest away form Z; find 
+the instance {\it west} Y that's furthest away from {\it east} X. Next, project all the remaining 
+points onto the line drawn between X and Y. Then choose the median point as the split and 
+recursively divide all the instances into {\it west} and {\it east} clusters until the number of 
+instances within each cluster is less than specific minimum size. The representation of the 
+clustering result is a tree, we call it Where-clustering tree. Such tree will be pruned if applicable 
+in some cases. Finally, cluster labels  will be assigned to instances in each of those 
+clusters(leaves). 
 
 
-Description of DE
+Then based on the attributes and the cluster labels in each instances,  we build a 
+decision tree based on CART algorithm. In each leaf of the tree, there're several instances 
+falling in. This will be the model trained for defect prediction. During testing process, a new 
+instance comes in and traverses the tree according to 
+values of the its attributes. If the instance could reach one leaf of the tree, the predicted value 
+of this instance will be the mean  of all the training data values associated with this leaf. 
+Otherwise if stops at intermediate nodes of tree, the predicted value will be the mean of the all 
+the training data value below this node. After estimating all the number of defectives in the test 
+data, whether each instance contains defectives will be determined by comparing with a threshold value. If the predicted value is greater than threshold, the Where-based learner will predict this instance as defective otherwise non-defective.
+
+%\begin{algorithm}
+%	\caption{Pesudocode for WHERE Algorithm }
+%	\label{alg:WHERE}
+%		\begin{algorithmic}[1]
+%			\Require $data$
+%			\Ensure $tree$
+%		\Function {Fastmap}{$ data$}
+%			\State $one \gets$ any$(data)$
+%			\State $west \gets$ furthest$(data, one)$
+%			\State $east \gets$ furthest$(data, west)$
+%			\State $c \gets$ distance($west, east$)
+%		\EndFunction
+%	 \end{algorithmic}            
+%\end{algorithm}
+
+\subsection{CART}
+\textbf{CART} is an {\em iterative dichotomization} algorithm
+that finds the attribute that most divides the data such that
+the variance of the goal variable in each division is
+minimized\cite{breiman84}.
+The algorithm then recurses on each division.
+Finally, the cost data in the leaf divisions
+is averaged to generate the estimate.
+
+\subsection{Random Forests}
+
+Breiman's website describes \textbf{Random Forests} as
+follows\cite{brieman00}. "Random Forests grows many classification
+trees. To classify a new object from an input vector, put the input
+vector down each of the trees in the forest. Each tree gives a
+classification, and we say the tree "votes" for that class. The forest
+chooses the classification having the most votes (over all the trees
+in the forest). Each tree is grown as follows.
+If the number of cases in the training set is N, sample N cases at
+random - but with replacement, from the original data. This sample
+will be the training set for growing the tree.
+Also, if there are M input variables, a number m$<<$M is specified such
+that at each node, m variables are selected at random out of the M and
+the best split on these m is used to split the node. The value of m is
+held constant during the forest growing.
+Finally, each tree is grown to the largest extent possible (there is
+no pruning)."
 
 
+
+
+%Suppose the cordinates of X and Y are $(0,0)$ and $(0,c)$, which are east and west 
+%instances within N samples. From the Pythegoras and cosine rule, each instance is projected 
+%at the point(x,y)
+%
+%\begin{equation}
+%	\begin{split}
+%	x &= (a^2 + c^2 - b^2)/(2c) \\
+%	y &= \sqrt{a^2 - x^2} 
+%	\end{split}
+%\end{equation}
+
+
+
+
+\subsection{Differential Evolution Algorithm}
+Differential Evolution (DE)\cite{storn1997differential} is a stochastic search algorithm that 
+optimizes a problem by iteratively trying to improve a  population of candidate solutions with 
+regard to a given quality measurement. Such method makes no assumptions about the 
+problem being optimized and has already been used as a parameter tuner
+\cite{omran2005differential, chiha2012tuning}.
+
+DE starts with creating a population of candidate solutions and then generates new 
+candidates based on $New = X+f*(Y-Z)$, where $X$, $Y$ and $Z$ are randomly selected 
+solutions from the current frontier and $f$ is a crossover factor. The newly generated solution 
+will be added into the next generation of solutions if dominating previous old points in the 
+frontier. To avoid meaning less iteration, early termination strategy is applied that is at the 
+beginning, assign a value to the $life$ parameter, it would be reduced by one each time   
+when the new generation of candidate solutions does not improve in terms of quality 
+measurement. The DE will stop when the $life$ equals to 0.
+
+Algorithm \ref{alg:DE} is a list of pseudocode of DE with early termination for maximizing a 
+score function, where $np$ is the number of population in each generation, $f$ is the 
+crossover factor as mentioned, $cf$ is the probability for crossover operation to generate new 
+candidate, $life$ is to control termination.
+
+\begin{algorithm}
+	\caption{Pesudocode for DE with Early Termination}
+	\label{alg:DE}
+		\begin{algorithmic}[1]
+			\Require $np$, $f$, $cf$, $life$
+			\Ensure $S_{best}$
+		  \State $Population  \gets $ InitializePopulation($np$)
+		  \State $S_{best} \gets $GetBestSolution($Population $)
+		  \While{$life > 0$}
+			\State $NewGeneration \gets \emptyset$
+			\For{$i=0 \to n-1$}
+				\State $S_i \gets$ GenNew($Population [i], Population , cf, f)$
+				\If {Score($S_i$) >Score($Population [i]$)}
+				 	\State $NewGeneration \gets S_i$
+				\Else
+					\State $NewGeneration \gets Population [i]$
+				\EndIf
+			\EndFor
+			\State $Population  \gets NewGeneration$
+			\If{$\neg$ Improve($Population $)}
+				\State $life -=1$
+			\EndIf
+			\State $S_{best} \gets$ GetBestSolution($Population $)
+		  \EndWhile
+		 \State \Return $S_{best}$
+                 \end{algorithmic}            
+\end{algorithm}
+
+%\begin{algorithm}
+%\begin{algorithmic}[1]
+% \KwData{this text}
+% \KwResult{how to write algorithm with \LaTeX2e }
+% initialization\;
+% \While{not at end of this document}{
+%  read current\;
+%  \eIf{understand}{
+%   go to next section\;
+%   current section becomes this one\;
+%   }{
+%   go back to the beginning of current section\;
+%  }
+% }
+% \caption{How to write algorithms}
+% \end{algorithmic}
+%\end{algorithm}
 
 \section{Experiment}
 
-Description of Data set
+\subsection{Data Set}
 
-Experiment 1: naive where vs tuned where
+The data used in this study is from PROMISE repository. Ten software defect predicition data 
+sets are analyzed. They're {\it ant}, {\it camel}, {\it ivy}, {\it jedit}, {\it log4j}, {\it lucene}, {\it 
+synapse}, {\it velocity}, {\it xalan} and {\it xerces}. Each of these data sets is composed of 
+several software modules with number of defects and code attributes. For more detailed 
+description of code attributes and the original data sets, please refer to  http://openscience.us/
+repo/
 
-Experiment 2: naive cart vs tuned cart vs random forest
+\subsection{Experiment Design}
+
+The experiment aims at investigate whether tuning helps learners improve performance in 
+terms of accuracy measurement. We choose compare WHERE-based learner with and 
+without tuning parameters and two {\it significantly different} learners Random Forest and 
+CART according to \cite{lessmann2008benchmarking}. As mentioned above, we'd like to see 
+whether tuning will help change the rank of CART and make it comparable with Random 
+Forest. 
+
+To evaluate accuracy performance of learners, several measurements are proposed, like 
+probability of  detection({\it pd}) and probability of false alarm ({\it pf})\cite{menzies2007data}, 
+the area under the receiver operating characteristics curve ({\it AUC})
+\cite{lessmann2008benchmarking}, and precision\cite{zhang2007comments}. In this work, we 
+expect learners should identify as many defective modules as possible while avoiding false 
+alarm. Therefore, learners are evaluated by both of {\it pd} and {\it pf} simaltanieously. A single 
+measure, G-measure, defined as the harmonic mean of {\it pd} and $1-{\it pf}$  is used. The 
+G-measure value is between 0 and 1. The higher, the better.
+\begin{equation}
+G = \frac{2*(1-pf)*pd}{1-pf+pd}
+\end{equation}
+
+In this experiment, we use three different portions of one project data set for training, tuning 
+and testing process. In contrast to hold out way used in \cite{lessmann2008benchmarking, 
+menzies2007data}, we separate the data sets in order. Since learners are designed to predict 
+defects in future projects,  any randomly data set selection without taking into the time series 
+will not sufficient to evaluate the performance of predicting future. To the most, that is good to 
+evaluate the accuracy of classification but not predicting future. Since we have 10 different 
+project data, each of which contains least 3 evolutionary versions. We use the following policy 
+to select the data: in each project, we only use the last three data files for experiment. 
+Specifically, the $nth$,  $(n-1)th$, $(n-2)th$ versions of project data are selected for testing, 
+tuning and training learners, respectively. This will make sure that we don't use the future 
+project data to train learners and predict previous project.
+
+To investigates the impacts of parameters on learners, we use DE as the tuner and compare the G-measure 
+values of Where-based learner with and without tuning, CART with and without tuning and Random 
+Forests. Since the tuning time for Random Forests is very long, hopefully other researchers design
+new heuristics to speed up the tuning process for Random Forests.  For the time being, even though
+we don't tune Random Forests, if tuning help CART outperform Random Forests or improve itself performance ,
+we still could conclude that tuning is helpful and necessary when comparing learners.
+
+Besides the Where-based learner implemented by ourself,  we use the CART and Random Forest modules 
+from scikit-learn \cite{scikit-learn} for this experiment. The parameters associated with different learners are listed in Fig.\ref{fig:parameters}. (\textbf{NEED to elaborate that there're different versions of CART, what's the point to do this experiment}). For each data set, run CART, naive Where-based learner and Random Forests with corresponding default values. Then using DE to tune corresponding parameters for CART and Where-based Learner,  and run them again with the optimal parameters from tuning process to test the performance. 
+This study ranks learners using the Scott-Knott procedure recommended by Mittas \& Angelis in their 2013
+IEEE TSE paper~\cite{mittas2013ranking}.  This method sorts a list of $l$ treatments with $ls$ measurements by their median score. It then splits $l$ into sub-lists $m,n$ in order to maximize the expected value of differences  in the observed performances before and after divisions. 
+
+
+
+
+
+
+\begin{figure*}[t!]
+\scriptsize
+  \centering
+	\begin{tabular}{|c|c|c|c|l|}
+	\hline
+	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
+\multicolumn{1}{c|}{Description} \\ \hline
+	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
+	& threshold & 0.5 &[0,1]& The value to determine defective or not .\\ \cline{2-5} 
+	& infogain & 0.33 &[0,1]& The percentage of features to consider  for the best 
+split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
+one is for clustering and the second one is building prediction model. we explicitly call Where-
+clustering tree and CART tree, respectively}. \\ \cline{2-5} 
+	 & min\_sample\_size & 4& [1,10]& The minimum number of samples required to be a leaf for 
+CART tree. \\ \cline{2-5} 
+	 & min\_Size & 0.5 &[0,1]& \begin{tabular}[c]{@{}l@{}}The value to determine the minimum 
+number of samples to be a Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
+\end{tabular} \\ \cline{2-5} 
+	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
+clustering tree. \\ \cline{2-5} 
+	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
+	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5} 
+	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ 
+\hline
+	\multirow{5}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ 
+\cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+	 & max\_depth & None &[1,50]& The maximum depth of the tree. \\ \cline{2-5} 
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_smaples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \hline  
+       \multirow{6}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & - & The value to determine defective or not. \\ 
+\cline{2-5} 
+	 & max\_feature & None &-& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+	 & max\_depth & None &-& The maximum depth of the tree. \\ \cline{2-5} 
+	 & min\_sample\_split & 2 &-& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_smaples\_leaf & 1 & -&The minimum number of samples required to be at a leaf 
+node. \\ \cline{2-5} 
+	 &  n\_estimators & 100 & -&The number of trees in the forest.\\ \hline
+
+	\end{tabular}
+    \caption {List of parameters to be tuned in Where-based learner and CART in scikit-learn.}
+\label{fig:parameters}
+\end{figure*}
+
+
+
+
+\section{Result}
+\begin{figure}[!th]
+
+{\scriptsize
+{\scriptsize \begin{tabular}{l@{~~~}l@{~~~}l@{~~~}r@{~~~}r@{~~~}c}
+\arrayrulecolor{darkgray}
+\rowcolor[gray]{0.75} Dataset     & Methods  & median &IQR&  \\ 
+\rowcolor[gray]{.9}ant & Naive\_WHERE & 0 & 0 & \quart{0.0}{0}{0.0}\\
+ & Naive\_Cart & 51 & 2 & \quart{51.0}{2}{52.0}\\
+ & Naive\_RFst & 53 & 1 & \quart{52.0}{1}{53.0}\\
+ & Tuned\_Cart & 63 & 0 & \quart{63.0}{0}{63.0}\\
+ & Tuned\_WHERE & 72 & 0 & \quart{72.0}{0}{72.0}\\
+\rowcolor[gray]{.9}camel & Naive\_WHERE & 45 & 0 & \quart{45.0}{0}{45.0}\\
+ & Naive\_Cart & 54 & 2 & \quart{54.0}{2}{54.0}\\
+ & Tuned\_WHERE & 56 & 0 & \quart{56.0}{0}{56.0}\\
+ & Tuned\_Cart & 56 & 2 & \quart{56.0}{2}{57.0}\\
+ & Naive\_RFst & 56 & 1 & \quart{57.0}{1}{57.0}\\
+\rowcolor[gray]{.9}ivy & Naive\_RFst & 50 & 1 & \quart{50.0}{1}{50.0}\\
+ & Naive\_WHERE & 54 & 0 & \quart{54.0}{0}{54.0}\\
+ & Naive\_Cart & 57 & 1 & \quart{58.0}{1}{58.0}\\
+ & Tuned\_Cart & 68 & 0 & \quart{68.0}{0}{68.0}\\
+ & Tuned\_WHERE & 70 & 0 & \quart{70.0}{0}{70.0}\\
+\rowcolor[gray]{.9} jedit & Naive\_WHERE & 49 & 0 & \quart{49.0}{0}{49.0}\\
+ & Naive\_Cart & 55 & 15 & \quart{55.0}{15}{55.0}\\
+ & Tuned\_WHERE & 62 & 0 & \quart{62.0}{0}{62.0}\\
+ & Tuned\_Cart & 65 & 3 & \quart{65.0}{3}{66.0}\\
+ & Naive\_RFst & 74 & 2 & \quart{73.0}{2}{74.0}\\
+ \rowcolor[gray]{.9} log4j & Naive\_Cart & 48 & 1 & \quart{47.0}{1}{48.0}\\
+ & Tuned\_WHERE & 50 & 0 & \quart{50.0}{0}{50.0}\\
+ & Naive\_WHERE & 53 & 0 & \quart{53.0}{0}{53.0}\\
+ & Tuned\_Cart & 55 & 4 & \quart{55.0}{4}{57.0}\\
+ & Naive\_RFst & 56 & 0 & \quart{57.0}{0}{57.0}\\
+\rowcolor[gray]{.9}lucene & Naive\_WHERE & 37 & 0 & \quart{37.0}{0}{37.0}\\
+ & Naive\_RFst & 56 & 1 & \quart{56.0}{1}{56.0}\\
+ & Naive\_Cart & 57 & 1 & \quart{57.0}{1}{58.0}\\
+ & Tuned\_Cart & 57 & 4 & \quart{57.0}{4}{58.0}\\
+ & Tuned\_WHERE & 61 & 0 & \quart{61.0}{0}{61.0}\\
+\rowcolor[gray]{.9}synapse & Naive\_WHERE & 0 & 0 & \quart{0.0}{0}{0.0}\\
+ & Naive\_Cart & 42 & 2 & \quart{41.0}{2}{42.0}\\
+ & Naive\_RFst & 43 & 4 & \quart{43.0}{4}{44.0}\\
+ & Tuned\_Cart & 49 & 11 & \quart{49.0}{11}{49.0}\\
+ & Tuned\_WHERE & 64 & 0 & \quart{64.0}{0}{64.0}\\
+\rowcolor[gray]{.9}velocity & Naive\_WHERE & 1 & 0 & \quart{1.0}{0}{1.0}\\
+ & Naive\_RFst & 9 & 0 & \quart{9.0}{0}{9.0}\\
+ & Naive\_Cart & 27 & 2 & \quart{26.0}{2}{27.0}\\
+ & Tuned\_Cart & 49 & 5 & \quart{46.0}{5}{50.0}\\
+ & Tuned\_WHERE & 57 & 0 & \quart{58.0}{0}{58.0}\\
+\rowcolor[gray]{.9}xalan & Tuned\_Cart & 51 & 4 & \quart{49.0}{4}{51.0}\\
+ & Tuned\_WHERE & 56 & 0 & \quart{57.0}{0}{57.0}\\
+ & Naive\_Cart & 66 & 0 & \quart{66.0}{0}{66.0}\\
+ & Naive\_WHERE & 69 & 0 & \quart{69.0}{0}{69.0}\\
+ & Naive\_RFst & 73 & 1 & \quart{73.0}{1}{73.0}\\
+\rowcolor[gray]{.9}xerces & Naive\_RFst & 18 & 1 & \quart{18.0}{1}{18.0}\\
+ & Naive\_Cart & 19 & 1 & \quart{18.0}{1}{19.0}\\
+ & Tuned\_Cart & 25 & 7 & \quart{24.0}{7}{26.0}\\
+ & Naive\_WHERE & 26 & 0 & \quart{26.0}{0}{26.0}\\
+ & Tuned\_WHERE & 34 & 1 & \quart{34.0}{1}{34.0}\\
+
+
+
+
+
+ \end{tabular}}
+
+}
+
+
+\caption{Results over Different Data Sets}\label{fig:g feature}
+\end{figure}
 
 \section{Discussion}
 
@@ -213,410 +489,9 @@ Defect Prediction
 Internal and external threats
 
 \section{Conclusion}
-%The \textit{proceedings} are the records of a conference.
-%ACM seeks to give these conference by-products a uniform,
-%high-quality appearance.  To do this, ACM has some rigid
-%requirements for the format of the proceedings documents: there
-%is a specified format (balanced  double columns), a specified
-%set of fonts (Arial or Helvetica and Times Roman) in
-%certain specified sizes (for instance, 9 point for body copy),
-%a specified live area (18 $\times$ 23.5 cm [7" $\times$ 9.25"]) centered on
-%the page, specified size of margins (1.9 cm [0.75"]) top, (2.54 cm [1"]) bottom
-%and (1.9 cm [.75"]) left and right; specified column width
-%(8.45 cm [3.33"]) and gutter size (.83 cm [.33"]).
-%
-%The good news is, with only a handful of manual
-%settings\footnote{Two of these, the {\texttt{\char'134 numberofauthors}}
-%and {\texttt{\char'134 alignauthor}} commands, you have
-%already used; another, {\texttt{\char'134 balancecolumns}}, will
-%be used in your very last run of \LaTeX\ to ensure
-%balanced column heights on the last page.}, the \LaTeX\ document
-%class file handles all of this for you.
-%
-%The remainder of this document is concerned with showing, in
-%the context of an ``actual'' document, the \LaTeX\ commands
-%specifically available for denoting the structure of a
-%proceedings paper, rather than with giving rigorous descriptions
-%or explanations of such commands.
-%
-%\section{The {\secit Body} of The Paper}
-%Typically, the body of a paper is organized
-%into a hierarchical structure, with numbered or unnumbered
-%headings for sections, subsections, sub-subsections, and even
-%smaller sections.  The command \texttt{{\char'134}section} that
-%precedes this paragraph is part of such a
-%hierarchy.\footnote{This is the second footnote.  It
-%starts a series of three footnotes that add nothing
-%informational, but just give an idea of how footnotes work
-%and look. It is a wordy one, just so you see
-%how a longish one plays out.} \LaTeX\ handles the numbering
-%and placement of these headings for you, when you use
-%the appropriate heading commands around the titles
-%of the headings.  If you want a sub-subsection or
-%smaller part to be unnumbered in your output, simply append an
-%asterisk to the command name.  Examples of both
-%numbered and unnumbered headings will appear throughout the
-%balance of this sample document.
-%
-%Because the entire article is contained in
-%the \textbf{document} environment, you can indicate the
-%start of a new paragraph with a blank line in your
-%input file; that is why this sentence forms a separate paragraph.
-%
-%\subsection{Type Changes and {\subsecit Special} Characters}
-%We have already seen several typeface changes in this sample.  You
-%can indicate italicized words or phrases in your text with
-%the command \texttt{{\char'134}textit}; emboldening with the
-%command \texttt{{\char'134}textbf}
-%and typewriter-style (for instance, for computer code) with
-%\texttt{{\char'134}texttt}.  But remember, you do not
-%have to indicate typestyle changes when such changes are
-%part of the \textit{structural} elements of your
-%article; for instance, the heading of this subsection will
-%be in a sans serif\footnote{A third footnote, here.
-%Let's make this a rather short one to
-%see how it looks.} typeface, but that is handled by the
-%document class file. Take care with the use
-%of\footnote{A fourth, and last, footnote.}
-%the curly braces in typeface changes; they mark
-%the beginning and end of
-%the text that is to be in the different typeface.
-%
-%You can use whatever symbols, accented characters, or
-%non-English characters you need anywhere in your document;
-%you can find a complete list of what is
-%available in the \textit{\LaTeX\
-%User's Guide}\cite{Lamport:LaTeX}.
-%
-%\subsection{Math Equations}
-%You may want to display math equations in three distinct styles:
-%inline, numbered or non-numbered display.  Each of
-%the three are discussed in the next sections.
-%
-%\subsubsection{Inline (In-text) Equations}
-%A formula that appears in the running text is called an
-%inline or in-text formula.  It is produced by the
-%\textbf{math} environment, which can be
-%invoked with the usual \texttt{{\char'134}begin. . .{\char'134}end}
-%construction or with the short form \texttt{\$. . .\$}. You
-%can use any of the symbols and structures,
-%from $\alpha$ to $\omega$, available in
-%\LaTeX\cite{Lamport:LaTeX}; this section will simply show a
-%few examples of in-text equations in context. Notice how
-%this equation: \begin{math}\lim_{n\rightarrow \infty}x=0\end{math},
-%set here in in-line math style, looks slightly different when
-%set in display style.  (See next section).
-%
-%\subsubsection{Display Equations}
-%A numbered display equation -- one set off by vertical space
-%from the text and centered horizontally -- is produced
-%by the \textbf{equation} environment. An unnumbered display
-%equation is produced by the \textbf{displaymath} environment.
-%
-%Again, in either environment, you can use any of the symbols
-%and structures available in \LaTeX; this section will just
-%give a couple of examples of display equations in context.
-%First, consider the equation, shown as an inline equation above:
-%\begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
-%Notice how it is formatted somewhat differently in
-%the \textbf{displaymath}
-%environment.  Now, we'll enter an unnumbered equation:
-%\begin{displaymath}\sum_{i=0}^{\infty} x + 1\end{displaymath}
-%and follow it with another numbered equation:
-%\begin{equation}\sum_{i=0}^{\infty}x_i=\int_{0}^{\pi+2} f\end{equation}
-%just to demonstrate \LaTeX's able handling of numbering.
-%
-%\subsection{Citations}
-%Citations to articles \cite{bowman:reasoning, clark:pct, braams:babel, herlihy:methodology},
-%conference
-%proceedings \cite{clark:pct} or books \cite{salas:calculus, Lamport:LaTeX} listed
-%in the Bibliography section of your
-%article will occur throughout the text of your article.
-%You should use BibTeX to automatically produce this bibliography;
-%you simply need to insert one of several citation commands with
-%a key of the item cited in the proper location in
-%the \texttt{.tex} file \cite{Lamport:LaTeX}.
-%The key is a short reference you invent to uniquely
-%identify each work; in this sample document, the key is
-%the first author's surname and a
-%word from the title.  This identifying key is included
-%with each item in the \texttt{.bib} file for your article.
-%
-%The details of the construction of the \texttt{.bib} file
-%are beyond the scope of this sample document, but more
-%information can be found in the \textit{Author's Guide},
-%and exhaustive details in the \textit{\LaTeX\ User's
-%Guide}\cite{Lamport:LaTeX}.
-%
-%This article shows only the plainest form
-%of the citation command, using \texttt{{\char'134}cite}.
-%This is what is stipulated in the SIGS style specifications.
-%No other citation format is endorsed.
-%
-%\subsection{Tables}
-%Because tables cannot be split across pages, the best
-%placement for them is typically the top of the page
-%nearest their initial cite.  To
-%ensure this proper ``floating'' placement of tables, use the
-%environment \textbf{table} to enclose the table's contents and
-%the table caption.  The contents of the table itself must go
-%in the \textbf{tabular} environment, to
-%be aligned properly in rows and columns, with the desired
-%horizontal and vertical rules.  Again, detailed instructions
-%on \textbf{tabular} material
-%is found in the \textit{\LaTeX\ User's Guide}.
-%
-%Immediately following this sentence is the point at which
-%Table 1 is included in the input file; compare the
-%placement of the table here with the table in the printed
-%dvi output of this document.
-%
-%\begin{table}
-%\centering
-%\caption{Frequency of Special Characters}
-%\begin{tabular}{|c|c|l|} \hline
-%Non-English or Math&Frequency&Comments\\ \hline
-%\O & 1 in 1,000& For Swedish names\\ \hline
-%$\pi$ & 1 in 5& Common in math\\ \hline
-%\$ & 4 in 5 & Used in business\\ \hline
-%$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
-%\hline\end{tabular}
-%\end{table}
-%
-%To set a wider table, which takes up the whole width of
-%the page's live area, use the environment
-%\textbf{table*} to enclose the table's contents and
-%the table caption.  As with a single-column table, this wide
-%table will ``float" to a location deemed more desirable.
-%Immediately following this sentence is the point at which
-%Table 2 is included in the input file; again, it is
-%instructive to compare the placement of the
-%table here with the table in the printed dvi
-%output of this document.
-%
-%
-%\begin{table*}
-%\centering
-%\caption{Some Typical Commands}
-%\begin{tabular}{|c|c|l|} \hline
-%Command&A Number&Comments\\ \hline
-%\texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
-%\texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
-%\texttt{{\char'134}table}& 300 & For tables\\ \hline
-%\texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
-%\end{table*}
-%% end the environment with {table*}, NOTE not {table}!
-%
-%\subsection{Figures}
-%Like tables, figures cannot be split across pages; the
-%best placement for them
-%is typically the top or the bottom of the page nearest
-%their initial cite.  To ensure this proper ``floating'' placement
-%of figures, use the environment
-%\textbf{figure} to enclose the figure and its caption.
-%
-%This sample document contains examples of \textbf{.eps}
-%and \textbf{.ps} files to be displayable with \LaTeX.  More
-%details on each of these is found in the \textit{Author's Guide}.
-%
-%\begin{figure}
-%\centering
-%\epsfig{file=fly.eps}
-%\caption{A sample black and white graphic (.eps format).}
-%\end{figure}
-%
-%\begin{figure}
-%\centering
-%\epsfig{file=fly.eps, height=1in, width=1in}
-%\caption{A sample black and white graphic (.eps format)
-%that has been resized with the \texttt{epsfig} command.}
-%\end{figure}
-%
-%
-%As was the case with tables, you may want a figure
-%that spans two columns.  To do this, and still to
-%ensure proper ``floating'' placement of tables, use the environment
-%\textbf{figure*} to enclose the figure and its caption.
-%
-%Note that either {\textbf{.ps}} or {\textbf{.eps}} formats are
-%used; use
-%the \texttt{{\char'134}epsfig} or \texttt{{\char'134}psfig}
-%commands as appropriate for the different file types.
-%
-%\subsection{Theorem-like Constructs}
-%Other common constructs that may occur in your article are
-%the forms for logical constructs like theorems, axioms,
-%corollaries and proofs.  There are
-%two forms, one produced by the
-%command \texttt{{\char'134}newtheorem} and the
-%other by the command \texttt{{\char'134}newdef}; perhaps
-%the clearest and easiest way to distinguish them is
-%to compare the two in the output of this sample document:
-%
-%This uses the \textbf{theorem} environment, created by
-%the\linebreak\texttt{{\char'134}newtheorem} command:
-%\newtheorem{theorem}{Theorem}
-%\begin{theorem}
-%Let $f$ be continuous on $[a,b]$.  If $G$ is
-%an antiderivative for $f$ on $[a,b]$, then
-%\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
-%\end{theorem}
-%
-%The other uses the \textbf{definition} environment, created
-%by the \texttt{{\char'134}newdef} command:
-%\newdef{definition}{Definition}
-%\begin{definition}
-%If $z$ is irrational, then by $e^z$ we mean the
-%unique number which has
-%logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
-%\end{definition}
-%
-%\begin{figure}
-%\centering
-%\psfig{file=rosette.ps, height=1in, width=1in,}
-%\caption{A sample black and white graphic (.ps format) that has
-%been resized with the \texttt{psfig} command.}
-%\end{figure}
-%
-%Two lists of constructs that use one of these
-%forms is given in the
-%\textit{Author's  Guidelines}.
-%
-%\begin{figure*}
-%\centering
-%\epsfig{file=flies.eps}
-%\caption{A sample black and white graphic (.eps format)
-%that needs to span two columns of text.}
-%\end{figure*}
-%and don't forget to end the environment with
-%{figure*}, not {figure}!
-% 
-%There is one other similar construct environment, which is
-%already set up
-%for you; i.e. you must \textit{not} use
-%a \texttt{{\char'134}newdef} command to
-%create it: the \textbf{proof} environment.  Here
-%is a example of its use:
-%\begin{proof}
-%Suppose on the contrary there exists a real number $L$ such that
-%\begin{displaymath}
-%\lim_{x\rightarrow\infty} \frac{f(x)}{g(x)} = L.
-%\end{displaymath}
-%Then
-%\begin{displaymath}
-%l=\lim_{x\rightarrow c} f(x)
-%= \lim_{x\rightarrow c}
-%\left[ g{x} \cdot \frac{f(x)}{g(x)} \right ]
-%= \lim_{x\rightarrow c} g(x) \cdot \lim_{x\rightarrow c}
-%\frac{f(x)}{g(x)} = 0\cdot L = 0,
-%\end{displaymath}
-%which contradicts our assumption that $l\neq 0$.
-%\end{proof}
-%
-%Complete rules about using these environments and using the
-%two different creation commands are in the
-%\textit{Author's Guide}; please consult it for more
-%detailed instructions.  If you need to use another construct,
-%not listed therein, which you want to have the same
-%formatting as the Theorem
-%or the Definition\cite{salas:calculus} shown above,
-%use the \texttt{{\char'134}newtheorem} or the
-%\texttt{{\char'134}newdef} command,
-%respectively, to create it.
-%
-%\subsection*{A {\secit Caveat} for the \TeX\ Expert}
-%Because you have just been given permission to
-%use the \texttt{{\char'134}newdef} command to create a
-%new form, you might think you can
-%use \TeX's \texttt{{\char'134}def} to create a
-%new command: \textit{Please refrain from doing this!}
-%Remember that your \LaTeX\ source code is primarily intended
-%to create camera-ready copy, but may be converted
-%to other forms -- e.g. HTML. If you inadvertently omit
-%some or all of the \texttt{{\char'134}def}s recompilation will
-%be, to say the least, problematic.
-%
-%\section{Conclusions}
-%This paragraph will end the body of this sample document.
-%Remember that you might still have Acknowledgments or
-%Appendices; brief samples of these
-%follow.  There is still the Bibliography to deal with; and
-%we will make a disclaimer about that here: with the exception
-%of the reference to the \LaTeX\ book, the citations in
-%this paper are to articles which have nothing to
-%do with the present subject and are used as
-%examples only.
-%%\end{document}  % This is where a 'short' article might terminate
-%
-%%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-%This section is optional; it is a location for you
-%to acknowledge grants, funding, editing assistance and
-%what have you.  In the present case, for example, the
-%authors would like to thank Gerald Murray of ACM for
-%his help in codifying this \textit{Author's Guide}
-%and the \textbf{.cls} and \textbf{.tex} files that it describes.
 
-%
-% The following two commands are all you need in the
-% initial runs of your .tex file to
-% produce the bibliography for the citations in your paper.
+\section{Acknowledgments}
+
 \bibliographystyle{unsrt}
-\bibliography{tuningpredictor}  % sigproc.bib is the name of the Bibliography in this case
-% You must have a proper ".bib" file
-%  and remember to run:
-% latex bibtex latex latex
-% to resolve all references
-%
-% ACM needs 'a single self-contained file'!
-%
-%APPENDICES are optional
-%\balancecolumns
-%\appendix
-%%Appendix A
-%\section{Headings in Appendices}
-%The rules about hierarchical headings discussed above for
-%the body of the article are different in the appendices.
-%In the \textbf{appendix} environment, the command
-%\textbf{section} is used to
-%indicate the start of each Appendix, with alphabetic order
-%designation (i.e. the first is A, the second B, etc.) and
-%a title (if you include one).  So, if you need
-%hierarchical structure
-%\textit{within} an Appendix, start with \textbf{subsection} as the
-%highest level. Here is an outline of the body of this
-%document in Appendix-appropriate form:
-%\subsection{Introduction}
-%\subsection{The Body of the Paper}
-%\subsubsection{Type Changes and  Special Characters}
-%\subsubsection{Math Equations}
-%\paragraph{Inline (In-text) Equations}
-%\paragraph{Display Equations}
-%\subsubsection{Citations}
-%\subsubsection{Tables}
-%\subsubsection{Figures}
-%\subsubsection{Theorem-like Constructs}
-%\subsubsection*{A Caveat for the \TeX\ Expert}
-%\subsection{Conclusions}
-%\subsection{Acknowledgments}
-%\subsection{Additional Authors}
-%This section is inserted by \LaTeX; you do not insert it.
-%You just add the names and information in the
-%\texttt{{\char'134}additionalauthors} command at the start
-%of the document.
-%\subsection{References}
-%Generated by bibtex from your ~.bib file.  Run latex,
-%then bibtex, then latex twice (to resolve references)
-%to create the ~.bbl file.  Insert that ~.bbl file into
-%the .tex source file and comment out
-%the command \texttt{{\char'134}thebibliography}.
-%% This next section command marks the start of
-%% Appendix B, and does not continue the present hierarchy
-%\section{More Help for the Hardy}
-%The acm\_proc\_article-sp document class file itself is chock-full of succinct
-%and helpful comments.  If you consider yourself a moderately
-%experienced to expert user of \LaTeX, you may find reading
-%it useful but please remember not to change it.
-%\balancecolumns
-% That's all folks!
+\bibliography{tuningpredictor}  
 \end{document}
