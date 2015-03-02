@@ -52,6 +52,8 @@
 
  \setlength{\floatsep}{1ex}
  \setlength{\textfloatsep}{1ex}
+ \newcommand{\subparagraph}{}
+
 \usepackage[compact,small]{titlesec}
 \DeclareMathSizes{7}{7}{7}{7} 
 \pagenumbering{arabic}
@@ -210,6 +212,15 @@ briefly describe our study and  our result; observation
 
 structure of this paper.
 
+\subsection{Implications}
+
+time for an end to era of data mining in se? moving on to a new phase of learning-as-optimization
+
+1) learning is actually an optimization tasks (e.g. see fig2 of  learners climbing the roc curve hill in http://goo.gl/x2EaAm)
+
+2) our learners are all contorted to do some tasks X (e.g. minimize expected value of entropy), then we assess them on score Y (recall). which is nuts. maybe we should build the goal predicate into the learner (e.g http://menzies.us/pdf/10which.pdf) 
+
+3) given 1 + 2, maybe the whole paradigm of optimizing param selection is wrong. maybe what we need is a library of bees buzzing around making random choices (e.g. about descritziation) which other bees use, plus their own random choices (e.g. max depth of tree learned from discretized data) which is used by other bees, plus their own random choices (e.g. business users reading the models).  the funky thing here is that it can take some time before some of the bees (the discretizers) get feedback from the community of people using their decision (the tree learners). 
 
 \section{Algorithm: Predictor and Tuner}
 
@@ -494,6 +505,7 @@ Internal and external threats
 %%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\arraystretch{1.2}
 \begin{figure*}[t!]
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
   \centering
 	\begin{tabular}{|c|c|c|c|l|}
@@ -582,7 +594,9 @@ node. \\ \cline{2-5}
 %\end{figure*}
 
 %%%%parameters for pd %%%%%%
-\begin{figure*}[!ht]
+\begin{figure*}[!t]
+
+\renewcommand{\baselinestretch}{0.7}
 \resizebox{\textwidth}{!}{
 \scriptsize
 \centering
@@ -621,7 +635,9 @@ node. \\ \cline{2-5}
 
 
 %%%%parameters for pf %%%%%%
-\begin{figure*}[!ht]
+\begin{figure*}[!t]
+
+\renewcommand{\baselinestretch}{0.7}
 \resizebox{\textwidth}{!}{
 \scriptsize
 \centering
@@ -661,6 +677,8 @@ node. \\ \cline{2-5}
 
 %%%%parameters for prec %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \resizebox{\textwidth}{!}{
 \scriptsize
 \centering
@@ -700,6 +718,8 @@ node. \\ \cline{2-5}
 
 %%%%parameters for F %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \resizebox{\textwidth}{!}{
 \scriptsize
 \centering
@@ -782,6 +802,8 @@ node. \\ \cline{2-5}
 %%%%%%%%%%%%%%%% defectives and non-defectives for each datasets%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{c c c c c c c c c c }
@@ -873,7 +895,7 @@ lcom3& & & & & $\star$& & $\star$& & & & $\star$& & $\star$& & $\star$& & & & $\
 %%%%%%%%%%%%%% pd bars%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \begin{figure*}
-\renewcommand{\baselinestretch}{0.5} 
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \begin{minipage}{0.81\linewidth}
 \begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
@@ -952,6 +974,8 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%%%%%%%%%%%%% features selection over pf%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
@@ -1054,6 +1078,7 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%%%%%%%%%%%%% features selection over precision%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!ht]
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
@@ -1088,7 +1113,7 @@ lcom3& & & & & $\star$& & $\star$& & & & & $\circ$& $\star$& & $\star$& & & & $\
 %%%%%%%%%%%%%% precision bars%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \begin{figure*}
-\renewcommand{\baselinestretch}{0.5} 
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \begin{minipage}{0.81\linewidth}
 \begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
@@ -1156,6 +1181,7 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%%%%%%%%%%%%% features selection over F%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!ht]
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
@@ -1188,7 +1214,7 @@ lcom3& & & & $\circ$& $\star$& $\circ$& $\star$& & & $\circ$& & $\circ$& $\star$
 \end{figure*}
 
 \begin{figure*}
-\renewcommand{\baselinestretch}{0.5} 
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \begin{minipage}{0.81\linewidth}
 \begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
@@ -1257,6 +1283,8 @@ All data available from http://openscience.us/repo/effort.
 %%%%%%%%%%%%%%%% features selection over G%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
@@ -1291,7 +1319,7 @@ lcom3& & & & $\circ$& $\star$& & $\star$& $\circ$& & $\circ$& $\star$& $\circ$& 
 
 
 \begin{figure*}
-\renewcommand{\baselinestretch}{0.5} 
+\renewcommand{\baselinestretch}{0.7} 
 \scriptsize
 \begin{minipage}{0.81\linewidth}
 \begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
@@ -1369,6 +1397,8 @@ All data available from http://openscience.us/repo/effort.
 \clearpage
 %%%%time for pd %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{l|c |c |c |c |c |c }
@@ -1399,6 +1429,8 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%time for pf %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{l|c |c |c |c |c |c }
@@ -1459,6 +1491,8 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%time for F %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{l|c |c |c |c |c |c }
@@ -1489,6 +1523,8 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%time for G %%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
   \begin{tabular}{l|c |c |c |c |c |c }
@@ -1519,35 +1555,58 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%%%%%%%%%%%%%  counts of features for different goals%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
 \scriptsize
 \centering
-  \begin{tabular}{c|c c|c c|c c|c c|c c|c }
+  \begin{tabular}{c|c c|c c|c c|c c|c c|c c }
   \hline\hline
-  Features & \multicolumn{2}{c}{Pd} & \multicolumn{2}{c}{Pf} & \multicolumn{2}{c}{Precision} & \multicolumn{2}{c}{F} & \multicolumn{2}{c}{G} & SUM
+  Features & \multicolumn{2}{c}{Pd} & \multicolumn{2}{c}{Pf} & \multicolumn{2}{c}{Precision} & \multicolumn{2}{c}{F} & \multicolumn{2}{c}{G} & \multicolumn{2}{c}{SUM}
 \\\hline
-  noc& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0\\
-ca& 0& 0& 0& 0& 0& 1& 0& 0& 0& 1& 2\\
-max\_cc& 0& 0& 0& 0& 0& 1& 0& 0& 0& 2& 3\\
-moa& 0& 0& 0& 0& 0& 1& 0& 1& 0& 3& 5\\
-avg\_cc& 0& 0& 0& 0& 0& 3& 0& 2& 0& 4& 9\\
-cbo& 0& 0& 0& 1& 0& 1& 0& 3& 0& 5& 10\\
-npm& 0& 0& 0& 0& 0& 2& 0& 4& 0& 5& 11\\
-lcom& 0& 0& 0& 1& 0& 1& 0& 4& 0& 5& 11\\
-ce& 0& 0& 0& 0& 0& 3& 0& 2& 0& 6& 11\\
-amc& 4& 0& 4& 0& 4& 1& 4& 5& 4& 6& 32\\
-cbm& 6& 0& 6& 2& 4& 1& 4& 2& 5& 4& 34\\
-rfc& 4& 0& 4& 3& 4& 4& 4& 9& 4& 11& 47\\
-wmc& 5& 0& 5& 1& 5& 3& 5& 7& 5& 12& 48\\
-ic& 8& 1& 8& 1& 9& 3& 8& 8& 9& 5& 60\\
-dit& 8& 1& 8& 3& 8& 5& 7& 8& 8& 8& 64\\
-cam& 9& 0& 9& 2& 9& 3& 9& 8& 9& 11& 69\\
-loc& 9& 1& 8& 4& 9& 4& 9& 8& 8& 10& 70\\
-lcom3& 9& 0& 8& 2& 8& 5& 8& 13& 9& 10& 72\\
-dam& 14& 0& 14& 5& 14& 6& 14& 12& 14& 12& 105\\
-mfa& 16& 3& 16& 7& 16& 6& 16& 16& 16& 13& 125\\
+  noc& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0& 0\\
+ca& 0& 0& 0& 0& 0& 1& 0& 0& 0& 1& 0& 2\\
+max\_cc& 0& 0& 0& 0& 0& 1& 0& 0& 0& 2& 0& 3\\
+moa& 0& 0& 0& 0& 0& 1& 0& 1& 0& 3& 0& 5\\
+avg\_cc& 0& 0& 0& 0& 0& 3& 0& 2& 0& 4& 0& 9\\
+cbo& 0& 0& 0& 1& 0& 1& 0& 3& 0& 5& 0& 10\\
+npm& 0& 0& 0& 0& 0& 2& 0& 4& 0& 5& 0& 11\\
+lcom& 0& 0& 0& 1& 0& 1& 0& 4& 0& 5& 0& 11\\
+ce& 0& 0& 0& 0& 0& 3& 0& 2& 0& 6& 0& 11\\
+amc& 4& 0& 4& 0& 4& 1& 4& 5& 4& 6& 20& 12\\
+cbm& 6& 0& 6& 2& 4& 1& 4& 2& 5& 4& 25& 9\\
+rfc& 4& 0& 4& 3& 4& 4& 4& 9& 4& 11& 20& 27\\
+wmc& 5& 0& 5& 1& 5& 3& 5& 7& 5& 12& 25& 23\\
+ic& 8& 1& 8& 1& 9& 3& 8& 8& 9& 5& 42& 18\\
+dit& 8& 1& 8& 3& 8& 5& 7& 8& 8& 8& 39& 25\\
+cam& 9& 0& 9& 2& 9& 3& 9& 8& 9& 11& 45& 24\\
+loc& 9& 1& 8& 4& 9& 4& 9& 8& 8& 10& 43& 27\\
+lcom3& 9& 0& 8& 2& 8& 5& 8& 13& 9& 10& 42& 30\\
+dam& 14& 0& 14& 5& 14& 6& 14& 12& 14& 12& 70& 35\\
+mfa& 16& 3& 16& 7& 16& 6& 16& 16& 16& 13& 80& 45\\
+
   \end{tabular}
-  \caption{Counts of features selected by different goals. For each goal, the numbers in right and left columns represent the counts of features selected for all the data sets.}
+    \caption{Counts of features selected by different goals. For each goal, the numbers in right and left columns represent the counts of features selected for all the data sets with and without tuning processes.}
 \end{figure*}
+
+
+%%%%time for G %%%%%%
+\begin{figure}[!ht]
+
+\renewcommand{\baselinestretch}{0.7}
+\scriptsize
+\centering
+  \begin{tabular}{l|rrr|rrr|rrr}
+    & \multicolumn{3}{c|}{Where}&\multicolumn{3}{c|}{CART}& \multicolumn{3}{c}{Random Forest}\\\cline{2-10}\\
+    Goal & tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive&$\frac{\mathit{tuned}}{\mathit{naive}}$\\\hline
+pd&242&13&19&7&1&9&13&1&10\\
+pf&33&14&2&2&1&3&3&2&2\\
+prec&159&13&12&9&1&13&18&2&11\\
+f&303&13&23&7&1&10&14&2&9\\
+G&164&14&12&9&1&10&15&2&10\\
+total&900&67&13&35&4&9&62&8&8\\
+  \end{tabular}
+  \caption{For one train/test set pair (ANT),  time (in seconds) spent optimizing for different goals.}
+\end{figure}
 
 
 
