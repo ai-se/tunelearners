@@ -315,7 +315,7 @@ When applying case-based reasoning, researchers use different settings including
 Another set of settings refers to how to handle non-numeric distances or missing values. Some researchers delete training data with missing information while others compute missing values via, say, median values.
 
 After feature selection comes instance selection. There are many settings for instance selectors such as use outlier removal or prototype generation. Within each of those settings are number sub-choices such as the choice of outlier remover or prototype generator.
-The next set of settings concern how many neighbors to use (k=1,2,5,etc). Some researchers set “k” in dynamic pre-learning phase that checks the training data to find what “k” works best for that data.
+The next set of settings concern how many neighbors to use (k=1,2,5,etc). Some researchers set ``k'' in dynamic pre-learning phase that checks the training data to find what ``k'' works best for that data.
 
 Once the neighbors are known, the next settings control how to summarize their information. Some researchers use means, other use medians, or a weighted sum that uses the distance of the neighbor from the test instance (and that weighting might be determined by some kernel such as uniform, triangular, Gaussian, cosine, or Epanechnikov).
 Researchers may use other settings to control different pre-processors. E.g. some discretize numeric values (via equal width or equal frequency) using some binning policy (and researchers differ on how many bins are best).\\\hline
@@ -1047,14 +1047,14 @@ All data available from http://openscience.us/repo/effort.
 
 %%%%%%%%%%%%%% precision bars%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-\begin{figure*}
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\begin{minipage}{0.81\linewidth}
-\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
-  \multicolumn{1}{c|}{~}&\multicolumn{11}{c}{median(precision) } \\
-  Data set   &   \multicolumn{2}{c}{Naive\_Where}         &   \multicolumn{2}{c}{Tuned\_Where}         &   \multicolumn{2}{c}{Naive\_CART}         &   \multicolumn{2}{c}{Tuned\_CART}    &   \multicolumn{2}{c}{Naive\_RanFst}  &   \multicolumn{2}{c}{Tuned\_RanFst}\\\hline
-\multicolumn{1}{c}{~}\\
+\begin{figure}
+\renewcommand{\baselinestretch}{0.8} 
+
+\scriptsize  
+\begin{tabular}{r|r@{~}l@{~}|r@{~}l|r@{~}l|r@{~}l|r@{~}l@{~}|r@{~}l@{~}r@{~}l}
+      &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forests}         \\\hline
+  Data set   &   \multicolumn{2}{c}{Naive}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{Naive}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{Naive}  &   \multicolumn{2}{c}{Tuned}\\\hline
+ 
 antV0 & 30 &         & $\bigstar$ 89 & {\rfour} & 27 &         &$\bigstar$ 89 & {\rfour} & 40 & {\rone} &$\bigstar$ 89 & {\rfour}\\
 antV1 & 32 &         &$\bigstar$ 74 & {\rfour} & 41 & {\rone} &$\bigstar$ 74 & {\rfour} & 57 & {\rtwo} &$\bigstar$ 74 & {\rfour}\\
 antV2 & 78 & {\rfour} &$\bigstar$ 78 & {\rfour} & 52 &         & 67 & {\rthree} & 66 & {\rtwo} & 50 &        \\
@@ -1073,43 +1073,20 @@ velocityV0 & 34 &         & 34 &         & 34 &         &$\bigstar$ 45 & {\rfour
 xercesV0 & 13 &         &$\bigstar$ 85 & {\rfour} & 14 &         & 73 & {\rfour} & 16 &         & 13 &        \\
 xercesV1 &$\bigstar$ 56 & {\rfour} & 26 &         & 55 & {\rfour} & 26 &         & 41 & {\rtwo} & 26 &        \\
 \end{tabular}
-\end{minipage}\begin{minipage}{.15\linewidth}
-\begin{tabular}{|p{\linewidth}|}\hline
 
-~\\
-
-{\bf KEY:}
-
-~\\
-
-precision percentile ranges:
-
-~\\
-
-80th to 100th = {\rfour}
-
-60th to 80th ~ = {\rthree}
-
-40th to 60th  ~ = {\rtwo}
-
-20th to 40th  ~ = {\rone}
-
-~\\
-
-An absent bar denotes\newline 0th to 20th percentile.
-
-~\\
-
+\caption{Precision values in tune   and naive runs.
+All data available from http://openscience.us/repo/effort. {\bf KEY:}
+  percentile ranges:\newline
+80th to 100th= {\rfour};
+60th to 80th= {\rthree}; 
+40th to 60th= {\rtwo};
+20th to 40th= {\rone};
+an absent bar shows  0th to 20th.
 Percentiles computed  separately
-for each data set.\\\hline
-\end{tabular}
-\end{minipage}
-\caption{Median precision values in tune once and test ten times experiment. 
-Gray bars  show  precision values
-discretized into 20th percentiles ranges from min to max.
-All data available from http://openscience.us/repo/effort.
+for each row.
+
 }\label{fig:nonc}
-\end{figure*}
+\end{figure}
 
 %%%%%%%%%%%%%% precision bars end%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
@@ -1117,27 +1094,27 @@ All data available from http://openscience.us/repo/effort.
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
 \begin{minipage}{0.81\linewidth}
-\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l}
+\begin{tabular}{r@{~}|r@{~}l|r@{~}l@{~}|r@{~}l|r@{~}@{~}l|@{~}r@{~}l|r@{~}l|@{~}r@{~}l}
   \multicolumn{1}{c|}{~}&\multicolumn{11}{c}{median(F ) } \\
   Data set   &   \multicolumn{2}{c}{Naive\_Where}         &   \multicolumn{2}{c}{Tuned\_Where}         &   \multicolumn{2}{c}{Naive\_CART}         &   \multicolumn{2}{c}{Tuned\_CART}    &   \multicolumn{2}{c}{Naive\_RanFst}  &   \multicolumn{2}{c}{Tuned\_RanFst}\\\hline
 \multicolumn{1}{c}{~}\\
-antV0 &$\bigstar$ 39 & {\rfour} & 26 & {\rone} & 32 & {\rtwo} & 25 &         & 25 &         & 22 &        \\
-antV1 & 11 &         &$\bigstar$ 85 & {\rfour} & 40 & {\rone} & 49 & {\rtwo} & 39 & {\rone} & 33 & {\rone}\\
-antV2 & 0 &         &$\bigstar$ 86 & {\rfour} & 44 & {\rtwo} & 51 & {\rtwo} & 52 & {\rthree} & 56 & {\rthree}\\
-camelV0 & 0 &         &$\bigstar$ 28 & {\rfour} & 9 & {\rone} &$\bigstar$ 28 & {\rfour} & 34 & {\rfour} & 31 & {\rfour}\\
-camelV1 & 34 & {\rthree} &$\bigstar$ 35 & {\rfour} & 31 &         & 33 & {\rtwo} & 33 & {\rtwo} & 30 &        \\
-ivyV0 & 27 &         & 30 & {\rone} & 30 & {\rone} & 32 & {\rthree} &$\bigstar$ 35 & {\rfour} &$\bigstar$ 35 & {\rfour}\\
-jeditV0 & 50 &         & 55 & {\rtwo} & 56 & {\rtwo} & 55 & {\rtwo} &$\bigstar$ 61 & {\rfour} & 60 & {\rfour}\\
-jeditV1 & 37 & {\rone} & 34 &         & 36 &         & 47 & {\rfour} & 45 & {\rthree} &$\bigstar$ 48 & {\rfour}\\
-jeditV2 & 4 &         &$\bigstar$ 99 & {\rfour} & 5 &         & 9 &         & 9 &         & 11 &        \\
-log4jV0 & 62 & {\rfour} & 7 &         & 47 & {\rthree} &$\bigstar$ 64 & {\rfour} & 53 & {\rfour} & 45 & {\rthree}\\
-luceneV0 & 70 & {\rthree} & 73 & {\rfour} & 56 &         &$\bigstar$ 75 & {\rfour} & 70 & {\rthree} &$\bigstar$ 75 & {\rfour}\\
-poiV0 &$\bigstar$ 78 & {\rfour} & 63 &         & 74 & {\rthree} & 70 & {\rtwo} & 73 & {\rthree} & 72 & {\rtwo}\\
-poiV1 & 5 &         &$\bigstar$ 78 & {\rfour} & 21 & {\rone} &$\bigstar$ 78 & {\rfour} & 76 & {\rfour} &$\bigstar$ 78 & {\rfour}\\
-synapseV0 & 0 &         & 2 &         & 40 & {\rthree} &$\bigstar$ 56 & {\rfour} & 52 & {\rfour} & 55 & {\rfour}\\
-velocityV0 & 51 &         & 51 &         & 49 &         & 51 &         & 53 & {\rone} &$\bigstar$ 59 & {\rfour}\\
-xercesV0 & 22 & {\rthree} & 20 & {\rone} & 21 & {\rtwo} & 18 &         & 23 & {\rfour} & 22 & {\rthree}\\
-xercesV1 & 23 & {\rone} & 2 &         & 18 & {\rone} & 36 & {\rtwo} & 68 & {\rfour} &$\bigstar$ 71 & {\rfour}\\
+ant0 &$\bigstar$ 39 & {\rfour} & 26 & {\rone} & 32 & {\rtwo} & 25 &         & 25 &         & 22 &        \\
+ant1 & 11 &         &$\bigstar$ 85 & {\rfour} & 40 & {\rone} & 49 & {\rtwo} & 39 & {\rone} & 33 & {\rone}\\
+ant2 & 0 &         &$\bigstar$ 86 & {\rfour} & 44 & {\rtwo} & 51 & {\rtwo} & 52 & {\rthree} & 56 & {\rthree}\\
+camel0 & 0 &         &$\bigstar$ 28 & {\rfour} & 9 & {\rone} &$\bigstar$ 28 & {\rfour} & 34 & {\rfour} & 31 & {\rfour}\\
+camel1 & 34 & {\rthree} &$\bigstar$ 35 & {\rfour} & 31 &         & 33 & {\rtwo} & 33 & {\rtwo} & 30 &        \\
+ivy0 & 27 &         & 30 & {\rone} & 30 & {\rone} & 32 & {\rthree} &$\bigstar$ 35 & {\rfour} &$\bigstar$ 35 & {\rfour}\\
+jedit0 & 50 &         & 55 & {\rtwo} & 56 & {\rtwo} & 55 & {\rtwo} &$\bigstar$ 61 & {\rfour} & 60 & {\rfour}\\
+jedit1 & 37 & {\rone} & 34 &         & 36 &         & 47 & {\rfour} & 45 & {\rthree} &$\bigstar$ 48 & {\rfour}\\
+jedit2 & 4 &         &$\bigstar$ 99 & {\rfour} & 5 &         & 9 &         & 9 &         & 11 &        \\
+log4j0 & 62 & {\rfour} & 7 &         & 47 & {\rthree} &$\bigstar$ 64 & {\rfour} & 53 & {\rfour} & 45 & {\rthree}\\
+lucene0 & 70 & {\rthree} & 73 & {\rfour} & 56 &         &$\bigstar$ 75 & {\rfour} & 70 & {\rthree} &$\bigstar$ 75 & {\rfour}\\
+poi0 &$\bigstar$ 78 & {\rfour} & 63 &         & 74 & {\rthree} & 70 & {\rtwo} & 73 & {\rthree} & 72 & {\rtwo}\\
+poi1 & 5 &         &$\bigstar$ 78 & {\rfour} & 21 & {\rone} &$\bigstar$ 78 & {\rfour} & 76 & {\rfour} &$\bigstar$ 78 & {\rfour}\\
+synapse0 & 0 &         & 2 &         & 40 & {\rthree} &$\bigstar$ 56 & {\rfour} & 52 & {\rfour} & 55 & {\rfour}\\
+velocity0 & 51 &         & 51 &         & 49 &         & 51 &         & 53 & {\rone} &$\bigstar$ 59 & {\rfour}\\
+xerces0 & 22 & {\rthree} & 20 & {\rone} & 21 & {\rtwo} & 18 &         & 23 & {\rfour} & 22 & {\rthree}\\
+xerces1 & 23 & {\rone} & 2 &         & 18 & {\rone} & 36 & {\rtwo} & 68 & {\rfour} &$\bigstar$ 71 & {\rfour}\\
 \end{tabular}
 \end{minipage}\begin{minipage}{.15\linewidth}
 \begin{tabular}{|p{\linewidth}|}\hline
@@ -1234,5 +1211,88 @@ conclusions that are over-stated. Taking care to precisely describe the boundari
 conclusion. While at the same time showing how to makde better conclusions on new
 data, whenever it arrives. And ensuring that those new conclusions are tuned
 to the goals of the business users who are funding the analysis and will use its results.
+
+
+
+
+
+\begin{figure}[!t]
+\small
+\begin{tabular}{|p{.95\linewidth}|}\hline
+Some goals related to aspects of defect prediction:
+\be
+\item
+Mission-critical systems are risk averse and may accept very high false alarm rates,
+just as long as they catch any life-threatening possibility. That is, such projects
+do not care about effort- they want to {\em maximize recall} regardless of any impact
+that might have on the false alarm rate.
+\item
+Cost averse managers may accept lower probabilities of
+detection (the recall measure), just as long as they {\em do not waste budgets on false alarms}. This community
+seeks to {\em minimize false alarms} while maintaining {\em some level of adequate recall}.
+\item  Suppose a new hire wants
+ to impress their manager. That 
+ new hire might want to ensure that no result presented to  management contains  true negative;
+i.e. they wish to {\em maximize precision}.
+\item
+Some communities do not care about   low precision,
+just as long as a small fraction the data is returned. Hayes, Dekhytar, \& Sundaram call this fraction 
+{\em selectivity} and offer an
+extensive discussion of the merits of this measure~\cite{hayes06}.
+\ee
+\\\hline
+Beyond defect prediction are other goals that combine defect prediction with other economic
+factors:
+\be
+\setcounter{enumi}{4}
+\item
+Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12}
+say that a defect predictor should maximizing {\em reward}; i.e. find the fewest lines of code
+that contain the most bugs.
+\item In other work, Yin et al. are concerned about
+ {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
+These bugs occur  when (say) developers try to fix parts of the code
+where they have very little experience~\cite{yin11}.  To avoid such incorrect bug fixes, we have to optimize
+for finding the most number of bugs in regions that {\em the most programmers have worked with before}.
+\item In {\em Better-faster-cheaper}, we seek  project changes that lead
+to fewer defects and faster development times using less resources~\cite{Green,elrawas08,elrawas10,me07f,me09a,me09f}.
+\item {\em  Rush-to-market} is another economic-based optimization measure.
+A learner that tries to maximize ``rush-to-market'' is trying to release the product as soon
+as possible, without too many bugs. Note that ``rush-to-market'' is an appropriate strategy for a company competing
+in a volatile and crowded market place where being first-to-market enables a revenue stream (that can be
+used to subsequently fix any issues with version 1.0)~\cite{huang06}.
+\ee
+\\\hline
+All the above measures relate to the tendency of a predictor to find something. Another style
+of measure would be to check the {\em variability} of that predictor:
+\be
+\setcounter{enumi}{8}
+\item
+In their study on reproducibility of SE results,
+ Anda, Sjoberg and Mockus advocate using the coefficient of variation ($CV=\frac{stddev}{mean}$).
+Using this measure, they defined {\em reproducibility} as $\frac{1}{CV}$~\cite{anda09}.
+\ee
+\\\hline
+\end{tabular}
+\caption{Reasoning about software many have many different goals including the nine shown here. Many of
+these goals are defined in terms of 
+\fig{criteria}.
+}\label{fig:goals}
+\end{figure}
+\fig{goals} lists other performance measures that we have seen at client sites or in the literature. Note that:
+\be
+\item This list is very long.
+\item This list keeps growing.
+\ee As to this second point,
+often when we work
+with new clients, they surprise us with yet another domain-specific criteria that is important for the business.
+That is, neither \fig{criteria} or \fig{goals} is not a complete list of all possible assessment criteria.
+
+Our reading of the defect prediction literature is that most papers only explore a small subset of 
+ \fig{criteria} or \fig{goals}. We think this is a mistake and researchers should more to a more general
+framework where they explore a wide and changing set of evaluation criteria. 
+Hence, this paper.
+
+
 
 \end{document}
