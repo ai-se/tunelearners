@@ -563,18 +563,20 @@ candidate, $life$ is to control termination.
 	\caption{Pesudocode for DE with Early Termination}
 	\label{alg:DE}
 		\begin{algorithmic}[1]
-			\Require $np$, $f$, $cf$, $life$
+			\Require $np = 10$, $f=0.75$, $cr=0.3$, $life = 5$
 			\Ensure $S_{best}$
+	      
+	      \Function{DE}{$np$, $f$, $cr$, $life$}
 		  \State $Population  \gets $ InitializePopulation($np$)
 		  \State $S_{best} \gets $GetBestSolution($Population $)
 		  \While{$life > 0$}
 			\State $NewGeneration \gets \emptyset$
-			\For{$i=0 \to n-1$}
-				\State $S_i \gets$ GenNew($Population [i], Population , cf, f)$
+			\For{$i=0 \to np-1$}
+				\State $S_i \gets$ GenNew($Population [i], Population , cr, f$)
 				\If {Score($S_i$) >Score($Population [i]$)}
-				 	\State $NewGeneration \gets S_i$
+				 	\State $NewGeneration$.append($S_i$)
 				\Else
-					\State $NewGeneration \gets Population [i]$
+					\State $NewGeneration$.append($Population [i]$)
 				\EndIf
 			\EndFor
 			\State $Population  \gets NewGeneration$
@@ -584,7 +586,34 @@ candidate, $life$ is to control termination.
 			\State $S_{best} \gets$ GetBestSolution($Population $)
 		  \EndWhile
 		 \State \Return $S_{best}$
-                 \end{algorithmic}            
+		 \EndFunction
+		 \Function{Score}{$Candidate$}
+		    \State set tuned parameters according to $Candidate$
+		    \State TrainLearner()
+		    \State $scores \gets$TestLearner()
+		    \State \% scocres = [pd, f, precision]
+		    \State $s \gets scores[i] $ 
+		    \State \% i determines the goal of tuning
+		    \State \Return$s$
+		 \EndFunction
+		 \Function{GenNew}{$old, pop, cr, f$}
+		   \State $a, b, c\gets threeOthers(pop,old)$ 
+		   \State \% pick 3 other points from the population
+		   \State $newf \gets \emptyset$
+		   \For{$i=0 \to np-1$}
+		        \If{$cr < random()$}
+		          \State $newf$.append($old[i]$)
+                \Else
+                  \If{typeof(old[i]) == bool}
+                    \State $newf$.append(not $old[i]$)
+		          \Else
+		           \State $newf$.append(trim($i$,($a[i] + f * (b[i] - c[i]$))))
+		           \State \%trim() will make new value fall in the range
+		          \EndIf
+		        \EndIf
+		   \EndFor
+		 \EndFunction
+        \end{algorithmic}            
 \end{algorithm}
 
 %\begin{algorithm}
@@ -1076,7 +1105,7 @@ xercesV0 & 13 &         &$\bigstar$ 85 & {\rfour} & 14 &         & 73 & {\rfour}
 xercesV1 &$\bigstar$ 56 & {\rfour} & 26 &         & 55 & {\rfour} & 26 &         & 41 & {\rtwo} & 26 &        \\
 \end{tabular}
 
-\caption{Precision values in tune   and naive runs.
+\caption{Precision values in tune and naive runs.
 All data available from http://openscience.us/repo/effort. {\bf KEY:}
   percentile ranges:\newline
 80th to 100th= {\rfour};
