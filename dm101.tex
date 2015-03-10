@@ -1,5 +1,11 @@
 
- 
+Human programmers are clever, but flawed. Coding  adds functionality, but also defects.
+Hence, software sometimes crashes (perhaps at the most awkward or dangerous moment) or delivers
+the wrong functionality. For a very long list of software-related errors,
+see  Peter Neumann's ``Risk Digest''\footnote{http://catless.ncl.ac.uk/Risks/}.
+
+Because of the above, is important to thoroughly {\em test} software before it is {\em used}.
+Such testing  can be very expensive.
 Software assessment budgets are finite
 while assessment effectiveness increases 
 exponentially with assessment effort.
@@ -13,15 +19,15 @@ in the confidence $C$ that we have found all defects
 can take {\em exponentially} more effort.
 For example, for one-in-a-thousand detects,
 moving $C$ from  
-90\% to 94\% to 98\% takes 2301, 2812, and 3910 black box
-probes, respectively.\footnote{A randomly selected 
+90\% to 98\% nearly doubles the number of required tests (2301 to   3910 black box
+probes, respectively)\footnote{A randomly selected 
 input to a program will find a fault with probability $p$.
 After $N$ random black-box tests, the chances of the inputs 
 not revealing any fault 
 is $(1-p)^N$. Hence, the chances $C$ of seeing the fault is $1-(1-p)^N$
 which can be rearranged to 
  $N(C,p)=\frac{log(1 -
-C)}{log(1-p)}$. For example, $N(0.90,10^{-3})=2301$.}
+C)}{log(1-p)}$. For example, $N(0.90,10^{-3})=2301$.}.
 
 Exponential costs quickly exhaust finite resources.
 Standard practice is to apply the best
@@ -37,15 +43,16 @@ sampling policy will always be incomplete.
 Nevertheless, it is the recommended option when
 resources do not permit a complete assessment of the whole system.
 
-
-There are many reasons to study defect  defect predictors learned from
-static code attributes: they are   {\em easy to
+One such lightweight sampling policy is defect predictors learned from static code attributes.
+Given software described using (for example) the attributes of \fig{ck} it is possible
+to use standard data mining technology to learn where the probability of software defects is highest.
+Such defect  defect predictors learned from
+static code attributes are   {\em easy to
 use}, {\em widely-used}, and {\em useful} to use.
 
-{\em Easy to use:} Static code attributes can be automatically and cheaply collected, even for very large systems~\cite{nagappan05}.
-By contrast, 
-other methods such as manual code reviews are labor-intensive.
-Depending on the review methods 8 to 20 LOC/minute can be
+{\em Easy to use:} Static code attributes can be automatically collected, even for very large systems~\cite{nagappan05}.
+Other methods, like  manual code reviews, are far slower and far more labor-intensive.
+For example, depending on the review methods 8 to 20 LOC/minute can be
 inspected and this effort repeats for all members of the review team,
 which can be as large as four or six~\cite{me02f}. 
 
@@ -65,35 +72,9 @@ they are fault prone.
 {\em Useful:}
 A
 standard result for defect predictors is that they find the location of  70\% (or more)
-of the defects in code.
-This is markedly
-higher than other currently-used
-industrial
-methods such as manual code reviews:
-\bi
-\item
-A panel at {\em IEEE Metrics
-2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
-of defects.
-\item
-Raffo found that the defect detection capability of
-industrial review methods have mode defect detection rates
-of around 50\%
- for full Fagan inspections~\cite{fagan76} to
-21\% for less-structured inspections.
-\ei
-Defect prediction scales well to a commercial
-context. Defect predicting technology has been
-commercialized in {\it Predictive}~\cite{turner06} a
-%scalable product suite to analyze and predict
-defects in software projects. Predictive was observed to
-highlight simimilar issues to those found   with the more expensive tools. But,
-Predictive was able to faster process a larger code
-base than the more expensive tool~\cite{turner06}.
-
-In addition, defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
-
-Finally, a subsequent study on the Turkish software
+of the defects in code~\cite{me70b}.
+Defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
+A subsequent study on the Turkish software
 compared how much code needs to be inspected using
 random selection vs. selection via defect
 predictors. Using random testing, 87\% of the files
@@ -105,4 +86,28 @@ could be found. That is, the same level of defect
 detection (after inspection) can be achieved using
 $(87-25)/87=71$\%less effort
 \cite{tosun09}.
+
+This is markedly
+higher than other currently-used
+industrial
+methods such as manual code reviews. For example, 
+A panel at {\em IEEE Metrics
+2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
+of defects.
+In other work, 
+Raffo found that the defect detection capability of
+industrial review methods have mode defect detection rates
+of around 50\%
+ for full Fagan inspections~\cite{fagan76} to
+21\% for less-structured inspections.
+
+Defect prediction scales well to a commercial
+context. Defect predicting technology has been
+commercialized in many tools including {\it Predictive}~\cite{turner06}, a
+ product suite to analyze and predict
+defects in software projects. Predictive was observed to
+highlight simimilar issues to those found   with the more expensive tools. Significantly,
+Predictive was able to faster process a larger code
+base than the more expensive tool~\cite{turner06}.
+
 

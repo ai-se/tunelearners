@@ -11,6 +11,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
+\renewcommand{\footnotesize}{\scriptsize}
 \definecolor{lightgray}{gray}{0.8}
 \definecolor{darkgray}{gray}{0.6}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -63,30 +64,31 @@
 
 \conferenceinfo{FSE}{'15 Bergamo, Italy}
 \title{Implications of Differential Evolution for  Defect Prediction:
-Analytics Without Parameter Tuning Considered Harmful}
+Analytics Without Parameter Tuning Considered Harmful?}
 \numberofauthors{1}
 \author{
 \alignauthor
-Wei Fu, Tim Menzies\\
-       \affaddr{Computer Science, North Carolina State University, USA}\\
-       {wfu@ncsu.edu, tim.menzies@gmail.com}} 
+Wei Fu, Tim Menzies, Vivek Nair\\
+       \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
+       {wfu@ncsu.edu, tim.menzies@gmail.com, vivekaxl@gmail.com}} 
 
 
  
 \maketitle
 \begin{abstract}
 When learning
-software defect predictors from static code attributes,   a
+software defect predictors,   a
 very simple optimizer called differential evolution needs can quickly
 find  good tunings for that learner.
 Such tunings can have a dramatic change to the performance of a learner;
 e.g. in this paper we show that tuning can alter the precision of
 a software defect predictor from 2\% to 98\%.
 
-These results suggest that it is time to change standard practice in
-software analytics. Specifically,
+These results prompt for a change to standard methods in software analytics.
+At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
 {\em without} first conducting an tuning optimizations study.
+The implications for other kinds of software analytics is now an open and pressing questions.
 
 %RQ1: Does tuning affect learners' performance?
 %RQ2: How to choose 
@@ -107,7 +109,8 @@ I.2.6 [Artificial Intelligence]: Induction
 \vspace{1mm}
 \noindent
 {\bf Keywords:} defect prediction, CART, random forests,
-Fastmap,   bootstrap sampling, effect size, A12.
+Fastmap,   bootstrap sampling, effect size, A12,differential evolution,
+search-based software engineering.
 
 \section{Introduction}
 
@@ -131,42 +134,47 @@ This paper shows that for at least one software analytics problem
 (software defect prediction from static code attributes),   a
 very simple optimizer called differential evolution needs only   seconds
 to just  few minutes to find good tunings.  
-
 These results   challenge much prior work into defect prediction:
 \bi 
 \item 
-Several recent high profile papers have claimed 
-that learnerX is better than learnerY for some software analytics task.
+Numerous   prominent papers have claimed 
+that learnerX is better than learnerY for some software analytics task~\cite{lessmann2008benchmarking,hall11,me07b}.
 For example, a recent IEEE TSE article claimed that the 
 CART decision tree learner was far worse than Random Forests for
-softwre defect predition. 
-We show that tuning can reverse the rankings of data miners such
-that, after tuning, the worst untuned learner (CART) can out-perform the supposedly
+softwre defect predition~\cite{lessmann2008benchmarking}. 
+Such conclusions do not survive tuning.
+For example,
+after tuning, the worst untuned learner (CART) can out-perform the supposedly
 best learner (Random Forests).
 \item
 The improvements achieved via differential evolution are too large to discount.
 Yet those result show that different attributes are ``best'' for different
-data sets and even differnt goals for the tunings. Hence, it is no longer
-supportable to use data mining to argue that certain kinds of attributes
-are better than others. 
+data sets and even different goals for the tunings. Hence, it is no longer
+supportable to use data mining to argue that certain kinds of attributes 
+are better than others; e.g. as  done by~\cite{rahman2013how}. 
 \ei 
 Given the simplicity and effectiveness of differential evolution,
 and also given the effects this method has on defect prediction, this
 paper  motivates  a change to the entire field of software analytics.
-It is no longer enough to just run a data miner and present the result
+At least for softwre defect prediction,
+it is no longer enough to just run a data miner and present the result
 {\em without} first conducting an tuning optimizations study.
+
+The implications for other kinds of data mining tasks is unclear.
+While this paper reports success with tuning defect predictors,
+we were not so successful with
+other analytics tasks (software development effort estimation).
+Hence, we assert that it is now an open and pressing research question is whether or not  
+tuning studies are now   required for research reports on software analytics.
 
 
 \section{Background}
 \subsection{Defect Prediction}
 
 
-This section is our standard introduction to defect prediction~\cite{aa},
+This section is our standard introduction to defect prediction~\cite{me15:book1},
 plus   some new results from Rahman et al.'s   2014 FSE paper~\cite{rahman14:icse}. 
-
-XXXX need our standard table
-
-\input{dm101}
+ 
 
 
 \begin{figure*}[!t]
@@ -221,10 +229,14 @@ defect & defect & Boolean: where defects found in post-release bug-tracking syst
 \end{tabular}
 }
 \end{center}
-\caption{OO measures used in our defect data sets. The last line shows
-the dependent attribute (whether any defect is reported to  a
+\caption{OO measures used in our defect data sets.  Last line is
+the dependent attribute (whether a defect is reported to  a
 post-release bug-tracking system).}\label{fig:ck}
 \end{figure*}
+
+
+\input{dm101}
+
 
 We formulate and present two cost-effectiveness-based
 accounting approaches to the comparability of bugginess
