@@ -75,26 +75,18 @@ Wei Fu, Tim Menzies\\
  
 \maketitle
 \begin{abstract}
+When learning
+software defect predictors from static code attributes,   a
+very simple optimizer called differential evolution needs can quickly
+find  good tunings for that learner.
+Such tunings can have a dramatic change to the performance of a learner;
+e.g. in this paper we show that tuning can alter the precision of
+a software defect predictor from 2\% to 98\%.
 
-
-software defect prediction with various 
-empirical data sets. Those proposed leaners are always evaluated against the state of the art 
-predictors by performing statistical analysis. Undoubtedly, given the bias from data sets and 
-accuracy indicators, the newer predictors outperform counterparts in selected experimental 
-settings. However,  most of data mining algorithm based predictors (e.g. CART, random 
-forest, 
-neural networks, SVM) have built-in {\it magic} parameters, like the number of trees in random 
-forest algorithm. the impact of internal parameters in those methods have been neglected 
-during evaluation. In this paper, we investigate this impact by tuning parameters in defect 
-predictors with search-based software engineering algorithm. Specifically, we used differential 
-evolution to tune the CART and a new predictor based on WHERE algorithm with local data, 
-and then predictors with optimal parameters obtained from tuning process will be applied to 
-predict defects. By comparing the performance of predictors with and without tuning process,  
-we observe that tuning improves the predictors' performance and predictors woking with 
-different data sets need different parameters. Our results also suggest that we should not use 
-the predictors of the shelf with their default parameters and tuning should be a processor 
-combined with any predictor with built-in parameters.
-
+These results suggest that it is time to change standard practice in
+software analytics. Specifically,
+it is no longer enough to just run a data miner and present the result
+{\em without} first conducting an tuning optimizations study.
 
 %RQ1: Does tuning affect learners' performance?
 %RQ2: How to choose 
@@ -119,15 +111,130 @@ Fastmap,   bootstrap sampling, effect size, A12.
 
 \section{Introduction}
 
-\begin{raggedleft}
-{\em ``The  common misunderstanding about science 
-is that scientists seek and find truth. They don't- 
-they make and test models.''}\\ -- Neil Gershenfeld
+%\begin{raggedleft}
+%{\em ``The  common misunderstanding about science 
+%%is that scientists seek and find truth. They don't- 
+%they make and test models.''}\\ -- Neil Gershenfeld
 
-{\em Essentially, all models are wrong, but some are useful."}\\ --George Box
+%{\em Essentially, all models are wrong, but some are useful."}\\ --George Box
+%%
+%\end{raggedleft}
 
-\end{raggedleft}
+One of the ``black arts'' of data mining is setting the tuning
+parameters that control  the choices within that data miner.
+Such tunings can have a dramatic change to the performance of a learner;
+e.g. in this paper we show that tuning can alter the precision of
+a software defect predictor from 2\% to 98\%.
 
+Many researchers have applied automatic optimizers to find good tunings.
+This paper shows that for at least one software analytics problem
+(software defect prediction from static code attributes),   a
+very simple optimizer called differential evolution needs only   seconds
+to just  few minutes to find good tunings.  
+
+These results   challenge much prior work into defect prediction:
+\bi 
+\item 
+Several recent high profile papers have claimed 
+that learnerX is better than learnerY for some software analytics task.
+For example, a recent IEEE TSE article claimed that the 
+CART decision tree learner was far worse than Random Forests for
+softwre defect predition. 
+We show that tuning can reverse the rankings of data miners such
+that, after tuning, the worst untuned learner (CART) can out-perform the supposedly
+best learner (Random Forests).
+\item
+The improvements achieved via differential evolution are too large to discount.
+Yet those result show that different attributes are ``best'' for different
+data sets and even differnt goals for the tunings. Hence, it is no longer
+supportable to use data mining to argue that certain kinds of attributes
+are better than others. 
+\ei 
+Given the simplicity and effectiveness of differential evolution,
+and also given the effects this method has on defect prediction, this
+paper  motivates  a change to the entire field of software analytics.
+It is no longer enough to just run a data miner and present the result
+{\em without} first conducting an tuning optimizations study.
+
+
+\section{Background}
+\subsection{Defect Prediction}
+
+
+This section is our standard introduction to defect prediction~\cite{aa},
+plus   some new results from Rahman et al.'s   2014 FSE paper~\cite{rahman14:icse}. 
+
+XXXX need our standard table
+
+\input{dm101}
+
+
+\begin{figure*}[!t]
+\renewcommand{\baselinestretch}{0.8}\begin{center}
+{\scriptsize
+\begin{tabular}{c|l|p{4in}}
+amc & average method complexity & e.g. number of JAVA byte codes\\\hline
+avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
+in class\\\hline
+ca & afferent couplings & how many other classes use the specific
+class. \\\hline
+cam & cohesion amongst classes & summation of number of different
+types of method parameters in every method divided by a multiplication
+of number of different method parameter types in whole class and
+number of methods. \\\hline
+cbm &coupling between methods &  total number of new/redefined methods
+to which all the inherited methods are coupled\\\hline
+cbo & coupling between objects & increased when the methods of one
+class access services of another.\\\hline
+ce & efferent couplings & how many other classes is used by the
+specific class. \\\hline
+dam & data access & ratio of the number of private (protected)
+attributes to the total number of attributes\\\hline
+dit & depth of inheritance tree &\\\hline
+ic & inheritance coupling &  number of parent classes to which a given
+class is coupled (includes counts of methods and variables inherited)
+\\\hline
+lcom & lack of cohesion in methods &number of pairs of methods that do
+not share a reference to an instance variable.\\\hline
+locm3 & another lack of cohesion measure & if $m,a$ are  the number of
+$methods,attributes$
+in a class number and $\mu(a)$  is the number of methods accessing an
+attribute,\newline
+then
+$lcom3=((\frac{1}{a} \sum_j^a \mu(a_j)) - m)/ (1-m)$.
+\\\hline
+loc & lines of code &\\\hline
+max\_cc & maximum McCabe & maximum McCabe's cyclomatic complexity seen
+in class\\\hline
+mfa & functional abstraction & number of methods inherited by a class
+plus number of methods accessible by member methods of the
+class\\\hline
+moa &  aggregation &  count of the number of data declarations (class
+fields) whose types are user defined classes\\\hline
+noc &  number of children &\\\hline
+npm & number of public methods & \\\hline
+rfc & response for a class &number of  methods invoked in response to
+a message to the object.\\\hline
+wmc & weighted methods per class &\\\hline
+\rowcolor{lightgray}
+defect & defect & Boolean: where defects found in post-release bug-tracking systems.
+\end{tabular}
+}
+\end{center}
+\caption{OO measures used in our defect data sets. The last line shows
+the dependent attribute (whether any defect is reported to  a
+post-release bug-tracking system).}\label{fig:ck}
+\end{figure*}
+
+We formulate and present two cost-effectiveness-based
+accounting approaches to the comparability of bugginess
+identification problem (CBI).
+We find no significant differences in the cost-effectiveness
+of the DP and the two SBF techniques —
+FindBugs and pmd— we could evaluate
+
+
+\section{Other sutff}
 XXX One consequence of this work is that it is possible to tune a detector such that it exhibits a wide range of performance scores. Given that, the next question becomes ``what performance scores do you want?''. This is an interesting issue since there is no single best answer. XXX
 
 How ``true'' are the  models generated by software analytics?
@@ -359,6 +466,12 @@ RQ:
 briefly describe our study and  our result; observation
 
 structure of this paper.
+
+Note that we do not claim that differntial evolution is the {\em best} way to
+optimize data miners for defect prediction. In this paper, we only show that
+differential evolution is {\em simple}, {\em fast} and {\em effective} at that task. As to   finding the best optimizer for defect prediction, that task would require
+the input of many researchers (and we hope this paper inspires
+much subsequent work into that issue).
 
 \subsection{Implications}
 

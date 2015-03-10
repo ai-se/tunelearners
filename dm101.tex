@@ -1,0 +1,108 @@
+
+ 
+Software assessment budgets are finite
+while assessment effectiveness increases 
+exponentially with assessment effort.
+Lowry et al. warn that  
+the state space explosion problem imposes
+strict limits on how much a system can be explored
+via automatic formal methods~\cite{lowrey98}.
+For standard black-box testing methods,
+a {\em linear} increase
+in the confidence $C$ that we have found all defects
+can take {\em exponentially} more effort.
+For example, for one-in-a-thousand detects,
+moving $C$ from  
+90\% to 94\% to 98\% takes 2301, 2812, and 3910 black box
+probes, respectively.\footnote{A randomly selected 
+input to a program will find a fault with probability $p$.
+After $N$ random black-box tests, the chances of the inputs 
+not revealing any fault 
+is $(1-p)^N$. Hence, the chances $C$ of seeing the fault is $1-(1-p)^N$
+which can be rearranged to 
+ $N(C,p)=\frac{log(1 -
+C)}{log(1-p)}$. For example, $N(0.90,10^{-3})=2301$.}
+
+Exponential costs quickly exhaust finite resources.
+Standard practice is to apply the best
+available assessment methods on the sections of the program that the
+best available domain knowledge declares is most critical.  We endorse
+this approach.  Clearly, the most critical sections require the best
+known assessment methods. However, this focus on certain sections
+can blind us to defects in other areas.
+Therefore, standard practice should be augmented
+with a  {\em
+lightweight sampling policy} to explore the rest of the system.  This
+sampling policy will always be incomplete.
+Nevertheless, it is the recommended option when
+resources do not permit a complete assessment of the whole system.
+
+
+There are many reasons to study defect  defect predictors learned from
+static code attributes: they are   {\em easy to
+use}, {\em widely-used}, and {\em useful} to use.
+
+{\em Easy to use:} Static code attributes can be automatically and cheaply collected, even for very large systems~\cite{nagappan05}.
+By contrast, 
+other methods such as manual code reviews are labor-intensive.
+Depending on the review methods 8 to 20 LOC/minute can be
+inspected and this effort repeats for all members of the review team,
+which can be as large as four or six~\cite{me02f}. 
+
+{\em Widely used:} Many researchers use static attributes to guide software 
+quality predictions.
+Verification and validation (V\&V) textbooks
+(\cite{rakitin01}) advise using static code complexity attributes
+to decide which modules are worthy of manual inspections.  
+For several  years, one of us (Menzies) worked on-site at the NASA software Independent Verification
+and Validation facility
+and he
+knows of several large government software contractors that won't
+review software modules {\em unless} tools like McCabe predict that
+they are fault prone.  
+
+
+{\em Useful:}
+A
+standard result for defect predictors is that they find the location of  70\% (or more)
+of the defects in code.
+This is markedly
+higher than other currently-used
+industrial
+methods such as manual code reviews:
+\bi
+\item
+A panel at {\em IEEE Metrics
+2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
+of defects.
+\item
+Raffo found that the defect detection capability of
+industrial review methods have mode defect detection rates
+of around 50\%
+ for full Fagan inspections~\cite{fagan76} to
+21\% for less-structured inspections.
+\ei
+Defect prediction scales well to a commercial
+context. Defect predicting technology has been
+commercialized in {\it Predictive}~\cite{turner06} a
+%scalable product suite to analyze and predict
+defects in software projects. Predictive was observed to
+highlight simimilar issues to those found   with the more expensive tools. But,
+Predictive was able to faster process a larger code
+base than the more expensive tool~\cite{turner06}.
+
+In addition, defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
+
+Finally, a subsequent study on the Turkish software
+compared how much code needs to be inspected using
+random selection vs. selection via defect
+predictors. Using random testing, 87\% of the files
+would have to be inspected in order to detect 87\%
+of the defects. However, if the inspection process
+was restricted to the 25\% of the files that trigger
+the defect predictors, then 88\% of the defects
+could be found. That is, the same level of defect
+detection (after inspection) can be achieved using
+$(87-25)/87=71$\%less effort
+\cite{tosun09}.
+
