@@ -1,9 +1,8 @@
-
-
 \documentclass{sig-alternative}
 \usepackage{multirow}
 \usepackage{color}
 \usepackage{graphics}
+\usepackage{cite}
 \usepackage{rotating}
 \usepackage{graphics}
 \usepackage{colortbl} 
@@ -63,14 +62,14 @@
 \begin{document}
 
 \conferenceinfo{FSE}{'15 Bergamo, Italy}
-\title{Implications of Differential Evolution for  Defect Prediction:
+\title{ 
 Analytics Without Parameter Tuning Considered Harmful?}
 \numberofauthors{1}
 \author{
 \alignauthor
 Wei Fu, Tim Menzies, Vivek Nair\\
        \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
-       {wfu@ncsu.edu, tim.menzies@gmail.com, vivekaxl@gmail.com}} 
+       fuwei.ee, tim.menzies, vivekaxl@gmail.com}
 
 
  
@@ -102,10 +101,7 @@ The implications for other kinds of software analytics is now an open and pressi
 D.2.8 [Software Engineering]: Product metrics;
 I.2.6 [Artificial Intelligence]: Induction
 
-\vspace{1mm}
-\noindent
-{\bf General Terms:} Experimentation, Algorithm
-
+ 
 \vspace{1mm}
 \noindent
 {\bf Keywords:} defect prediction, CART, random forests,
@@ -123,21 +119,63 @@ search-based software engineering.
 %%
 %\end{raggedleft}
 
+In the $21^{st}$ century, it is now impossible
+to manually browse all the available software project
+data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
+and this is just one of over a dozen open-source repositories
+that are readily available to researchers~\cite{rod12}.
+For example,  the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub hosts over 14 million projects. 
+
+
+Faced with this information overload,
+researchers in empirical SE
+use  data miners  to (e.g.) generate 
+defect predictors from static code measures.
+Such   measures can be
+automatically extracted from the code base, with very little effort
+even for very large software systems~\cite{nagappan05}. 
+In addition, they have  some generality
+across multiple projects: e.g. defect
+predictors developed at NASA~\cite{me07b} have also been successfully
+applied in Turkey~\cite{tosun09}.
+Such detectors reduce the effort required for 
+defect prediction: if 
+inspection teams let themselves be guided by defect predictors then
+they can find 80\% to 88\% of the defects
+after inspecting  20\% to 25\% of the code~\cite{ostrand04,tosun10}.
+
+
 One of the ``black arts'' of data mining is setting the tuning
 parameters that control  the choices within that data miner.
 Such tunings can have a dramatic change to the performance of a learner;
 e.g. in this paper we show that tuning can alter the precision of
 a software defect predictor from 2\% to 98\%.
 
-Many researchers have applied automatic optimizers to find good tunings.
+Many researchers have applied automatic optimizers to find good tunings~\cite{cora10}  but not in the arean
+of adjusting the parameters of data miners learning
+static code defect predictors.
+(to the best of our knowledge, this is the first such study).
 This paper shows that for at least one software analytics problem
 (software defect prediction from static code attributes),   a
-very simple optimizer called differential evolution needs only   seconds
-to just  few minutes to find good tunings.  
+very simple optimizer called 
+{\em differential evolution} can  find good tunings.  
 
-These results   challenge much prior work into defect prediction:
-Numerous   prominent papers have claimed 
-that learnerX is better than learnerY for some software analytics task~\cite{lessmann2008benchmarking,hall11,me07b}.
+The good news here is that that tuning defect predictors is very easy. Differential
+evolution is so simple to implement that many
+researchers just ``roll their own'' rather
+than relying on some standard package.
+By various measures
+(presented below),  
+tuning defect predictors is at least an order of magnitude
+simpler than other standard optimization tasks. 
+Further, measured in terms on runtimes, 
+differental evolution takes just seconds
+to a few minutes to propose highy effective tunings.
+
+
+The not-so-good-news is that these results   challenge much prior work into defect prediction.
+Several   prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
+that learnerX is better than learnerY for some software analytics task~.
 For example, a recent IEEE TSE article claimed that the 
 CART decision tree learner was far worse than Random Forests for
 softwre defect predition~\cite{lessmann2008benchmarking}. 
@@ -147,33 +185,64 @@ after tuning, the worst untuned learner (CART) can out-perform the supposedly
 best learner (Random Forests).
 
 Another class of conclusions challenged by this paper are research papers
-that use data miners to   show that different attributes are ``best'' for different
-data sets and even different goals for the tunings. Hence, it is no longer
-supportable to use data mining to argue that certain kinds of attributes 
-are better than others; e.g. as  done by~\cite{rahman2013how}. 
-For example, in 2013,
-Rahman et al
-\cite{rahman2013how}  used results from logistic regression to conclude
-that code metrics are generally less useful than process
-metrics for  predicting defects from static code analysis.  
-In the same year, Bell et al. (who also used negative binomial regression) argued that
-software defect prediction was not improved by adding attributes relating to the social
-structure of programmer teams~\cite{bell2013limited}.
+that use data miners to   show that certain factors
+are more important than others for (say)
+predicting defects. We show in this paper
+that cuch conclusions
+do not survive tuning. It turns out the after tuning,
+different data sets show  that very different 
+factors are ``best''. Also, even within the same data set, if we adjust the goals of the tuning then we arrive at different ``best'' factors.
 
-Given the simplicity and effectiveness of differential evolution,
-and also given the effects this method has on defect prediction, this
-paper  motivates  a change to the entire field of software analytics.
+
+Given this locality effect in what is ``best'',
+then there are many   papers that may
+need to be rewritten.
+For example, one of us (Menzies) used data miners
+to assert that some factors were more important than others for predicting
+successful software reuse~\cite{me02k}. That assertion should now be doubted.
+
+Similarly,   we should now revisit
+all other conclusions that used data miners to rank different factors including:
+\bi
+\item
+Bell et al.~\cite{bell2013limited} who say that
+software defect prediction is not improved by adding attributes relating to the social
+structure of programmer teams;
+\item
+Rahman et al
+\cite{rahman2013how}  who say
+ code metrics are  less useful than process
+metrics for  predicting defects from static code analysis; 
+\item Mosser et al.~\cite{moser2008comparative} who also say  that process metrics are better. 
+\ei
+There are many other examples of researchers
+using data mining to claim that certain
+factors are more important than others; e.g. ~\cite{zimmermann2007predicting,herzig2013predicting}.
+All those results must  now be called into question.
 At least for softwre defect prediction,
-it is no longer enough to just run a data miner and present the result
+since is no longer enough to just run a data miner and present the result
 {\em without} first conducting an tuning optimizations study.
 
 The implications for other kinds of data mining tasks is unclear.
 While this paper reports success with tuning defect predictors,
-we were not so successful with
-other analytics tasks (software development effort estimation).
-Hence, we assert that it is now an open and pressing research question is whether or not  
-tuning studies are now   required for research reports on software analytics.
+there are many of software analytics tasks 
+(software development effort estimation, social network mining,
+detecting duplicate issue reports, etc).
+Since those other tasks often use the same kinds of learners
+explored in this paper, it is clearly possible that
+the conclusions of this paper apply to other tasks as well. 
+Hence, we assert that it is now an open and pressing research question if
+``analytics without parameter tuning is considered harmful?''.
+Note that if the answer is ``yes'' then:
+conferences like FSE
+should routinely reject software analytics papers that do not
+have a tuning study.   
 
+The rest of this paper is structured as follows.
+
+One caveat before beginning- this paper explores
+optimization via differential evolution.
+XXX
 
 \section{Background}
 \subsection{Defect Prediction}
