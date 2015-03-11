@@ -2,9 +2,10 @@
 Human programmers are clever, but flawed. Coding  adds functionality, but also defects.
 Hence, software sometimes crashes (perhaps at the most awkward or dangerous moment) or delivers
 the wrong functionality. For a very long list of software-related errors,
-see  Peter Neumann's ``Risk Digest''\footnote{http://catless.ncl.ac.uk/Risks/}.
+see  Peter Neumann's ``Risk Digest'' at catless.ncl.ac.uk/Risks.
 
-Because of the above, is important to thoroughly {\em test} software before it is {\em used}.
+Since programming inherently
+introduces defects into  programs, is important to thoroughly {\em test} software before it is {\em used}.
 Such testing  can be very expensive.
 Software assessment budgets are finite
 while assessment effectiveness increases 
@@ -56,8 +57,10 @@ For example, depending on the review methods 8 to 20 LOC/minute can be
 inspected and this effort repeats for all members of the review team,
 which can be as large as four or six~\cite{me02f}. 
 
-{\em Widely used:} Many researchers use static attributes to guide software 
+{\em Widely used:} Many researchers and industrial practitioners  use static attributes to guide software 
 quality predictions.
+ Defect prediction models have been reported
+to have been used at Google~\cite{lewis13}.
 Verification and validation (V\&V) textbooks
 (\cite{rakitin01}) advise using static code complexity attributes
 to decide which modules are worthy of manual inspections.  
@@ -72,14 +75,14 @@ they are fault prone.
 {\em Useful:}
 A
 standard result for defect predictors is that they find the location of  70\% (or more)
-of the defects in code~\cite{me70b}.
+of the defects in code~\cite{me07b}.
 Defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
 A subsequent study on the Turkish software
 compared how much code needs to be inspected using
 random selection vs. selection via defect
 predictors. Using random testing, 87\% of the files
 would have to be inspected in order to detect 87\%
-of the defects. However, if the inspection process
+of the defects. Further, if the inspection process
 was restricted to the 25\% of the files that trigger
 the defect predictors, then 88\% of the defects
 could be found. That is, the same level of defect
@@ -87,19 +90,6 @@ detection (after inspection) can be achieved using
 $(87-25)/87=71$\%less effort
 \cite{tosun09}.
 
-This is markedly
-higher than other currently-used
-industrial
-methods such as manual code reviews. For example, 
-A panel at {\em IEEE Metrics
-2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
-of defects.
-In other work, 
-Raffo found that the defect detection capability of
-industrial review methods have mode defect detection rates
-of around 50\%
- for full Fagan inspections~\cite{fagan76} to
-21\% for less-structured inspections.
 
 Defect prediction scales well to a commercial
 context. Defect predicting technology has been
@@ -110,4 +100,31 @@ highlight simimilar issues to those found   with the more expensive tools. Signi
 Predictive was able to faster process a larger code
 base than the more expensive tool~\cite{turner06}.
 
+The success of this method in  predictors in finding bugs is   markedly
+higher than other currently-used
+industrial
+methods such as manual code reviews. For example, 
+a  panel at {\em IEEE Metrics
+2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
+of defects.
+In other work, 
+Raffo documents the typical    defect detection capability of
+industrial review methods:   around 50\%
+ for full Fagan inspections~\cite{fagan76} to
+21\% for less-structured inspections.
+
+Note only do static code defect predictors perform well compared to manual methods,
+they also are competititve with certain automatic methods.
+At ICSE'14, Rahman et al.~\cite{rahman14:icse} offered an extensive comparison of:
+\bi
+\item The static code analysis tools FindBugs, Jlint, and Pmd;
+\item Against static code defect predictors
+(which they called ``statistical defect prediction'') build using logistic regression.
+\ei
+That study assessed the cost-effectiveness of finding bugs using either method.
+They found   no significant differences in the cost-effectiveness
+of the two approaches. Given this equivalence, it is significant to note that 
+static code defect prediction can be quickly adapted to new languages, just by building lightweight
+parsers that can extract information like \fig{ck}. The same cannot be said for   static code analyzers that require extensive modification before they can be applied to a new
+language.
 
