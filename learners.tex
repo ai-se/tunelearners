@@ -5,12 +5,17 @@ or if they use some  clustering algorithm to restrict the case matching
 to just the subset of old cases most similar  to new  cases.}. 
 Generalization is important since,
 without generalization, all we can do is perform exact matches
-of new situations to a database of old examples. This is not recommended practice since,
+of new situations against  a database of old examples. This is not recommended practice since,
  if the new situation has not occurred  before, then nothing in the data  will
  matches the new situation
 (and we cannot make any predictions).
 
-The key point here is that there are many ways to summarize data and exceConsider some learner that
+The key point here is that, at least is software engineering,
+the raw data contains noise and superflous details (e.g. highly correleated attributes
+or repeated/very similar rows). Recent results show
+
+are many ways to summarize data.  A repeated result is
+that a table of data with R rows and C columns can be reduced to around Consider some learner that
 builds predictive rules form a subset of  attributes $A$ ranges. Assuming numeric attributes
 divided into five ranges, then the 20 attributes of \fig{ck} can be combined into 
 $2^{5*20}> 10^{30}$
