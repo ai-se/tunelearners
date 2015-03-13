@@ -107,14 +107,12 @@ search-based software engineering.
 
 \section{Introduction}
 
-%\begin{raggedleft}
-%{\em ``The  common misunderstanding about science 
-%%is that scientists seek and find truth. They don't- 
-%they make and test models.''}\\ -- Neil Gershenfeld
+\begin{raggedleft}
+{\em ``So those who are last now will be first then, \\
+and those who are first will be last.''}\\ 
+-- Matthew 20:16
 
-%{\em Essentially, all models are wrong, but some are useful."}\\ --George Box
-%%
-%\end{raggedleft}
+ \end{raggedleft}
 
 In the $21^{st}$ century, it is now impossible
 to manually browse all the available software project
@@ -277,7 +275,97 @@ not exist general conclusions, there does seem to exist general methods for find
 local conclusions in a particular context. Further, as shown below, those
 methods may be very simple to implement and very fast to execute.
 
+\section{Motivating Example}
 
+This section offers a small demonstration
+of the impact of tuning parameters. It also demonstrates that this issue of tuning effects not jist the complex data miners discussed later in the paper but also 
+applies for even very simple  learning schemes.
+
+
+One way to generate a  defect predictor from
+static code is to use 
+linear  regression.
+This is a standard statistical
+method that fits a straight line to a set of points. The line
+offers a set of predicted values.
+If the points are somewhat
+scattered, then a single regression line cannot pass through all points and the distance from these predicted values to the actual
+values is a measure of the error associated with that line.
+Linear regression search for a line that minimizes that
+error and maximizes the correlation\footnote{
+$Correlation$
+measures how closely two variables co-vary.  It ranges from   from -1
+(perfect negative correlation) through 0 (no correlation) to +1
+ (perfect positive correlation).
+Let  $a_i$ and $p_i$ denote some actual and predicted values respectively; and  $n$ and $\overline{x}$ denote
+ the number of observations and the mean of the $n$ observations, 
+respectively. Then:
+$S_{PA}=\frac{\sum_i (p_i - \overline{p})(a_i -
+  \overline{a})}{n-1}$ and
+$S_{p}=\frac{\sum_i (p_i - \overline{p})^2}{n-1}$
+and 
+$S_{a}=\frac{\sum_i (a_i - \overline{a})^2}{n-1}$ and
+correlation is  $c=\frac{S_{PA}}{\sqrt{S_pS_a}}$.}  denoted as $c$.
+
+Suppose  a researcher wants to use linear regression
+to test if Halstead's~\cite{halstead77} measures
+of   function complexity
+(number of symbols programmers has to understand) are   {\em better than}
+mere lines of code for predicting
+software defects.  That researcher might argue that Halstead's cognitive approach to
+software bugs is better suited to code refactoring tools since it offers 
+more ways to alter functions that just some coarse grained lines of code measure.
+
+
+That researcher might test that belief by using studying historical
+defect logs with 
+linear regression. Here are two equations (learned from NASA data)
+that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$.
+Note that the Halstead correlations $c_2$
+are worse than those from lines of code $c_1$-- which seems to suggest that
+despite their potential support for refactoring, our researchers should not use Halstead.
+
+{\scriptsize \[\begin{array}{l|l|ll}
+\mathit{measures} & d= \mathit{\#defects} & \mathit{correlation}\\\hline
+\mathit{LOC}   &d_i= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
+\mathid{Halstead & d_2= 0.231 + 0.00344N     \\    
+           & +  0.0009V   - 0.185L \\
+           & - 0.0343D      - 0.00541I \\
+           & + 0.000019E + 0.711B \\ 
+            &   - 0.00047T  & c_2=-0.36 
+            \end{array}
+\end{eqnarray}}
+ 
+
+
+\begin{figure}[!t]
+{\scriptsize
+\begin{tabular}{rl}
+recall   &
+ \includegraphics[width=3.2in]{lsrvscostpd.pdf}\\
+  false alarms:  \includegraphics[width=3.2in]{lsrvscostpf.pdf}\\
+\end{tabular}}
+\caption{
+ probability of false alarm,
+  and
+  probability of recognizing defective modules  seen using \mbox{$d_i \ge T$} for
+  \mbox{$0.1 \le T \le 3$} 
+  Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp
+ }\label{fig:pd1}
+ \end{figure}
+
+Using these equations, a blind-spot sampling policy might be to
+assess some module if $defects_i$ is more than some threshold $X_i$.
+\fig{pd1} shows this for both $defects_1$ (the ``LSR'' curve) and
+$defects_2$ (the ``HALSTEAD'' curve).  Not surprisingly, the detector's
+$PD$ depends on the value selected for $X_i$.  At $X_i=0$ there are no
+blind spots. Every part of the code is assessed so all modules with defects are found and $PD$ is very high.  But as $X_i$ increases fewer
+modules are inspected, so less is found and $PD$ decreases.
+
+ Note that either $defects_1$ or $defects_2$ can reach some desired
+level of $PD$, {\em regardless of their correlations}, merely by
+selecting the appropriate threshold value. For example, PD=75\% using {\em either} $defects_1\ge 0.65$ or $defects_2\ge 0.45$ (see
+\fig{pd1}).   
 
 \section{Background}
 \subsection{Defect Prediction}
