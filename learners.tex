@@ -1,10 +1,14 @@
 This section describes the learners used in this study: CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
-and WHERE~\cite{menzies2013local}. The implementations
+and WHERE~\cite{menzies2013local}. 
+The implementations
 for CART and Random Forest comes from 
 SciKitLearn~\cite{scikit-learn}.
 WHERE is available from
 github.com/ai-se/where\footnote{\wei{ need a nice  where repo. with an
-data and code examples sub-directory. clean code. throw out anything not needed. before april1.}}
+data and code examples sub-directory. clean code. throw out anything not needed. before april1.}}.
+This section is somewhat technical but we need
+to present this detail in order to understand all the options that comprise the tuning 
+parameters of our learners.
 
 CART, Random Forest, and WHERE are all  tree learners that divide a data set, then recurses
 on each split.
