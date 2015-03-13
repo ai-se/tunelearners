@@ -1,5 +1,181 @@
-This section describes the learners used in this study. While there are many differences
-in those learners, they have the same goal: to summarize a large data set into a small model\footnote{Technical note: proponents of instance-based reasoning might argue that
+This section describes the learners used in this study: CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
+and WHERE~\cite{menzies2013local}. The implementations
+for CART and Random Forest comes from 
+SciKitLearn~\cite{scikit-learn}.
+WHERE is available from
+github.com/ai-se/where\footnote{\wei{ need a nice  where repo. with an
+data and code examples sub-directory. clean code. throw out anything not needed. before april1.}}
+
+CART, Random Forest, and WHERE are all  tree learners that divide a data set, then recurses
+on each split.
+All our learners use the following tuning parameters to control that splitting process.
+These learners
+generate numeric predictions which are converted
+into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all use the threshold value $T$ discussed in \tion{eq}.
+Also, if data contains more than {\em min sample split}, then a split is attempted.
+On the other hand, if a split contains no more than {\em min samples leaf}, then recursion stops. For CART and Random Forest use a 
+user-supplied constant for this parameter while
+WHERE computes $m$={\em min samples leaf} from the size of the data
+sets via  $m=\mathit{size}^\mathif{min size}$ (so, for WHERE,
+{\em min size} is the parameter to be tuned).
+
+These learners use different techniques to explore the splits:
+\bi
+\item
+CART finds the attributes whose ranges contain rows with least variance in the number
+of defects\footnote{If an attribute ranges $r_i$ is found in 
+$n_i$ rows each with a  defect count variance of $v_i$, then CART seeks the attributes
+whose ranges minimizes $\sum_i \left(\sqrt{v_i}\times n_i/(\sum_i n_i)\right)$.}.
+\item
+Random Forest    divides data like CART,
+but it builds more than one tree, each time using some subset of
+the attributes (selected at random). 
+\item
+WHERE projects the data on to dimensions synthesizes from the raw data using
+a process analogous to principle component analysis\footnote{
+PCA  synthesises  new
+attributes $e_i, e_2,...$
+that extends across the dimension of greatest  variance in the data  with attributes $d$.  
+This process  combines
+redundant  variables into a smaller set of variables  (so $e \ll d$) since those
+redundancies become (approximately) parallel lines
+in $e$ space. For all such redundancies \mbox{$i,j \in d$}, we 
+can ignore $j$ 
+since effects that change over $j$ also
+change in the same way over $i$.
+PCA is also useful for skipping over noisy variables from $d$-- these
+variables are effectively ignored since    they  do not contribute to the variance in the data.}.
+WHERE   divides  at the median point of that projection. On recursion,
+this generates a dendogram, the leaves of which are clusters of  very similar examples.
+\ei
+WHERE's {\em infoPrune} tuning parameter then uses  what attributes are used in this process.
+
+XXX
+
+Once WHERE's dengogram is generated, some mechanism must be used to map test cases into specific 
+clusters. To this end, WHERE pretends its clusters are ``classes'' and 
+a entropy-based decision tree learner   to find
+the decisions that best select for each ``class'' (i.e. each cluster).
+This entropy-based learner  finds the attributes that build sub-trees that best select
+for the fewest  clusters\footnote{In entropy based decision-tree learning,  the
+the splitting attribute is the one that most  minimizes $\sum_i \left( e_i\times n_i/(\sum_i n_i)\right)$,
+defined as follows.
+Let    attribute ranges $r_i$ select
+$n_i$ rows that are found in $c_j$ clusters.  Then the probability of
+arriving at those clusters is $p_j = c_j/n_i$ and the entropy
+of those rows is $e_i = \sum_j \left( -p_j \ldot log_2p_j\right)$.}.
+\ei
+After b
+
+If WHERE's {\em tree prune} parameter is enabled, then WHERE also prunes  superfluous sub-trees
+in the cluster-selection trees. For example, if a sub-tree and its parent have the same 
+majority cluster
+(one that occurs most frequently), then we prune the sub-tree.
+
+
+
+
+
+Other tuning parameters are learner specific. For example,
+{\em max feature} is used by
+CART and Random Forest to select the number of attributes
+used to build one tree.
+CART's default is to use all the attributes while 
+Random Forest usually selects the square root of the number
+of attributes.
+Also,
+$F$ is the number of trees built by Random Forest 
+(and was
+  discussed in our introduction).
+ Further,
+  {\em max leaf nodes} is the upper bound on leaf notes generated in a 
+  Random Forest.
+
+Of all our learners, WHERE has the most tuning parameters. This turns out
+to be significant since, in the experiments shown below, tuned WHERE 
+out-performed the other learners. This suggests the heuristic that if
+you are going to tune learners, use one with the most tuning options.
+
+After building its tree, WHERE ranks all attributes by how well
+they select for fewest leaves (using the  infogain measure
+from the Fayyad-Irani discretizer~\cite{FayIra93Multi}, where ``class'' is really the leaf cluster ids). It then only uses the best {\em infoPrune} percent of the attributes to build
+its cluster selection tree. Also, the {\em tree prune} parameter (described above) sometimes
+prunes aways all  cluster selectors branches. To tame this effect, the {\em wriggle} parameter
+blocks tree pruning for at least the the   {\em wriggle} number of initial branches.
+
+
+
+We choose CART and Random Forest since  these were used in 
+a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that compared 21 different 
+learners for software defect prediction:
+\bi
+\item
+{\em Statistical classifiers:}
+Linear    discriminant analysis,
+Quadratic discriminant analysis,
+Logistic regression,
+Naive Bayes,
+Bayesian networks,
+Least-angle regression,
+Relevance vector machine,
+
+\item
+{\em Nearest neighbor methods:}
+k-nearest neighbor,
+K-Star
+
+\item
+{\em Neural networks:}
+Multi-Layer Perceptron,
+Radial bias function network,
+
+\item
+{\em Support vector machine-based classifiers:}
+Support vector machine,
+Lagrangian SVM
+Least squares SVM,
+Linear programming,
+Voted perceptron,
+
+\item
+{\em Decision-tree approaches:}
+C4.5 decision tree,
+CART,
+Alternating decision tree.
+\item
+{\em Ensemble methods:}
+Random Forest,
+Logistic Model Tree.
+\ei
+In that study, CART was severely trounced (was ranked last) and Random Forest was
+the standout best method. The experiments shown below both confirm and refute
+that ranking. In a result consistent with the prior result, untuned Random Forest performs best.
+However, after tuning, the worst learner found by Lessmann et al. (CART) performed better
+than Random Forest.
+
+, where the performance of both tools as predictors are 
+significantly different based on authors' experiment as mentioned before. We'd like to 
+investigate whether tuning can change such conclusion. WHERE-based Predictor is a new 
+defect predictor based on WHERE\cite{menzies2013local} algorithm. A comparison with 
+standard predictor like CART and Random Forest will better evaluate and judge the 
+performance such new predictor. As for the tuner, there're many heuristic optimization 
+algorithms in wild. However, DE is a good but maybe not the best candidate for the tuning 
+process considering different performance measurements. To determine which optimizer is 
+fitable and results in better performance is beyond this work scope. We leave it to future 
+works. The rest of this section will describe each tool applied in this work.
+
+
+
+While there are many technical
+differences
+in those learners, they have certain similarities.
+
+To begin with, all the learners in this study generate numeric predictions which are converted
+into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all have some threshold  value $T$ 
+that can be tuned.
+
+
+same goal: to summarize a large data set into a small model\footnote{Technical note: proponents of instance-based reasoning might argue that
 their goal is to retain, and not summarize, the training data.
 However, 
 even instance-based reasoners use some degree of summarizing when they learn
@@ -22,10 +198,13 @@ $c$ columns can be replaced by one column.
 then those $r$ rows can be replaced
 by one cluster centroid that stands in $r$.
 \item
-Kocagenunil~\cite{me13a} and Papakroni~\cite{papa13} conduct  different experiments
-to  show  that tables of software defect data in the form of \fig{ck} contain around 90\% redundant
-data. Specifically, they show that such tables can be be pruned back to around
+The seperate experiments of
+Kocagenunil~\cite{me13a} and Papakroni~\cite{papa13}  show that  tables  of data
+like \fig{ck} can be be pruned back to around
 25\% of the columns and 10\% of the rows without losing the essential information in the data set.
+This reduced space contains $0.25*0.1 = 2.5\%$ of the cells in the original table.
+While some of that reduction is due to the removal of noise, their conclusion is correlated
+columns and similar rows are very common in SE data sets.
 \ei
 Given this high level of redundancy, learners need only explore a small fraction of these $2^{A*d}$ rules.
 Most learners exploit this fact to optimize their reasoning. Rather than explore all options,

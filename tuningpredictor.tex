@@ -27,6 +27,8 @@
 \definecolor{Gray}{gray}{0.95}
 \definecolor{LightGray}{gray}{0.975}
 
+\newcommand{\wei}[1]{\textcolor{red}{Wei: #1}} 
+
 %% timm tricks
 \newcommand{\bi}{\begin{itemize}[leftmargin=0.4cm]}
 \newcommand{\ei}{\end{itemize}}
@@ -206,12 +208,12 @@ Thirdly, it is standard practice to use the default ``off-the-shelf'' tunings  f
 we have defended that approach on methodological grounds arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, one such default setting
-  in the Python SciKitLearn toolkit~\cite{scikit-learn}
-is to use $T=10$ decision trees in  Random Forest classifiers.
-Our optimizer settled on  $T$ values that were were nowhere near that default:
+  in the Python \mbox{SciKitLearn} toolkit~\cite{scikit-learn}
+is to use $F=10$ decision trees in  Random Forest classifiers.
+Our optimizer settled on  $F$ values that were were nowhere near that default:
 
 {\scriptsize
-\[T \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
+\[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
                                 108,  119, 133,  140, 140,   147,  145,  142   \end{array}\right\}
 \]}
 
@@ -219,18 +221,17 @@ Our optimizer settled on  $T$ values that were were nowhere near that default:
 In summary,it is now an open and pressing research issue to check if
 analytics without parameter tuning is considered {\em harmful} or, at the 
 very least, {\em misleading}.
-At the very least, there is now cause to doubt many conclusions based on
+Clearly, we must now doubt  conclusions based on
 ``off-the-shelf'' tunings.
-At the very most, 
-it is no longer enough to just run a data miner and present the result
+Further,
+it is no longer enough to just run a data miner and report the result
 {\em without} first conducting an tuning optimizations study.
 
+ 
 
-The rest of this paper is structured as follows.
+\subsection{Preliminaries}
 
-\section{Preliminaries}
-
-Before beginning, this section offers certain caveats on these results.
+Before beginning, we offer four caveats on these results.
 
 Firstly, we are {\em not} saying that {\em all} learning requires
 tuning. For example, when proposing fixes to software, Weimar et al. use a genetic learner
@@ -243,7 +244,7 @@ then this becomes a race between competing methods (or attributes).  In such a r
 to hobble one competitor with poor tunings. 
  
 
-Secondly, the tuning results shown here only came from one particular software analytics task 
+Secondly, the tuning results shown here only came from one  software analytics task 
 (defect prediction from static code attributes).
 There are many other kinds of software analytics tasks 
 (software development effort estimation, social network mining,
@@ -275,10 +276,10 @@ not exist general conclusions, there does seem to exist general methods for find
 local conclusions in a particular context. Further, as shown below, those
 methods may be very simple to implement and very fast to execute.
 
-\section{Motivating Example}
+\section{Motivating Example}\label{sec:eg}
 
 This section offers a small demonstration
-of the impact of tuning parameters. It also demonstrates that this issue of tuning effects not jist the complex data miners discussed later in the paper but also 
+of the impact of tuning parameters. It also demonstrates that this issue of tuning effects not jist the complex data miners discussed later in the paper bu t also 
 applies for even very simple  learning schemes.
 
 
@@ -300,12 +301,12 @@ measures how closely two variables co-vary.  It ranges from   from -1
 Let  $a_i$ and $p_i$ denote some actual and predicted values respectively; and  $n$ and $\overline{x}$ denote
  the number of observations and the mean of the $n$ observations, 
 respectively. Then:
-$S_{PA}=\frac{\sum_i (p_i - \overline{p})(a_i -
-  \overline{a})}{n-1}$ and
-$S_{p}=\frac{\sum_i (p_i - \overline{p})^2}{n-1}$
+$S_{PA}=(\sum_i (p_i - \overline{p})(a_i -
+  \overline{a}))/(n-1)$ and
+$S_{p}=(\sum_i (p_i - \overline{p})^2)(n-1)$
 and 
-$S_{a}=\frac{\sum_i (a_i - \overline{a})^2}{n-1}$ and
-correlation is  $c=\frac{S_{PA}}{\sqrt{S_pS_a}}$.}  denoted as $c$.
+$S_{a}=(\sum_i (a_i - \overline{a})^2)/(n-1)$ and
+correlation is  $c=S_{PA}/\sqrt{S_pS_a}$.}  denoted as $c$.
 
 Suppose  a researcher wants to use linear regression
 to test if Halstead's~\cite{halstead77} measures
@@ -314,15 +315,16 @@ of   function complexity
 mere lines of code for predicting
 software defects.  That researcher might argue that Halstead's cognitive approach to
 software bugs is better suited to code refactoring tools since it offers 
-more ways to alter functions that just some coarse grained lines of code measure.
+more ways to alter functions that just some coarse grain lines of code measure.
 
 
 That researcher might test that belief by using studying historical
 defect logs with 
-linear regression. Here are two equations (learned from NASA data)
-that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$.
-Note that the Halstead correlations $c_2$
-are worse than those from lines of code $c_1$-- which seems to suggest that
+linear regression. Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
+that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$ seen in a
+software module (in this case, a ``C'' function).
+Note that the Halstead correlation $c_2$
+is worse than those from lines of code $c_1$. This result  seems to suggest that
 despite their potential support for refactoring, our researchers should not use Halstead.
 
 {\scriptsize \[\begin{array}{l|l|ll}
@@ -337,37 +339,77 @@ despite their potential support for refactoring, our researchers should not use 
 \end{eqnarray}}
  
 
+\noindent
+Enter tuning. Suppose the defect predictors $d_1$ and $d_2$  learned from LOC or Halstead
+are used to to call an inspection
+team to check for errors in certain parts of the code using the rule
+\begin{equation}\label{eq:yesno}\scriptsize
+\mathit{inspect}= \left\{
+\begin{array}{ll}
+d_i \ge T \rightarrow \mathit{Yes}\\
+d_i <   T \rightarrow \mathit{No}
+\end{array}
+\end{equation}
+\fig{pd1} shows the effects of tuning the $T$ variable. Not surprisingly,
+at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
+problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls below
+20\% at $T=0.45$ (for Halstead). 
+
+ 
 
 \begin{figure}[!t]
 {\scriptsize
-\begin{tabular}{rl}
-recall   &
- \includegraphics[width=3.2in]{lsrvscostpd.pdf}\\
-  false alarms:  \includegraphics[width=3.2in]{lsrvscostpf.pdf}\\
-\end{tabular}}
+\begin{center}
+
+\% recall (probability of detection):   
+
+\includegraphics[width=3in]{lsrvscostpd.pdf}
+
+\% false alarms:
+
+\includegraphics[width=3in]{lsrvscostpf.pdf}
+\end{center}}
 \caption{
- probability of false alarm,
+ Y-axis shows probability of false alarm,
   and
-  probability of recognizing defective modules  seen using \mbox{$d_i \ge T$} for
-  \mbox{$0.1 \le T \le 3$} 
-  Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp
+  probability of recognizing defective modules  seen using \mbox{$d_i \ge T$}.
+  Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp.
  }\label{fig:pd1}
  \end{figure}
 
-Using these equations, a blind-spot sampling policy might be to
-assess some module if $defects_i$ is more than some threshold $X_i$.
-\fig{pd1} shows this for both $defects_1$ (the ``LSR'' curve) and
-$defects_2$ (the ``HALSTEAD'' curve).  Not surprisingly, the detector's
-$PD$ depends on the value selected for $X_i$.  At $X_i=0$ there are no
-blind spots. Every part of the code is assessed so all modules with defects are found and $PD$ is very high.  But as $X_i$ increases fewer
-modules are inspected, so less is found and $PD$ decreases.
 
- Note that either $defects_1$ or $defects_2$ can reach some desired
-level of $PD$, {\em regardless of their correlations}, merely by
-selecting the appropriate threshold value. For example, PD=75\% using {\em either} $defects_1\ge 0.65$ or $defects_2\ge 0.45$ (see
-\fig{pd1}).   
+One  important lesson from  \fig{pd1} is that the ``best'' tunings are context
+specific. For mission critical systems (e.g. a nuclear power plant), management
+might accept the cost of high false alarm rates if it meant increasing the probability
+of detecting errors. For such contexts, we might recommend some very small value of $T$.
 
-\section{Background}
+The other  important lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
+detector can work just as well as seemingly better ones.
+Note that either the Halstead or LOC detector can reach some desired
+level of recall, regardless of their correlations, just by
+selecting the appropriate threshold value. For example, in \fig{pd1}, see the recall=75\% values
+found at {\em either} $d_i\ge 0.65$ or $d_2\ge 0.45$ (and at the threshold, the false alarm rates
+were very similar: 14\% and 19\%).
+
+The core point of this example is that    the true value of a detector
+could not be assessed {\em without} conducting a  tuning study in the context of some business case (in this case, 
+issuing a request to an inspection team to review some module).  
+This is strong motivation to explore the issue of tunings.
+
+
+
+\section{Background Notes}
+
+
+
+The rest of this paper repeats the analyis of the last section, but for much
+more complex learners. In those results, shown  below, we will find
+examples of {\em rank reversals};
+i.e.  after tuning the top ranked defector becomes last and vice versa.
+Such examples motivate the extensive exploration of tuning in software analytics.
+Before presenting those results, this section offers some background notes on defect prediction,
+performance measures, and optimization with differential evolution.
+
 \subsection{Defect Prediction}
 
 
@@ -438,9 +480,8 @@ post-release bug-tracking system).}\label{fig:ck}
 
  
 
-\subsection{Data Mining}
-Static code defect prediction applies data miners to build its predictors. How does data mining work?
-
+\subsection{Data Mining Algorithms}
+ 
 \input{learners}
 
 
