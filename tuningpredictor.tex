@@ -237,7 +237,7 @@ Firstly, we are {\em not} saying that {\em all} learning requires
 tuning. For example, when proposing fixes to software, Weimar et al. use a genetic learner
 to propose patches~\cite{Weimer:2009}. Consider one performance criteria for that work; i.e. 
 that   that that method can find and fix known bugs. Note that this is a {\em competency criteria}
-which does not include the phrase  {\em better than}. Such performance criteria do
+which does not include the phrase  ``{\em better than}''. Such performance criteria do
 not requiring tuning.  However, once {\em better than} enters the performance criteria
 (as done in \cite{lessmann2008benchmarking,hall11,me07b,bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting})
 then this becomes a race between competing methods (or attributes).  In such a race, it is unfair
@@ -276,7 +276,7 @@ not exist general conclusions, there does seem to exist general methods for find
 local conclusions in a particular context. Further, as shown below, those
 methods may be very simple to implement and very fast to execute.
 
-\section{Motivating Example}\label{sec:eg}
+\section{Motivating Example}\label{sect:eg}
 
 This section offers a small demonstration
 of the impact of tuning parameters. It also demonstrates that this issue of tuning effects not jist the complex data miners discussed later in the paper bu t also 
@@ -301,12 +301,12 @@ measures how closely two variables co-vary.  It ranges from   from -1
 Let  $a_i$ and $p_i$ denote some actual and predicted values respectively; and  $n$ and $\overline{x}$ denote
  the number of observations and the mean of the $n$ observations, 
 respectively. Then:
-$S_{PA}=(\sum_i (p_i - \overline{p})(a_i -
+$S_{\mathit{PA}}=(\sum_i (p_i - \overline{p})(a_i -
   \overline{a}))/(n-1)$ and
 $S_{p}=(\sum_i (p_i - \overline{p})^2)(n-1)$
 and 
 $S_{a}=(\sum_i (a_i - \overline{a})^2)/(n-1)$ and
-correlation is  $c=S_{PA}/\sqrt{S_pS_a}$.}  denoted as $c$.
+correlation is  $c=S_{\mathit{PA}}/\sqrt{S_pS_a}$.}  denoted as $c$.
 
 Suppose  a researcher wants to use linear regression
 to test if Halstead's~\cite{halstead77} measures
@@ -327,16 +327,18 @@ Note that the Halstead correlation $c_2$
 is worse than those from lines of code $c_1$. This result  seems to suggest that
 despite their potential support for refactoring, our researchers should not use Halstead.
 
-{\scriptsize \[\begin{array}{l|l|ll}
+{\scriptsize \[
+\begin{array}{l|l|ll}
 \mathit{measures} & d= \mathit{\#defects} & \mathit{correlation}\\\hline
 \mathit{LOC}   &d_i= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
-\mathid{Halstead & d_2= 0.231 + 0.00344N     \\    
-           & +  0.0009V   - 0.185L \\
-           & - 0.0343D      - 0.00541I \\
-           & + 0.000019E + 0.711B \\ 
-            &   - 0.00047T  & c_2=-0.36 
-            \end{array}
-\end{eqnarray}}
+\mathit{Halstead} & d_2= 0.231 + 0.00344N     \\    
+                 & +  0.0009V   - 0.185L \\
+                 & - 0.0343D      - 0.00541I \\
+                 & + 0.000019E + 0.711B \\ 
+                 &   - 0.00047T  & c_2=-0.36  
+\end{array}
+\]
+}
  
 
 \noindent
@@ -347,8 +349,8 @@ team to check for errors in certain parts of the code using the rule
 \mathit{inspect}= \left\{
 \begin{array}{ll}
 d_i \ge T \rightarrow \mathit{Yes}\\
-d_i <   T \rightarrow \mathit{No}
-\end{array}
+d_i <   T \rightarrow \mathit{No} 
+\end{array}\right.
 \end{equation}
 \fig{pd1} shows the effects of tuning the $T$ variable. Not surprisingly,
 at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
@@ -484,8 +486,9 @@ post-release bug-tracking system).}\label{fig:ck}
  
 \input{learners}
 
+The psuedocde for differential evolution is shown in Algorithm \ref{alg:DE}
 
-\subsection{Differential Evolution Algorithm}
+for 
 Differential Evolution (DE)\cite{storn1997differential} is a stochastic search algorithm that 
 optimizes a problem by iteratively trying to improve a  population of candidate solutions with 
 regard to a given quality measurement. Such method makes no assumptions about the 
@@ -594,17 +597,17 @@ repo/
 
 \subsection{Experiment Design}
 
-The experiment aims at investigate whether tuning helps learners improve performance in 
+The experiment aims at investigating whether tuning helps learners improve performance in 
 terms of accuracy measurement. We choose compare WHERE-based learner with and 
 without tuning parameters and two {\it significantly different} learners Random Forest and 
 CART according to \cite{lessmann2008benchmarking}. As mentioned above, we'd like to see 
 whether tuning will help change the rank of CART and make it comparable with Random 
 Forest. 
 
-To evaluate accuracy performance of learners, several measurements are proposed, like 
+To evaluate accuracy performance of learners, several measurements are proposed to use, like 
 probability of  detection({\it pd}) and probability of false alarm ({\it pf})\cite{menzies2007data}, 
 the area under the receiver operating characteristics curve ({\it AUC})
-\cite{lessmann2008benchmarking}, and precision\cite{zhang2007comments}. In this work, we 
+\cite{lessmann2008benchmarking}, precision and F measure\cite{zhang2007comments}. In this work, we 
 expect learners should identify as many defective modules as possible while avoiding false 
 alarm. Therefore, learners are evaluated by both of {\it pd} and {\it pf} simaltanieously. A single 
 measure, G-measure, defined as the harmonic mean of {\it pd} and $1-{\it pf}$  is used. The 
@@ -613,17 +616,16 @@ G-measure value is between 0 and 1. The higher, the better.
 G = \frac{2*(1-pf)*pd}{1-pf+pd}
 \end{equation}
 
-In this experiment, we use three different portions of one project data set for training, tuning 
-and testing process. In contrast to hold out way used in \cite{lessmann2008benchmarking, 
+In this experiment, we divide one project data set into training, tuning 
+and testing datasets. In contrast to hold out way used in \cite{lessmann2008benchmarking, 
 menzies2007data}, we separate the data sets in order. Since learners are designed to predict 
 defects in future projects,  any randomly data set selection without taking into the time series 
-will not sufficient to evaluate the performance of predicting future. To the most, that is good to 
-evaluate the accuracy of classification but not predicting future. Since we have 10 different 
-project data, each of which contains least 3 evolutionary versions. We use the following policy 
-to select the data: in each project, we only use the last three data files for experiment. 
-Specifically, the $nth$,  $(n-1)th$, $(n-2)th$ versions of project data are selected for testing, 
-tuning and training learners, respectively. This will make sure that we don't use the future 
-project data to train learners and predict previous project.
+will not sufficient to evaluate the performance of predicting future. Since we have data from 
+10 different projects, each of which contains at least 3 evolutionary versions. We use the following policy 
+to select the data for experiments: for each project, we use every three chronological data files 
+to do testing, tuning and training in one experiment. For example, in ant project,
+we have versions of $ant1.3$, $1.4$, $1.5$, $1.6$, and $1.7$, which will generate data sets called
+ $antV0$, $antV1$ and $antV2$ for three experiments.
 
 To investigates the impacts of parameters on learners, we use DE as the tuner and compare the G-measure 
 values of Where-based learner with and without tuning, CART with and without tuning and Random 
@@ -632,12 +634,49 @@ new heuristics to speed up the tuning process for Random Forests.  For the time 
 we don't tune Random Forests, if tuning help CART outperform Random Forests or improve itself performance ,
 we still could conclude that tuning is helpful and necessary when comparing learners.
 
-Besides the Where-based learner implemented by ourself,  we use the CART and Random Forest modules 
-from scikit-learn \cite{scikit-learn} for this experiment. The parameters associated with different learners are listed in Fig.\ref{fig:parameters}. (\textbf{NEED to elaborate that there're different versions of CART, what's the point to do this experiment}). For each data set, run CART, naive Where-based learner and Random Forests with corresponding default values. Then using DE to tune corresponding parameters for CART and Where-based Learner,  and run them again with the optimal parameters from tuning process to test the performance. 
-This study ranks learners using the Scott-Knott procedure recommended by Mittas \& Angelis in their 2013
-IEEE TSE paper~\cite{mittas2013ranking}.  This method sorts a list of $l$ treatments with $ls$ measurements by their median score. It then splits $l$ into sub-lists $m,n$ in order to maximize the expected value of differences  in the observed performances before and after divisions. 
+Besides the Where-based learner implemented by ourselves,  we use the CART and Random Forest modules 
+from scikit-learn \cite{scikit-learn} to do a comparative study. The parameters associated with different learners are listed in Fig.\ref{fig:parameters}. For each data set, run CART, naive Where-based learner and Random Forests with corresponding default values. Then using DE to tune corresponding parameters for CART and Where-based Learner,  and run them again with the optimal parameters from tuning process to test the performance. 
+% This study ranks learners using the Scott-Knott procedure recommended by Mittas \& Angelis in their 2013
+% IEEE TSE paper~\cite{mittas2013ranking}.  This method sorts a list of $l$ treatments with $ls$ measurements by their median score. It then splits $l$ into sub-lists $m,n$ in order to maximize the expected value of differences  in the observed performances before and after divisions. 
 
 \section{Result}
+
+
+ 
+\begin{figure}[!t]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{r@{~}|r@{~}rr|r@{~}rr|r@{~}rr}
+    & \multicolumn{3}{c|}{WHERE}&\multicolumn{3}{c|}{CART}& \multicolumn{3}{c}{Random Forest}\\\cline{2-10} 
+    Goal & tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive&$\frac{\mathit{tuned}}{\mathit{naive}}$\\\hline
+pd&71.4&1.2&60&4.4&0.1&44&7.1&0.2&36\\ 
+prec&82.8&1.4&59&3.9&0.1&39&7.4&0.2&37\\
+f&86.1&1.2&72&3.3&0.1&33&6.7&0.2&34
+  \end{tabular}
+  \caption{For one train/test set pair (ANT),  time (in seconds) spent tuning,
+  for different goals, or just running the ``off-the-shelf'' learner.}
+\end{figure}
+
+
+\begin{figure}[!t]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+\begin{tabular}{r|rrr}
+goal &	WHERE	&CART&	Random Forest\\\hline
+f	&15	&13	&9\\ 
+pd	&15	&16	&8\\ 
+prec&	14	&14	&8
+\end{tabular}
+\caption{How much slower is tuning vs just running the default
+settings of the learner? E.g. bottom right, tuning to increase
+precision with Random Forests is eight times slower than
+just running Random Forests.}
+\end{figure}
+
 
 \section{Discussion}
 
@@ -657,6 +696,9 @@ Internal and external threats
 
 \section{Acknowledgments}
 
+\vspace*{0.5mm}
+ 
+ \scriptsize
 \bibliographystyle{unsrt}
 \bibliography{tuningpredictor}  
 
@@ -682,7 +724,7 @@ clustering tree and CART tree, respectively}. \\ \cline{2-5}
 & min\_sample\_size & 4& [1,10]& The minimum number of samples required to be a leaf for 
 CART tree. \\ \cline{2-5} 
 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}The value to determine the minimum 
-number of samples to be a Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
+number of samples to be an internal node of the Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
 \end{tabular} \\ \cline{2-5} 
     & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
@@ -1403,7 +1445,7 @@ have been made by many other authors; e.g.
 
 We write to suggest that all those conclusions may be wrong or, at the very most,
 correct within a very limited context. At the very least, the conclusions
-of those papers (and literally dozens of similar papers, include severl
+of those papers (and literally dozens of similar papers, include several
 of our own~\cite{me02e,me02k,me03a,me06d,me07b}) need to be revisited
 in light of this paper's results on the effects of tuning on data miners.
 

@@ -1,115 +1,77 @@
-This section describes the learners used in this study: CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
-and WHERE~\cite{menzies2013local}. 
-The implementations
+This section describes this study's learners (CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
+and WHERE~\cite{menzies2013local}) and their
+tuning parameters (summarised in \fig{parameters}).
+
+Our implementations
 for CART and Random Forest comes from 
 SciKitLearn~\cite{scikit-learn}.
 WHERE is available from
 github.com/ai-se/where\footnote{\wei{ need a nice  where repo. with an
 data and code examples sub-directory. clean code. throw out anything not needed. before april1.}}.
-This section is somewhat technical but we need
-to present this detail in order to understand all the options that comprise the tuning 
-parameters of our learners.
+WHERE has the most tuning parameters. This turns out
+to be important since, in the experiments shown below, tuned WHERE 
+out-performed the other learners-- a result suggesting that
+if you are going to tune learners, then use one with many tuning options.
 
-CART, Random Forest, and WHERE are all  tree learners that divide a data set, then recurses
-on each split.
-All our learners use the following tuning parameters to control that splitting process.
-These learners
-generate numeric predictions which are converted
-into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all use the threshold value $T$ discussed in \tion{eq}.
-Also, if data contains more than {\em min sample split}, then a split is attempted.
-On the other hand, if a split contains no more than {\em min samples leaf}, then recursion stops. For CART and Random Forest use a 
-user-supplied constant for this parameter while
-WHERE computes $m$={\em min samples leaf} from the size of the data
-sets via  $m=\mathit{size}^\mathif{min size}$ (so, for WHERE,
-{\em min size} is the parameter to be tuned).
+%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\arraystretch{1.2}
+\begin{figure*}[t!]
+\scriptsize
+  \centering
+	\begin{tabular}{|c|c|c|c|l|}
+	\cline{1-5}
+	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
+\multicolumn{1}{c|}{Description} \\ \hline
+	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
+	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
+	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider  for the best 
+split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
+one is for clustering and the second one is building prediction model. we explicitly call Where-
+clustering tree and CART tree, respectively}. \\ \cline{2-5} 
+	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
+CART tree. \\ \cline{2-5} 
+	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}The value to determine the minimum 
+number of samples to be a Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
+\end{tabular} \\ \cline{2-5} 
+    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
+	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
+clustering tree. \\ \cline{2-5} 
+	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
+	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5}
+	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ \cline{2-5} 
+\hline
+\multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
 
-These learners use different techniques to explore the splits:
-\bi
-\item
-CART finds the attributes whose ranges contain rows with least variance in the number
-of defects\footnote{If an attribute ranges $r_i$ is found in 
-$n_i$ rows each with a  defect count variance of $v_i$, then CART seeks the attributes
-whose ranges minimizes $\sum_i \left(\sqrt{v_i}\times n_i/(\sum_i n_i)\right)$.}.
-\item
-Random Forest    divides data like CART,
-but it builds more than one tree, each time using some subset of
-the attributes (selected at random). 
-\item
-WHERE projects the data on to dimensions synthesizes from the raw data using
-a process analogous to principle component analysis\footnote{
-PCA  synthesises  new
-attributes $e_i, e_2,...$
-that extends across the dimension of greatest  variance in the data  with attributes $d$.  
-This process  combines
-redundant  variables into a smaller set of variables  (so $e \ll d$) since those
-redundancies become (approximately) parallel lines
-in $e$ space. For all such redundancies \mbox{$i,j \in d$}, we 
-can ignore $j$ 
-since effects that change over $j$ also
-change in the same way over $i$.
-PCA is also useful for skipping over noisy variables from $d$-- these
-variables are effectively ignored since    they  do not contribute to the variance in the data.}.
-WHERE   divides  at the median point of that projection. On recursion,
-this generates a dendogram, the leaves of which are clusters of  very similar examples.
-\ei
-WHERE's {\em infoPrune} tuning parameter then uses  what attributes are used in this process.
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{1-5}  
+       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
+\cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{2-5} 
+	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
+	 \hline
 
-XXX
-
-Once WHERE's dengogram is generated, some mechanism must be used to map test cases into specific 
-clusters. To this end, WHERE pretends its clusters are ``classes'' and 
-a entropy-based decision tree learner   to find
-the decisions that best select for each ``class'' (i.e. each cluster).
-This entropy-based learner  finds the attributes that build sub-trees that best select
-for the fewest  clusters\footnote{In entropy based decision-tree learning,  the
-the splitting attribute is the one that most  minimizes $\sum_i \left( e_i\times n_i/(\sum_i n_i)\right)$,
-defined as follows.
-Let    attribute ranges $r_i$ select
-$n_i$ rows that are found in $c_j$ clusters.  Then the probability of
-arriving at those clusters is $p_j = c_j/n_i$ and the entropy
-of those rows is $e_i = \sum_j \left( -p_j \ldot log_2p_j\right)$.}.
-\ei
-After b
-
-If WHERE's {\em tree prune} parameter is enabled, then WHERE also prunes  superfluous sub-trees
-in the cluster-selection trees. For example, if a sub-tree and its parent have the same 
-majority cluster
-(one that occurs most frequently), then we prune the sub-tree.
+	\end{tabular}
+    \caption {List of parameters to be tuned in Where-based learner and CART in scikit-learn.}
+\label{fig:parameters}
+\end{figure*}
+ 
+\subsection{Why Study These Algorithms?}
 
 
+This paper studies WHERE since this was the first learner we tried to tune and, as shown below,
+it offers an interesting case study on the benefits of tuning.
 
-
-
-Other tuning parameters are learner specific. For example,
-{\em max feature} is used by
-CART and Random Forest to select the number of attributes
-used to build one tree.
-CART's default is to use all the attributes while 
-Random Forest usually selects the square root of the number
-of attributes.
-Also,
-$F$ is the number of trees built by Random Forest 
-(and was
-  discussed in our introduction).
- Further,
-  {\em max leaf nodes} is the upper bound on leaf notes generated in a 
-  Random Forest.
-
-Of all our learners, WHERE has the most tuning parameters. This turns out
-to be significant since, in the experiments shown below, tuned WHERE 
-out-performed the other learners. This suggests the heuristic that if
-you are going to tune learners, use one with the most tuning options.
-
-After building its tree, WHERE ranks all attributes by how well
-they select for fewest leaves (using the  infogain measure
-from the Fayyad-Irani discretizer~\cite{FayIra93Multi}, where ``class'' is really the leaf cluster ids). It then only uses the best {\em infoPrune} percent of the attributes to build
-its cluster selection tree. Also, the {\em tree prune} parameter (described above) sometimes
-prunes aways all  cluster selectors branches. To tame this effect, the {\em wriggle} parameter
-blocks tree pruning for at least the the   {\em wriggle} number of initial branches.
-
-
-
-We choose CART and Random Forest since  these were used in 
+This paper also studies  CART and Random Forest since  these were used in 
 a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that compared 21 different 
 learners for software defect prediction:
 \bi
@@ -156,241 +118,180 @@ the standout best method. The experiments shown below both confirm and refute
 that ranking. In a result consistent with the prior result, untuned Random Forest performs best.
 However, after tuning, the worst learner found by Lessmann et al. (CART) performed better
 than Random Forest.
+  
 
-, where the performance of both tools as predictors are 
-significantly different based on authors' experiment as mentioned before. We'd like to 
-investigate whether tuning can change such conclusion. WHERE-based Predictor is a new 
-defect predictor based on WHERE\cite{menzies2013local} algorithm. A comparison with 
-standard predictor like CART and Random Forest will better evaluate and judge the 
-performance such new predictor. As for the tuner, there're many heuristic optimization 
-algorithms in wild. However, DE is a good but maybe not the best candidate for the tuning 
-process considering different performance measurements. To determine which optimizer is 
-fitable and results in better performance is beyond this work scope. We leave it to future 
-works. The rest of this section will describe each tool applied in this work.
+\subsection{Learners and Their Tunings}
 
+CART, Random Forest, and WHERE are all  tree learners that divide a data set, then recurse
+on each split.
+If data contains more than {\em min sample split}, then a split is attempted.
+On the other hand, if a split contains no more than {\em min samples leaf}, then recursion stops. For CART and Random Forest use a 
+user-supplied constant for this parameter while
+WHERE computes $m$={\em min samples leaf} from the size of the data
+sets via  $m=\mathit{size}^\mathit{min size}$ (so, for WHERE,
+{\em min size} is the parameter to be tuned).
 
+These learners
+generate numeric predictions which are converted
+into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all use the {\em threshold} value $T$ discussed in \tion{eg}.
 
-While there are many technical
-differences
-in those learners, they have certain similarities.
-
-To begin with, all the learners in this study generate numeric predictions which are converted
-into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all have some threshold  value $T$ 
-that can be tuned.
-
-
-same goal: to summarize a large data set into a small model\footnote{Technical note: proponents of instance-based reasoning might argue that
-their goal is to retain, and not summarize, the training data.
-However, 
-even instance-based reasoners use some degree of summarizing when they learn
-ways to bias the instance matching away from irrelevant training data.
-Those bias tools include  generalizing points to ranges (to allow for partial matches)
-or  clustering algorithm that restrict the case matching
-to just the subset of old cases most similar  to new  cases.}. 
-
-For example,
-consider some learner that
-builds predictive rules from a subset of  attributes $A$ ranges. Assuming numeric attributes
-divided into $d=5$ divisions, then the 20 attributes of \fig{ck} can be combined into 
-$2^{A*d} = 2^{5*20} > 10^{30}$
-possible rules. The key thing to note here is that many of these rules will have similar effects
-since, at least in software engineering, data sets containing rows $R$ and columns $C$ can contain much redundancy:
+These learners use different techniques to explore the splits:
 \bi
-\item When $c \subset C$ columns of data that are correlated to each other, then those
-$c$ columns can be replaced by one column.
-\item When $r \subset R$ rows of data are very similar (e.g. they come from similar projects), 
-then those $r$ rows can be replaced
-by one cluster centroid that stands in $r$.
 \item
-The seperate experiments of
-Kocagenunil~\cite{me13a} and Papakroni~\cite{papa13}  show that  tables  of data
-like \fig{ck} can be be pruned back to around
-25\% of the columns and 10\% of the rows without losing the essential information in the data set.
-This reduced space contains $0.25*0.1 = 2.5\%$ of the cells in the original table.
-While some of that reduction is due to the removal of noise, their conclusion is correlated
-columns and similar rows are very common in SE data sets.
+CART finds the attributes whose ranges contain rows with least variance in the number
+of defects\footnote{If an attribute ranges $r_i$ is found in 
+$n_i$ rows each with a  defect count variance of $v_i$, then CART seeks the attributes
+whose ranges minimizes $\sum_i \left(\sqrt{v_i}\times n_i/(\sum_i n_i)\right)$.}.
+\item
+Random Forest    divides data like CART,
+but it builds $F>1$  trees, each time with a subset of
+the attributes (selected at random). 
+\item
+WHERE projects the data on to a dimension it synthesizes from the raw data using
+a process analogous to principle component analysis\footnote{
+PCA  synthesises  new
+attributes $e_i, e_2,...$
+that extends across the dimension of greatest  variance in the data  with attributes $d$.  
+This process  combines
+redundant  variables into a smaller set of variables  (so $e \ll d$) since those
+redundancies become (approximately) parallel lines
+in $e$ space. For all such redundancies \mbox{$i,j \in d$}, we 
+can ignore $j$ 
+since effects that change over $j$ also
+change in the same way over $i$.
+PCA is also useful for skipping over noisy variables from $d$-- these
+variables are effectively ignored since    they  do not contribute to the variance in the data.}.
+WHERE   divides  at the median point of that projection. On recursion,
+this generates a dendogram, the leaves of which are clusters of  very similar examples.
 \ei
-Given this high level of redundancy, learners need only explore a small fraction of these $2^{A*d}$ rules.
-Most learners exploit this fact to optimize their reasoning. Rather than explore all options,
-they employ some {\em search bias} that lets them quickly focus on a small set of promising rules.
+WHERE's {\em infoPrune} tuning parameter then choices the
+attributes   that best select  different clusters.
+WHERE pretends its clusters are ``classes'', then 
+asks the InfoGain of the
+Fayyad-Irani discretizer~\cite{FayIra93Multi}, to rank the attriubutes.
+WHERE then ignores everything except the top   {\em infoPrune} percent of the sorted
+attributes.
 
-Different biases work best for different data sets so it is standard practice to allow an analyst
-to control these biases via tuning parameters. For example, consider the search biases
-$B_i$ of decision tree learner that :
-\bi
-\item Splits the data on some criteria $B_1$;
-\item Assesses each split using some criteria $B_2$;
-\item Selects which split(s) to explore further using $B_3$;
-\item Recurses into each split until some stopping criteria $B_4$ is encountered.
-\ei
-These biases also appear when the learned decision tree makes a decision:
-\bi
-\item To declare a software module to be XXX
-\ei
+Optionally, if the {\em where prune} option is set, 
+WHERE  continues to applies infogain criteria  recursively to build a tree that selects for the
+different clusters. If WHERE's {\em tree prune} parameter is enabled, then WHERE also prunes  superfluous sub-trees. For example, if a sub-tree and its parent have the same 
+majority cluster
+(one that occurs most frequently), then we prune the sub-tree.
+This tree pruning  sometimes
+prunes aways all  cluster selectors branches. To tame this effect, the {\em wriggle} parameter
+blocks tree pruning for at least the the {\em wriggle} number of initial branches.
+
+Other tuning parameters are learner specific. For example,
+{\em max feature} is used by
+CART and Random Forest to select the number of attributes
+used to build one tree.
+CART's default is to use all the attributes while 
+Random Forest usually selects the square root of the number
+of attributes.
+Also,
+  {\em max leaf nodes} is the upper bound on leaf notes generated in a 
+  Random Forest.
 
 
-\section{Algorithm: Predictor and Tuner}
 
-In order to conduct the experiment of this paper, we need one tool that can predict defects 
-from the empirical data sets and a second tool to tune the built-in parameters associated with 
-predictor. To compare the effects of the tuning process, we have three different predictors: 
-WHERE-based Predictor, CART and Random Forest. Different Evolution(DE) as an optimizer 
-is used as a tuner in this paper.
+\subsection{Tuning Algorithms}
 
-We choose CART and Random Forest as a predictor in this paper is motivated by 
-\cite{lessmann2008benchmarking}, where the performance of both tools as predictors are 
-significantly different based on authors' experiment as mentioned before. We'd like to 
-investigate whether tuning can change such conclusion. WHERE-based Predictor is a new 
-defect predictor based on WHERE\cite{menzies2013local} algorithm. A comparison with 
-standard predictor like CART and Random Forest will better evaluate and judge the 
-performance such new predictor. As for the tuner, there're many heuristic optimization 
-algorithms in wild. However, DE is a good but maybe not the best candidate for the tuning 
-process considering different performance measurements. To determine which optimizer is 
-fitable and results in better performance is beyond this work scope. We leave it to future 
-works. The rest of this section will describe each tool applied in this work.
 
- \subsection{WHERE-based Learner}
-\textbf{WHERE-based Learner} is composed of WHERE clustering algorithm and CART 
-decision tree algorithm. The key idea of WHERE-based learner is that  instead of training the 
-CART decision tree based on the class labels associated with each training sample, it's using 
-CART to build decision trees based on the cluster labels, which are generated by the WHERE 
-clustering algorithm.
+ \subsubsection{Parametric Tuning Algorithms}
+The  goal of this paper is to adjust the tuning parameters of \fig{parameters}
+in order to   optimize (improve) some particular performance scores
+generated by a particular learner being applied to  a particular data set.
+For this task, we do not use traditional parametric numeric optimizer  
+such as  gradient descent optimizers~\cite{saltelli00} that require models comprise
+differential functions (i.e. functions of real-valued variables whose derivative exists at each point in its domain).
+This is impractical  for  our learners since their internal states are   not a smoothly differential continuous function.
+Rather, learners being tuned  contains many regions with many different properties (tuning options can
+drive the learner into very different modes with very different performance properties).
+
+
+ \subsubsection{Non-Parametric Tuning Algorithms}
+ 
+Non-parametric  optimizers   make no assumption
+about the model being only differential functions. One such optimizer
+is simulated annealing. SA generates {\em new} solutions
+ by randomly perturbing (a.k.a. ``mutating'') some part of an {\em old}
+ solution.  {\em New} replaces {\em old} if (a) it scores higher; or
+ (b) it reaches some probability set by a ``temperature'' constant. Initially,
+ temperature is high so SA jumps to sub-optimal solutions (this allows
+ the algorithm to escape from local minima). Subsequently, the
+ ``temperature'' cools and SA only ever moves to better {\em new}
+ solutions. 
+ SA is often used in search-based SE
+ e.g.~\cite{fea02a,me07f}, perhaps due to its simplicity.
+
+SA was invented   in the 1950s, when
+ computer RAM was very small~\cite{kirkpatrick83}. A standard SA algorithm needs
+ only space for three solutions {\em new, old} and the {\em best} seen so far.
+  In the 1960s, when more RAM became available, it became standard to
+ generate many {\em new} mutants, and then combine together parts of
+ promising solutions~\cite{goldberg79}.  Such {\em evolutionary
+   algorithms} (EA) work in {\em generations} over a population of
+ candidate solutions.  Initially, the population is created at random.
+ Subsequently, each generation makes use of select+crossover+mutate
+ operators to pick promising solutions, mix them up in some way, and
+ then slightly adjust them.
+ EAs are also often used in search-based
+ software engineering, particularly in test case generation~\cite{andrews07,andrews10}
+ or refactoring~\cite{Weimer:2009}
+
+ Later work focused on creative ways to control the
+ mutation process. Tabu search and scatter search
+ work to bias new mutations away from prior
+ mutations~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350}.
+ Particle swarm
+ optimization randomly mutates multiple solutions
+ (which are called ``particles''), but biases those
+ mutations towards the best solution seen by one
+ particle and/or by the neighborhood around that
+ particle~\cite{pan08}.
+ Differential evolution mutates solutions by
+ interpolating between members of the current
+ population~\cite{storn1997differential}.  
+ 
+Another more recent technique that has claimed much attention
+are   heuristics that decompose the total space into many smaller problems, and then which use a simpler optimizer for each region. 
+For example, in $\mathcal{E}$-domination~\cite{deb05}, the  user is asked
+`what is the lower threshold $\mathcal{E}$ on the size of a useful effect?''. The solution space
+is then divided into boxes of size $\mathcal{E}$ and linked such that  the  set $X.\mathit{lower}$ contains boxes with worse objective scores that $X$.  Solutions in pairs boxes are  quickly compared  using   small samples from each  and, if some box $X$ is found to be inferior, then it is quickly pruned along with all
+solutions in the $X.\mathit{lower}$ boxes.
+Later research generalized this approach. MOEA/D (multiobjective
+evolutionary algorithm based on decomposition~\cite{zhang07}) is a generic framework that decomposes a multiobjective optimization problem into many smaller single problems, then applies a second optimizer to each smaller subproblem, simultaneously.   Other work in this arena are the response surface methods
+that quickly find multiple approximations to the problem, each of which holds for a very tiny region.
+Each region has a ``slope'' and examples in that region are pushed along the slope towards better
+solutions~\cite{krall15,Zuluaga:13}.
+ 
+ \subsubsection{Selecting a Tuning Algorithm}
+ 
+From all the above methods, how do we select which optimizers to apply to tuning data miners.
+Cohen~\cite{cohen95} advises comparing any supposedly more
+sophisticated method against the simplest possible alternative. For
+example, in one study with ``floor effects'', Holte showed that,
+often, much of the performance of complex multi-level decision trees
+could be easily achieved using a much simpler single-level decision
+tree learner called 1R~\cite{holte93}. He therefore recommends a very simple rule learner
+(called ``1R'') as a
+kind of ``scout'' that can do a quick preliminary analysis of a data
+set and which can report back if that data really requires a more
+complex analysis.
+
+To find our ``scout'',  we sorted  the above algorithms from simplest to most complex.
+The three simplest optimizers are SA, $\mathcal{E}$-domination, and 
+differential evolution (each can be coded in less than a page of some high-level scripting language). Our reading of the current literature is that there are more current advocated for
+differential evolution than
+  SA or $\mathcal{E}$-domination. when the MOEA/D community select a secondary optimizer, then often use  differential evolution~\cite{zhang07,5583335}.
+  Also, Vesterstrom and Thomsen~\cite{Vesterstrom04} found that  differential evolution was competitive with 
+   particle swarm optimization and a genetic algorithm. 
+  
+
+
  
  
+
+
  
-\begin{figure}[!t]
-
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{r@{~}|r@{~}rr|r@{~}rr|r@{~}rr}
-    & \multicolumn{3}{c|}{WHERE}&\multicolumn{3}{c|}{CART}& \multicolumn{3}{c}{Random Forest}\\\cline{2-10} 
-    Goal & tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive&$\frac{\mathit{tuned}}{\mathit{naive}}$\\\hline
-pd&71.4&1.2&60&4.4&0.1&44&7.1&0.2&36\\ 
-prec&82.8&1.4&59&3.9&0.1&39&7.4&0.2&37\\
-f&86.1&1.2&72&3.3&0.1&33&6.7&0.2&34
-  \end{tabular}
-  \caption{For one train/test set pair (ANT),  time (in seconds) spent tuning,
-  for different goals, or just running the ``off-the-shelf'' learner.}
-\end{figure}
-
-
-\begin{figure}[!t]
-
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-\begin{tabular}{r|rrr}
-goal &	WHERE	&CART&	Random Forest\\\hline
-f	&15	&13	&9\\ 
-pd	&15	&16	&8\\ 
-prec&	14	&14	&8
-\end{tabular}
-\caption{How much slower is tuning vs just running the default
-settings of the learner? E.g. bottom right, tuning to increase
-precision with Random Forests is eight times slower than
-just running Random Forests.}
-\end{figure}
-
-
-
-% Given N instances, instead of building decision tree directly with CART, we use WHERE to 
-%cluster instances. 
-WHERE is a fast clustering algorithm designed by {\it menzies} for finding software artifacts 
-with similar attributes. It clusters data on dimensions synthesized along the axis of greatest 
-variability in the data. The way WHERE used to find such dimension is a linear-time heuristic 
-called ``FASTMAP" proposed by Faloutsos \& Lin\cite{faloutsos1995fastmap}. ``FASTMAP" 
-randomly picks one instance $Z$; find the instance {\it east} $X$ that's furthest away form $Z$; find 
-the instance {\it west} $Y$ that's furthest away from {\it east} $X$. Next, project all the remaining 
-points onto the line drawn between $X$ and $Y$.  The line $\overline{XY}$ is an approximation of the 
-first component found by PCA. As shown in Figure \ref{Where}, $X$ and $Y$ are the furthest points found by ``FASTMAP'' and $\overline{XY}$ is of length $c$. Each point in this figure has a distance $a$
-to $X$ and distance $b$ to $Y$. According to the coisne rule and Pythagoras, each instance will be mapped 
-into 2-dimension by the following equations.
-\begin{equation}
-\begin{split}
-x  &= (a^2 +c^2-b^2)/(2c)\\ 
-   y  &= \sqrt{a^2 -x^2}
-\end{split}
-\end{equation}
-
-
-Then choose the median point $\hat{x}$ as the split and 
-recursively divide all the instances into {\it west} and {\it east} clusters until the number of 
-instances within each cluster is less than specific minimum size. The representation of the 
-clustering result is a tree, we call it Where-clustering tree. Such tree will be pruned if applicable 
-in some cases. Finally, cluster labels  will be assigned to instances in each of those 
-clusters(leaves). 
-
-\begin{figure}[!ht]
-\includegraphics[scale=0.5]{where.png}
-\caption{WHERE algoirthm }
-\label{Where}
-\end{figure}
-Then based on the attributes and the cluster labels in each instances,  we build a 
-decision tree based on CART algorithm. In each leaf of the tree, there're several instances 
-falling in. This will be the model trained for defect prediction. During testing process, a new 
-instance comes in and traverses the tree according to 
-values of the its attributes. If the instance could reach one leaf of the tree, the predicted value 
-of this instance will be the mean  of all the training data values associated with this leaf. 
-Otherwise if stops at intermediate nodes of tree, the predicted value will be the mean of the all 
-the training data value below this node. After estimating all the number of defectives in the test 
-data, whether each instance contains defectives will be determined by comparing with a threshold value. If the predicted value is greater than threshold, the Where-based learner will predict this instance as defective otherwise non-defective.
-
-
-%\begin{algorithm}
-%	\caption{Pesudocode for WHERE Algorithm }
-%	\label{alg:WHERE}
-%	\begin{algorithmic}[1]
-%	\Require $data$
-%	\Ensure $tree$
-%	\Function {Fastmap}{$ data$}
-%	\State $one \gets$ any$(data)$
-%	\State $west \gets$ furthest$(data, one)$
-%	\State $east \gets$ furthest$(data, west)$
-%	\State $c \gets$ distance($west, east$)
-%	\EndFunction
-%	\end{algorithmic}            
-%\end{algorithm}
-
-\subsection{CART}
-\textbf{CART} is an {\em iterative dichotomization} algorithm
-that finds the attribute that most divides the data such that
-the variance of the goal variable in each division is
-minimized\cite{breiman84}.
-The algorithm then recurses on each division.
-Finally, the cost data in the leaf divisions
-is averaged to generate the estimate.
-
-\subsection{Random Forests}
-
-Breiman's website describes \textbf{Random Forests} as
-follows\cite{brieman00}. "Random Forests grows many classification
-trees. To classify a new object from an input vector, put the input
-vector down each of the trees in the forest. Each tree gives a
-classification, and we say the tree "votes" for that class. The forest
-chooses the classification having the most votes (over all the trees
-in the forest). Each tree is grown as follows.
-If the number of cases in the training set is N, sample N cases at
-random - but with replacement, from the original data. This sample
-will be the training set for growing the tree.
-Also, if there are M input variables, a number m$<<$M is specified such
-that at each node, m variables are selected at random out of the M and
-the best split on these m is used to split the node. The value of m is
-held constant during the forest growing.
-Finally, each tree is grown to the largest extent possible (there is
-no pruning)."
-
-
-
-
-%Suppose the cordinates of X and Y are $(0,0)$ and $(0,c)$, which are east and west 
-%instances within N samples. From the Pythegoras and cosine rule, each instance is projected 
-%at the point(x,y)
-%
-%\begin{equation}
-%	\begin{split}
-%	x &= (a^2 + c^2 - b^2)/(2c) \\
-%	y &= \sqrt{a^2 - x^2} 
-%	\end{split}
-%\end{equation}
-
+ 

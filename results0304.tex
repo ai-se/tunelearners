@@ -36,57 +36,7 @@
 
 \begin{document}
 
-%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
-\renewcommand\arraystretch{1.2}
-\begin{figure*}[t!]
-\scriptsize
-  \centering
-	\begin{tabular}{|c|c|c|c|l|}
-	\cline{1-5}
-	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
-\multicolumn{1}{c|}{Description} \\ \hline
-	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
-	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
-	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider  for the best 
-split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
-one is for clustering and the second one is building prediction model. we explicitly call Where-
-clustering tree and CART tree, respectively}. \\ \cline{2-5} 
-	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
-CART tree. \\ \cline{2-5} 
-	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}The value to determine the minimum 
-number of samples to be a Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
-\end{tabular} \\ \cline{2-5} 
-    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
-	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
-clustering tree. \\ \cline{2-5} 
-	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
-	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5}
-	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ \cline{2-5} 
-\hline
-\multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
 
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{1-5}  
-       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
-\cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
-	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{2-5} 
-	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
-	 \hline
-
-	\end{tabular}
-    \caption {List of parameters to be tuned in Where-based learner and CART in scikit-learn.}
-\label{fig:parameters}
-\end{figure*}
 
 %%%%%%%%%%%%%%%% optimal parameters from tuning process%%%%%%%%%%%%%%%%%%%%%
 %%%%parameters for pd %%%%%%
@@ -215,7 +165,7 @@ node. \\ \cline{2-5}
 \centering
   \begin{tabular}{c c c c c c c c c c }
   \hline\hline
-  Dataset &ant&antV1&antV2&camel&camelV1&ivy&jedit&jeditV1&jeditV2
+  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivyV0&jeditV0&jeditV1&jeditV2
 \\\hline
   training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
 \\  tunning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
@@ -228,7 +178,7 @@ node. \\ \cline{2-5}
 \centering
   \begin{tabular}{c c c c c c c c c c }
   \hline\hline
-  Dataset &log4j&lucene&poi&poiV1&synapse&velocity&xerces&xercesV1
+  Dataset &log4jV0&luceneV0&poiV0&poiV1&synapseV0&velocityV0&xercesV0&xercesV1
 \\\hline
   training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
 \\  tunning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
@@ -246,7 +196,7 @@ node. \\ \cline{2-5}
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
   \hline\hline
-  Features & \multicolumn{2}{c}{ant}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camel}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivy}&\multicolumn{2}{c}{jedit}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4j}&\multicolumn{2}{c}{lucene}&\multicolumn{2}{c}{poi}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapse}&\multicolumn{2}{c}{velocity}&\multicolumn{2}{c}{xerces}&\multicolumn{2}{c}{xercesV1}
+  Features & \multicolumn{2}{c}{antV0}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camelV0}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivyV0}&\multicolumn{2}{c}{jeditV0}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4jV0}&\multicolumn{2}{c}{luceneV0}&\multicolumn{2}{c}{poiV0}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapseV0}&\multicolumn{2}{c}{velocityV0}&\multicolumn{2}{c}{xercesV0}&\multicolumn{2}{c}{xercesV1}
 \\\hline
   npm& & & & & & & & & & & & & & & & & & & & & & & & $\circ$& & & & & & & & & & \\
 loc& & & $\star$& & & & $\star$& & $\star$& & & & & & & & & & $\star$& & & & $\star$& $\circ$& $\star$& $\circ$& $\star$& & & & $\star$& & $\star$& \\
@@ -280,7 +230,7 @@ lcom3& & & & & $\star$& & $\star$& & & & $\star$& & $\star$& & $\star$& & & & $\
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
   \hline\hline
-  Features & \multicolumn{2}{c}{ant}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camel}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivy}&\multicolumn{2}{c}{jedit}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4j}&\multicolumn{2}{c}{lucene}&\multicolumn{2}{c}{poi}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapse}&\multicolumn{2}{c}{velocity}&\multicolumn{2}{c}{xerces}&\multicolumn{2}{c}{xercesV1}
+  Features & \multicolumn{2}{c}{antV0}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camelV0}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivyV0}&\multicolumn{2}{c}{jeditV0}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4jV0}&\multicolumn{2}{c}{luceneV0}&\multicolumn{2}{c}{poiV0}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapseV0}&\multicolumn{2}{c}{velocityV0}&\multicolumn{2}{c}{xercesV0}&\multicolumn{2}{c}{xercesV1}
 \\\hline
   npm& & & & & & & & & & & & & & & & & & & & $\circ$& & $\circ$& & $\circ$& & $\circ$& & & & & & & & $\circ$\\
 loc& & & $\star$& & & & $\star$& $\circ$& $\star$& $\circ$& & & & & & & & & $\star$& $\circ$& & & & $\circ$& $\star$& $\circ$& $\star$& & & & $\star$& & $\star$& $\circ$\\
@@ -315,7 +265,7 @@ lcom3& & & & & $\star$& & $\star$& $\circ$& & & $\star$& $\circ$& $\star$& & $\s
 \centering
   \begin{tabular}{c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c c|c }
   \hline\hline
-  Features & \multicolumn{2}{c}{ant}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camel}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivy}&\multicolumn{2}{c}{jedit}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4j}&\multicolumn{2}{c}{lucene}&\multicolumn{2}{c}{poi}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapse}&\multicolumn{2}{c}{velocity}&\multicolumn{2}{c}{xerces}&\multicolumn{2}{c}{xercesV1}
+  Features & \multicolumn{2}{c}{antV0}&\multicolumn{2}{c}{antV1}&\multicolumn{2}{c}{antV2}&\multicolumn{2}{c}{camelV0}&\multicolumn{2}{c}{camelV1}&\multicolumn{2}{c}{ivyV0}&\multicolumn{2}{c}{jeditV0}&\multicolumn{2}{c}{jeditV1}&\multicolumn{2}{c}{jeditV2}&\multicolumn{2}{c}{log4jV0}&\multicolumn{2}{c}{luceneV0}&\multicolumn{2}{c}{poiV0}&\multicolumn{2}{c}{poiV1}&\multicolumn{2}{c}{synapseV0}&\multicolumn{2}{c}{velocityV0}&\multicolumn{2}{c}{xercesV0}&\multicolumn{2}{c}{xercesV1}
 \\\hline
   npm& & & & $\circ$& & $\circ$& & & & $\circ$& & & & & & & & & & & & & & $\circ$& & & & & & & & & & \\
 loc& & & $\star$& $\circ$& & $\circ$& $\star$& & $\star$& $\circ$& & & & $\circ$& & $\circ$& & $\circ$& $\star$& $\circ$& & & $\star$& $\circ$& $\star$& $\circ$& $\star$& $\circ$& & & $\star$& $\circ$& $\star$& $\circ$\\
@@ -690,26 +640,26 @@ for each row.}
 \begin{figure*}[!ht]
 \scriptsize
 \centering
-  \begin{tabular}{l|c |c |c |c |c |c }
+  \begin{tabular}{r|c |c |c |c |c |c }
     \hline\hline
     Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
     \hline
-    ant & 50/ 76.50 & 1.42 & 80/ 4.82 & 0.08 & 60/ 7.44 & 0.16\\
+    antV0 & 50/ 76.50 & 1.42 & 80/ 4.82 & 0.08 & 60/ 7.44 & 0.16\\
     antV1 & 90/ 235.43 & 2.31 & 70/ 5.96 & 0.08 & 50/ 8.20 & 0.20\\
     antV2 & 70/ 435.70 & 6.31 & 70/ 8.71 & 0.16 & 60/ 12.81 & 0.41\\
-    camel & 70/ 528.58 & 7.89 & 80/ 13.12 & 0.18 & 70/ 17.46 & 0.30\\
+    camelV0 & 70/ 528.58 & 7.89 & 80/ 13.12 & 0.18 & 70/ 17.46 & 0.30\\
     camelV1 & 50/ 1498.80 & 23.87 & 70/ 18.36 & 0.24 & 50/ 22.81 & 0.71\\
-    ivy & 50/ 54.83 & 1.00 & 50/ 3.04 & 0.06 & 50/ 6.40 & 0.17\\
-    jedit & 50/ 283.42 & 5.15 & 80/ 7.58 & 0.08 & 50/ 9.03 & 0.29\\
+    ivyV0 & 50/ 54.83 & 1.00 & 50/ 3.04 & 0.06 & 50/ 6.40 & 0.17\\
+    jeditV0 & 50/ 283.42 & 5.15 & 80/ 7.58 & 0.08 & 50/ 9.03 & 0.29\\
     jeditV1 & 50/ 313.84 & 6.38 & 70/ 7.04 & 0.10 & 50/ 10.25 & 0.30\\
     jeditV2 & 50/ 357.03 & 6.76 & 70/ 7.92 & 0.11 & 50/ 10.30 & 0.33\\
-    log4j & 50/ 74.28 & 1.30 & 50/ 2.10 & 0.05 & 50/ 5.47 & 0.16\\
-    lucene & 50/ 162.91 & 2.78 & 50/ 3.85 & 0.08 & 60/ 10.01 & 0.24\\
-    poi & 50/ 208.96 & 3.92 & 50/ 4.97 & 0.10 & 50/ 8.96 & 0.28\\
+    log4jV0 & 50/ 74.28 & 1.30 & 50/ 2.10 & 0.05 & 50/ 5.47 & 0.16\\
+    luceneV0 & 50/ 162.91 & 2.78 & 50/ 3.85 & 0.08 & 60/ 10.01 & 0.24\\
+    poiV0 & 50/ 208.96 & 3.92 & 50/ 4.97 & 0.10 & 50/ 8.96 & 0.28\\
     poiV1 & 70/ 526.41 & 7.00 & 60/ 7.18 & 0.10 & 60/ 12.95 & 0.27\\
-    synapse & 70/ 157.51 & 1.84 & 60/ 3.77 & 0.05 & 70/ 9.24 & 0.16\\
-    velocity & 50/ 154.39 & 2.58 & 60/ 4.05 & 0.05 & 50/ 6.89 & 0.19\\
-    xerces & 50/ 103.19 & 1.99 & 50/ 5.13 & 0.08 & 50/ 9.16 & 0.21\\
+    synapseV0 & 70/ 157.51 & 1.84 & 60/ 3.77 & 0.05 & 70/ 9.24 & 0.16\\
+    velocityV0 & 50/ 154.39 & 2.58 & 60/ 4.05 & 0.05 & 50/ 6.89 & 0.19\\
+    xercesV0 & 50/ 103.19 & 1.99 & 50/ 5.13 & 0.08 & 50/ 9.16 & 0.21\\
     xercesV1 & 50/ 686.59 & 12.61 & 100/ 13.93 & 0.15 & 60/ 14.69 & 0.38\\
   \end{tabular}
   \caption{Time (in seconds) spent on the objective of pd with B stop: tune once+ test once}
@@ -720,26 +670,26 @@ for each row.}
 \begin{figure*}[!ht]
 \scriptsize
 \centering
-  \begin{tabular}{l|c |c |c |c |c |c }
+  \begin{tabular}{r|c |c |c |c |c |c }
     \hline\hline
     Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
     \hline
-    ant & 50/ 77.16 & 1.30 & 60/ 3.47 & 0.07 & 50/ 6.54 & 0.14\\
+    antV0 & 50/ 77.16 & 1.30 & 60/ 3.47 & 0.07 & 50/ 6.54 & 0.14\\
     antV1 & 50/ 135.16 & 2.33 & 60/ 4.84 & 0.08 & 50/ 8.61 & 0.19\\
     antV2 & 50/ 368.50 & 6.23 & 60/ 6.67 & 0.14 & 50/ 11.75 & 0.40\\
-    camel & 50/ 479.03 & 8.25 & 60/ 11.73 & 0.18 & 60/ 15.69 & 0.31\\
+    camelV0 & 50/ 479.03 & 8.25 & 60/ 11.73 & 0.18 & 60/ 15.69 & 0.31\\
     camelV1 & 60/ 1551.51 & 26.87 & 60/ 18.47 & 0.28 & 80/ 37.96 & 0.73\\
-    ivy & 80/ 83.80 & 1.01 & 50/ 3.07 & 0.07 & 60/ 7.63 & 0.17\\
-    jedit & 60/ 349.99 & 5.95 & 70/ 8.33 & 0.11 & 50/ 13.40 & 0.30\\
+    ivyV0 & 80/ 83.80 & 1.01 & 50/ 3.07 & 0.07 & 60/ 7.63 & 0.17\\
+    jeditV0 & 60/ 349.99 & 5.95 & 70/ 8.33 & 0.11 & 50/ 13.40 & 0.30\\
     jeditV1 & 50/ 442.35 & 7.48 & 70/ 8.63 & 0.11 & 70/ 15.52 & 0.37\\
     jeditV2 & 50/ 360.04 & 7.90 & 60/ 8.63 & 0.12 & 60/ 14.33 & 0.38\\
-    log4j & 60/ 97.23 & 1.49 & 70/ 3.31 & 0.06 & 80/ 8.79 & 0.17\\
-    lucene & 70/ 206.41 & 2.89 & 80/ 6.90 & 0.08 & 60/ 10.30 & 0.25\\
-    poi & 70/ 338.44 & 4.28 & 60/ 6.47 & 0.13 & 60/ 12.45 & 0.29\\
+    log4jV0 & 60/ 97.23 & 1.49 & 70/ 3.31 & 0.06 & 80/ 8.79 & 0.17\\
+    luceneV0 & 70/ 206.41 & 2.89 & 80/ 6.90 & 0.08 & 60/ 10.30 & 0.25\\
+    poiV0 & 70/ 338.44 & 4.28 & 60/ 6.47 & 0.13 & 60/ 12.45 & 0.29\\
     poiV1 & 60/ 468.73 & 7.95 & 50/ 7.24 & 0.14 & 70/ 17.66 & 0.30\\
-    synapse & 50/ 111.30 & 1.87 & 60/ 3.85 & 0.05 & 60/ 7.82 & 0.15\\
-    velocity & 60/ 192.83 & 2.66 & 90/ 6.11 & 0.06 & 80/ 12.99 & 0.22\\
-    xerces & 70/ 139.33 & 2.23 & 60/ 6.47 & 0.11 & 50/ 8.89 & 0.25\\
+    synapseV0 & 50/ 111.30 & 1.87 & 60/ 3.85 & 0.05 & 60/ 7.82 & 0.15\\
+    velocityV0 & 60/ 192.83 & 2.66 & 90/ 6.11 & 0.06 & 80/ 12.99 & 0.22\\
+    xercesV0 & 70/ 139.33 & 2.23 & 60/ 6.47 & 0.11 & 50/ 8.89 & 0.25\\
     xercesV1 & 50/ 759.82 & 13.11 & 50/ 8.62 & 0.14 & 60/ 16.90 & 0.37\\
   \end{tabular}
   \caption{Time (in seconds) spent on the objective of prec with B stop: tune once+ test once}
@@ -750,26 +700,26 @@ for each row.}
 \begin{figure*}[!ht]
 \scriptsize
 \centering
-  \begin{tabular}{l|c |c |c |c |c |c }
+  \begin{tabular}{r|c |c |c |c |c |c }
     \hline\hline
     Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
     \hline
-    ant & 70/ 95.34 & 1.18 & 50/ 3.09 & 0.06 & 60/ 6.89 & 0.13\\
+    antV0 & 70/ 95.34 & 1.18 & 50/ 3.09 & 0.06 & 60/ 6.89 & 0.13\\
     antV1 & 50/ 130.69 & 2.24 & 50/ 4.47 & 0.08 & 60/ 9.03 & 0.19\\
     antV2 & 50/ 296.68 & 6.66 & 60/ 7.29 & 0.15 & 60/ 12.74 & 0.31\\
-    camel & 60/ 496.70 & 8.01 & 60/ 10.43 & 0.17 & 70/ 17.32 & 0.30\\
+    camelV0 & 60/ 496.70 & 8.01 & 60/ 10.43 & 0.17 & 70/ 17.32 & 0.30\\
     camelV1 & 70/ 1732.99 & 23.35 & 60/ 15.93 & 0.22 & 60/ 24.71 & 0.71\\
-    ivy & 70/ 58.81 & 1.03 & 70/ 4.07 & 0.06 & 60/ 7.37 & 0.16\\
-    jedit & 90/ 412.23 & 5.17 & 70/ 6.59 & 0.08 & 60/ 10.56 & 0.28\\
+    ivyV0 & 70/ 58.81 & 1.03 & 70/ 4.07 & 0.06 & 60/ 7.37 & 0.16\\
+    jeditV0 & 90/ 412.23 & 5.17 & 70/ 6.59 & 0.08 & 60/ 10.56 & 0.28\\
     jeditV1 & 70/ 425.18 & 6.61 & 60/ 6.15 & 0.10 & 60/ 13.00 & 0.31\\
     jeditV2 & 60/ 398.86 & 6.97 & 50/ 5.90 & 0.12 & 60/ 13.63 & 0.35\\
-    log4j & 50/ 68.17 & 1.37 & 60/ 2.46 & 0.04 & 70/ 6.37 & 0.15\\
-    lucene & 50/ 147.78 & 2.74 & 50/ 3.79 & 0.07 & 60/ 7.98 & 0.24\\
-    poi & 60/ 251.48 & 3.90 & 60/ 5.65 & 0.09 & 70/ 11.25 & 0.30\\
+    log4jV0 & 50/ 68.17 & 1.37 & 60/ 2.46 & 0.04 & 70/ 6.37 & 0.15\\
+    luceneV0 & 50/ 147.78 & 2.74 & 50/ 3.79 & 0.07 & 60/ 7.98 & 0.24\\
+    poiV0 & 60/ 251.48 & 3.90 & 60/ 5.65 & 0.09 & 70/ 11.25 & 0.30\\
     poiV1 & 60/ 404.96 & 7.22 & 70/ 8.10 & 0.11 & 60/ 12.74 & 0.28\\
-    synapse & 50/ 95.37 & 1.80 & 60/ 3.69 & 0.06 & 60/ 7.65 & 0.14\\
-    velocity & 60/ 176.80 & 3.40 & 50/ 4.14 & 0.07 & 50/ 7.36 & 0.23\\
-    xerces & 60/ 177.48 & 2.34 & 50/ 6.53 & 0.09 & 50/ 14.91 & 0.33\\
+    synapseV0 & 50/ 95.37 & 1.80 & 60/ 3.69 & 0.06 & 60/ 7.65 & 0.14\\
+    velocityV0 & 60/ 176.80 & 3.40 & 50/ 4.14 & 0.07 & 50/ 7.36 & 0.23\\
+    xercesV0 & 60/ 177.48 & 2.34 & 50/ 6.53 & 0.09 & 50/ 14.91 & 0.33\\
     xercesV1 & 50/ 762.28 & 13.33 & 70/ 12.84 & 0.15 & 60/ 16.63 & 0.40\\
   \end{tabular}
   \caption{Time (in seconds) spent on the objective of F with B stop: tune once+ test once}
@@ -789,7 +739,7 @@ for each row.}
 %antV0 & 53 & {\rone} & $\bigstar$100 & {\rfour} & 38 &         & $\bigstar$100 & {\rfour} & 97 & {\rfour} & $\bigstar$100 & {\rfour}\\
 %antV1 & 7 &         & $\bigstar$100 & {\rfour} & 39 & {\rone} & 96 & {\rfour} & 95 & {\rfour} & $\bigstar$100 & {\rfour}\\
 %antV2 & 0 &         & $\bigstar$100 & {\rfour} & 37 & {\rone} & $\bigstar$100 & {\rfour} & 92 & {\rfour} & 98 & {\rfour}\\
-%camelV0 & 0 &         & $\bigstar$100 & {\rfour} & 6 &         & $\bigstar$100 & {\rfour} & 66 & {\rthree} & 97 & {\rfour}\\
+%camelV0V0 & 0 &         & $\bigstar$100 & {\rfour} & 6 &         & $\bigstar$100 & {\rfour} & 66 & {\rthree} & 97 & {\rfour}\\
 %camelV1 & 80 & {\rthree} & $\bigstar$100 & {\rfour} & 46 &         & $\bigstar$100 & {\rfour} & 94 & {\rfour} & $\bigstar$100 & {\rfour}\\
 %ivyV0 & 93 & {\rtwo} & $\bigstar$100 & {\rfour} & 88 &         & $\bigstar$100 & {\rfour} & 98 & {\rfour} & 98 & {\rfour}\\
 %jeditV0 & 89 & {\rthree} & $\bigstar$100 & {\rfour} & 66 &         & 99 & {\rfour} & 96 & {\rfour} & $\bigstar$100 & {\rfour}\\
@@ -919,22 +869,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 180/ 241.5 & 12.6 & 120/ 7.4 & 0.8 & 13.3 & 1.4\\
+%    antV0 & 180/ 241.5 & 12.6 & 120/ 7.4 & 0.8 & 13.3 & 1.4\\
 %    antV1 & 140/ 347.5 & 23.5 & 140/ 11.6 & 0.8 & 19.5 & 2.0\\
 %    antV2 & 140/ 696.5 & 60.0 & 220/ 23.6 & 1.5 & 22.6 & 3.1\\
-%    camel & 190/ 1412.6 & 76.5 & 230/ 34.7 & 1.7 & 51.1 & 3.0\\
+%    camelV0 & 190/ 1412.6 & 76.5 & 230/ 34.7 & 1.7 & 51.1 & 3.0\\
 %    camelV1 & 130/ 3391.9 & 230.6 & 140/ 36.1 & 2.4 & 46.3 & 6.9\\
-%    ivy & 70/ 93.9 & 9.9 & 80/ 5.1 & 0.6 & 9.7 & 1.6\\
-%    jedit & 110/ 679.2 & 51.1 & 140/ 12.7 & 0.8 & 18.1 & 2.8\\
+%    ivyV0 & 70/ 93.9 & 9.9 & 80/ 5.1 & 0.6 & 9.7 & 1.6\\
+%    jeditV0 & 110/ 679.2 & 51.1 & 140/ 12.7 & 0.8 & 18.1 & 2.8\\
 %    jeditV1 & 180/ 1078.5 & 64.9 & 180/ 17.2 & 0.9 & 24.6 & 3.0\\
 %    jeditV2 & 110/ 838.0 & 68.2 & 150/ 16.4 & 1.1 & 23.4 & 3.4\\
-%    log4j & 150/ 190.8 & 13.4 & 130/ 5.2 & 0.4 & 11.0 & 1.4\\
-%    lucene & 120/ 421.0 & 27.6 & 130/ 9.2 & 0.7 & 13.3 & 2.3\\
-%    poi & 70/ 348.6 & 40.4 & 110/ 10.6 & 0.9 & 21.7 & 2.7\\
+%    log4jV0 & 150/ 190.8 & 13.4 & 130/ 5.2 & 0.4 & 11.0 & 1.4\\
+%    luceneV0 & 120/ 421.0 & 27.6 & 130/ 9.2 & 0.7 & 13.3 & 2.3\\
+%    poiV0 & 70/ 348.6 & 40.4 & 110/ 10.6 & 0.9 & 21.7 & 2.7\\
 %    poiV1 & 140/ 1060.7 & 69.4 & 190/ 20.8 & 1.0 & 26.3 & 2.6\\
-%    synapse & 180/ 350.9 & 18.5 & 160/ 9.5 & 0.5 & 14.4 & 1.5\\
-%    velocity & 80/ 257.0 & 28.3 & 110/ 7.5 & 0.5 & 13.3 & 1.9\\
-%    xerces & 110/ 239.9 & 21.4 & 160/ 14.8 & 0.8 & 15.2 & 2.1\\
+%    synapseV0 & 180/ 350.9 & 18.5 & 160/ 9.5 & 0.5 & 14.4 & 1.5\\
+%    velocityV0 & 80/ 257.0 & 28.3 & 110/ 7.5 & 0.5 & 13.3 & 1.9\\
+%    xercesV0 & 110/ 239.9 & 21.4 & 160/ 14.8 & 0.8 & 15.2 & 2.1\\
 %    xercesV1 & 210/ 2433.9 & 130.3 & 200/ 27.6 & 1.4 & 25.3 & 3.7\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on different models over the objective of pd}
@@ -949,22 +899,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 50/ 77.44 & 1.24 & 80/ 4.24 & 0.06 & 6.71 & 0.15\\
+%    antV0 & 50/ 77.44 & 1.24 & 80/ 4.24 & 0.06 & 6.71 & 0.15\\
 %    antV1 & 90/ 230.16 & 2.23 & 70/ 5.97 & 0.08 & 8.07 & 0.20\\
 %    antV2 & 70/ 378.86 & 6.06 & 70/ 8.01 & 0.17 & 11.73 & 0.31\\
-%    camel & 70/ 494.66 & 7.80 & 80/ 12.82 & 0.19 & 16.56 & 0.30\\
+%    camelV0 & 70/ 494.66 & 7.80 & 80/ 12.82 & 0.19 & 16.56 & 0.30\\
 %    camelV1 & 50/ 1491.42 & 23.14 & 70/ 18.33 & 0.24 & 22.18 & 0.71\\
-%    ivy & 50/ 54.57 & 1.00 & 50/ 3.00 & 0.06 & 6.33 & 0.16\\
-%    jedit & 50/ 283.66 & 5.13 & 80/ 7.30 & 0.08 & 10.08 & 0.28\\
+%    ivyV0 & 50/ 54.57 & 1.00 & 50/ 3.00 & 0.06 & 6.33 & 0.16\\
+%    jeditV0 & 50/ 283.66 & 5.13 & 80/ 7.30 & 0.08 & 10.08 & 0.28\\
 %    jeditV1 & 50/ 314.08 & 6.44 & 70/ 6.88 & 0.09 & 10.07 & 0.30\\
 %    jeditV2 & 50/ 358.69 & 6.81 & 70/ 7.79 & 0.11 & 11.45 & 0.34\\
-%    log4j & 50/ 74.06 & 1.37 & 50/ 2.08 & 0.05 & 5.45 & 0.14\\
-%    lucene & 50/ 162.03 & 2.65 & 50/ 3.75 & 0.07 & 9.71 & 0.25\\
-%    poi & 50/ 209.67 & 3.91 & 50/ 4.86 & 0.09 & 8.86 & 0.28\\
+%    log4jV0 & 50/ 74.06 & 1.37 & 50/ 2.08 & 0.05 & 5.45 & 0.14\\
+%    luceneV0 & 50/ 162.03 & 2.65 & 50/ 3.75 & 0.07 & 9.71 & 0.25\\
+%    poiV0 & 50/ 209.67 & 3.91 & 50/ 4.86 & 0.09 & 8.86 & 0.28\\
 %    poiV1 & 80/ 600.72 & 6.97 & 60/ 7.12 & 0.11 & 13.19 & 0.28\\
-%    synapse & 60/ 137.39 & 1.83 & 60/ 3.80 & 0.06 & 8.44 & 0.17\\
-%    velocity & 50/ 171.88 & 3.10 & 60/ 4.73 & 0.06 & 8.16 & 0.24\\
-%    xerces & 50/ 116.11 & 2.02 & 60/ 6.21 & 0.11 & 9.51 & 0.21\\
+%    synapseV0 & 60/ 137.39 & 1.83 & 60/ 3.80 & 0.06 & 8.44 & 0.17\\
+%    velocityV0 & 50/ 171.88 & 3.10 & 60/ 4.73 & 0.06 & 8.16 & 0.24\\
+%    xercesV0 & 50/ 116.11 & 2.02 & 60/ 6.21 & 0.11 & 9.51 & 0.21\\
 %    xercesV1 & 80/ 1131.28 & 15.16 & 80/ 14.33 & 0.19 & 17.83 & 0.41\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on the objective of pd with B stop: tune once+ test once}
@@ -1113,22 +1063,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 90/ 158.6 & 13.3 & 140/ 8.8 & 0.7 & 18.1 & 1.6\\
+%    antV0 & 90/ 158.6 & 13.3 & 140/ 8.8 & 0.7 & 18.1 & 1.6\\
 %    antV1 & 110/ 298.9 & 25.4 & 150/ 13.5 & 0.9 & 15.8 & 2.2\\
 %    antV2 & 90/ 632.0 & 65.0 & 100/ 14.4 & 1.7 & 29.3 & 3.6\\
-%    camel & 50/ 566.3 & 94.3 & 110/ 26.0 & 1.8 & 20.8 & 5.5\\
+%    camelV0 & 50/ 566.3 & 94.3 & 110/ 26.0 & 1.8 & 20.8 & 5.5\\
 %    camelV1 & 170/ 4954.0 & 243.0 & 200/ 52.1 & 2.3 & 42.7 & 7.2\\
-%    ivy & 160/ 148.7 & 10.0 & 150/ 8.6 & 0.6 & 11.0 & 1.6\\
-%    jedit & 240/ 972.5 & 51.9 & 180/ 15.8 & 0.8 & 22.3 & 2.9\\
+%    ivyV0 & 160/ 148.7 & 10.0 & 150/ 8.6 & 0.6 & 11.0 & 1.6\\
+%    jeditV0 & 240/ 972.5 & 51.9 & 180/ 15.8 & 0.8 & 22.3 & 2.9\\
 %    jeditV1 & 140/ 1102.5 & 73.6 & 160/ 19.7 & 0.9 & 46.5 & 3.5\\
 %    jeditV2 & 100/ 837.5 & 76.9 & 130/ 15.7 & 1.3 & 65.3 & 3.7\\
-%    log4j & 170/ 289.2 & 17.1 & 140/ 6.8 & 0.6 & 17.1 & 1.6\\
-%    lucene & 180/ 471.6 & 29.6 & 100/ 8.7 & 0.8 & 16.8 & 2.5\\
-%    poi & 130/ 651.4 & 52.0 & 90/ 11.4 & 1.1 & 23.1 & 3.3\\
+%    log4jV0 & 170/ 289.2 & 17.1 & 140/ 6.8 & 0.6 & 17.1 & 1.6\\
+%    luceneV0 & 180/ 471.6 & 29.6 & 100/ 8.7 & 0.8 & 16.8 & 2.5\\
+%    poiV0 & 130/ 651.4 & 52.0 & 90/ 11.4 & 1.1 & 23.1 & 3.3\\
 %    poiV1 & 220/ 1666.8 & 86.2 & 90/ 13.8 & 1.4 & 25.7 & 3.2\\
-%    synapse & 80/ 209.2 & 23.7 & 120/ 9.2 & 0.7 & 15.8 & 1.7\\
-%    velocity & 90/ 345.5 & 33.5 & 140/ 11.5 & 0.7 & 12.7 & 2.3\\
-%    xerces & 170/ 392.2 & 27.2 & 100/ 13.9 & 1.2 & 43.0 & 3.0\\
+%    synapseV0 & 80/ 209.2 & 23.7 & 120/ 9.2 & 0.7 & 15.8 & 1.7\\
+%    velocityV0 & 90/ 345.5 & 33.5 & 140/ 11.5 & 0.7 & 12.7 & 2.3\\
+%    xercesV0 & 170/ 392.2 & 27.2 & 100/ 13.9 & 1.2 & 43.0 & 3.0\\
 %    xercesV1 & 90/ 1619.8 & 157.1 & 130/ 23.8 & 1.7 & 34.8 & 5.0\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on different models over the objective of prec}
@@ -1142,22 +1092,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 50/ 74.99 & 1.18 & 60/ 3.61 & 0.08 & 6.74 & 0.15\\
+%    antV0 & 50/ 74.99 & 1.18 & 60/ 3.61 & 0.08 & 6.74 & 0.15\\
 %    antV1 & 50/ 130.29 & 2.55 & 60/ 5.53 & 0.08 & 7.95 & 0.18\\
 %    antV2 & 50/ 350.53 & 6.79 & 60/ 7.31 & 0.15 & 11.94 & 0.38\\
-%    camel & 50/ 495.31 & 7.87 & 60/ 10.01 & 0.18 & 15.89 & 0.30\\
+%    camelV0 & 50/ 495.31 & 7.87 & 60/ 10.01 & 0.18 & 15.89 & 0.30\\
 %    camelV1 & 60/ 1535.38 & 26.05 & 60/ 19.33 & 0.25 & 37.19 & 0.77\\
-%    ivy & 80/ 89.34 & 1.04 & 50/ 3.50 & 0.07 & 8.29 & 0.16\\
-%    jedit & 60/ 339.23 & 5.31 & 70/ 7.55 & 0.10 & 12.40 & 0.33\\
+%    ivyV0 & 80/ 89.34 & 1.04 & 50/ 3.50 & 0.07 & 8.29 & 0.16\\
+%    jeditV0 & 60/ 339.23 & 5.31 & 70/ 7.55 & 0.10 & 12.40 & 0.33\\
 %    jeditV1 & 50/ 425.66 & 6.63 & 70/ 7.12 & 0.09 & 13.26 & 0.32\\
 %    jeditV2 & 50/ 305.83 & 7.03 & 60/ 7.29 & 0.11 & 12.15 & 0.35\\
-%    log4j & 60/ 85.77 & 1.30 & 70/ 2.77 & 0.04 & 7.75 & 0.15\\
-%    lucene & 70/ 179.94 & 2.62 & 80/ 5.55 & 0.07 & 9.04 & 0.24\\
-%    poi & 70/ 296.01 & 4.06 & 60/ 5.79 & 0.09 & 9.99 & 0.27\\
+%    log4jV0 & 60/ 85.77 & 1.30 & 70/ 2.77 & 0.04 & 7.75 & 0.15\\
+%    luceneV0 & 70/ 179.94 & 2.62 & 80/ 5.55 & 0.07 & 9.04 & 0.24\\
+%    poiV0 & 70/ 296.01 & 4.06 & 60/ 5.79 & 0.09 & 9.99 & 0.27\\
 %    poiV1 & 60/ 408.56 & 7.01 & 50/ 6.27 & 0.10 & 15.76 & 0.27\\
-%    synapse & 50/ 96.34 & 1.83 & 60/ 3.74 & 0.05 & 7.35 & 0.15\\
-%    velocity & 60/ 176.39 & 2.62 & 90/ 5.79 & 0.06 & 13.14 & 0.19\\
-%    xerces & 70/ 123.47 & 2.15 & 60/ 6.01 & 0.08 & 8.03 & 0.21\\
+%    synapseV0 & 50/ 96.34 & 1.83 & 60/ 3.74 & 0.05 & 7.35 & 0.15\\
+%    velocityV0 & 60/ 176.39 & 2.62 & 90/ 5.79 & 0.06 & 13.14 & 0.19\\
+%    xercesV0 & 70/ 123.47 & 2.15 & 60/ 6.01 & 0.08 & 8.03 & 0.21\\
 %    xercesV1 & 50/ 679.13 & 12.77 & 50/ 7.70 & 0.14 & 15.67 & 0.37\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on the objective of prec with B stop: tune once+ test once}
@@ -1306,22 +1256,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 230/ 302.5 & 13.3 & 110/ 6.9 & 0.7 & 13.8 & 1.6\\
+%    antV0 & 230/ 302.5 & 13.3 & 110/ 6.9 & 0.7 & 13.8 & 1.6\\
 %    antV1 & 130/ 328.7 & 27.2 & 140/ 12.7 & 0.8 & 15.4 & 2.0\\
 %    antV2 & 200/ 1030.2 & 73.0 & 260/ 31.3 & 1.7 & 34.6 & 4.2\\
-%    camel & 200/ 1838.4 & 92.5 & 190/ 33.4 & 2.0 & 43.7 & 3.4\\
+%    camelV0 & 200/ 1838.4 & 92.5 & 190/ 33.4 & 2.0 & 43.7 & 3.4\\
 %    camelV1 & 220/ 4352.4 & 275.8 & 160/ 46.2 & 5.4 & 42.8 & 7.8\\
-%    ivy & 140/ 167.9 & 11.9 & 50/ 4.1 & 0.7 & 18.8 & 1.8\\
-%    jedit & 180/ 830.6 & 62.9 & 60/ 7.8 & 1.0 & 45.7 & 3.3\\
+%    ivyV0 & 140/ 167.9 & 11.9 & 50/ 4.1 & 0.7 & 18.8 & 1.8\\
+%    jeditV0 & 180/ 830.6 & 62.9 & 60/ 7.8 & 1.0 & 45.7 & 3.3\\
 %    jeditV1 & 140/ 1055.2 & 81.8 & 110/ 13.6 & 1.1 & 30.7 & 3.6\\
 %    jeditV2 & 170/ 1322.7 & 92.2 & 140/ 18.1 & 1.3 & 35.3 & 4.1\\
-%    log4j & 220/ 370.7 & 16.3 & 110/ 5.6 & 0.5 & 16.1 & 1.7\\
-%    lucene & 110/ 385.3 & 31.9 & 100/ 8.8 & 0.8 & 21.3 & 2.6\\
-%    poi & 170/ 720.7 & 46.2 & 100/ 10.2 & 0.9 & 19.9 & 3.0\\
+%    log4jV0 & 220/ 370.7 & 16.3 & 110/ 5.6 & 0.5 & 16.1 & 1.7\\
+%    luceneV0 & 110/ 385.3 & 31.9 & 100/ 8.8 & 0.8 & 21.3 & 2.6\\
+%    poiV0 & 170/ 720.7 & 46.2 & 100/ 10.2 & 0.9 & 19.9 & 3.0\\
 %    poiV1 & 170/ 1229.0 & 79.4 & 110/ 14.9 & 1.2 & 25.9 & 2.9\\
-%    synapse & 190/ 377.0 & 21.6 & 160/ 10.3 & 0.6 & 21.0 & 1.7\\
-%    velocity & 100/ 275.6 & 39.6 & 120/ 8.9 & 0.7 & 13.2 & 2.1\\
-%    xerces & 130/ 310.7 & 25.4 & 130/ 13.3 & 0.9 & 21.6 & 2.3\\
+%    synapseV0 & 190/ 377.0 & 21.6 & 160/ 10.3 & 0.6 & 21.0 & 1.7\\
+%    velocityV0 & 100/ 275.6 & 39.6 & 120/ 8.9 & 0.7 & 13.2 & 2.1\\
+%    xercesV0 & 130/ 310.7 & 25.4 & 130/ 13.3 & 0.9 & 21.6 & 2.3\\
 %    xercesV1 & 130/ 1792.1 & 147.9 & 160/ 37.1 & 1.6 & 35.4 & 4.0\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on different models over the objective of F}
@@ -1335,22 +1285,22 @@ for each row.}
 %    \hline\hline
 %    Datasets & Tuned\_Where & Naive\_Where & Tuned\_CART & Naive\_CART & Tuned\_RanFst & Naive\_RanFst\\
 %    \hline
-%    ant & 70/ 95.37 & 1.13 & 50/ 2.98 & 0.07 & 6.69 & 0.13\\
+%    antV0 & 70/ 95.37 & 1.13 & 50/ 2.98 & 0.07 & 6.69 & 0.13\\
 %    antV1 & 50/ 124.00 & 2.15 & 50/ 4.39 & 0.09 & 8.71 & 0.19\\
 %    antV2 & 50/ 292.02 & 6.16 & 60/ 7.12 & 0.18 & 13.25 & 0.31\\
-%    camel & 60/ 512.16 & 7.51 & 60/ 9.81 & 0.16 & 17.61 & 0.29\\
+%    camelV0 & 60/ 512.16 & 7.51 & 60/ 9.81 & 0.16 & 17.61 & 0.29\\
 %    camelV1 & 60/ 1577.43 & 22.43 & 60/ 15.90 & 0.24 & 24.13 & 0.71\\
-%    ivy & 80/ 84.74 & 0.99 & 60/ 3.92 & 0.07 & 6.39 & 0.17\\
-%    jedit & 80/ 428.65 & 5.01 & 50/ 5.26 & 0.08 & 13.66 & 0.28\\
+%    ivyV0 & 80/ 84.74 & 0.99 & 60/ 3.92 & 0.07 & 6.39 & 0.17\\
+%    jeditV0 & 80/ 428.65 & 5.01 & 50/ 5.26 & 0.08 & 13.66 & 0.28\\
 %    jeditV1 & 60/ 400.97 & 6.48 & 50/ 5.81 & 0.10 & 10.48 & 0.32\\
 %    jeditV2 & 70/ 449.76 & 6.75 & 50/ 5.90 & 0.11 & 12.41 & 0.35\\
-%    log4j & 60/ 79.60 & 1.43 & 60/ 2.75 & 0.05 & 7.38 & 0.14\\
-%    lucene & 60/ 183.58 & 2.88 & 50/ 5.07 & 0.09 & 10.27 & 0.30\\
-%    poi & 60/ 295.96 & 4.30 & 60/ 6.15 & 0.10 & 11.59 & 0.28\\
+%    log4jV0 & 60/ 79.60 & 1.43 & 60/ 2.75 & 0.05 & 7.38 & 0.14\\
+%    luceneV0 & 60/ 183.58 & 2.88 & 50/ 5.07 & 0.09 & 10.27 & 0.30\\
+%    poiV0 & 60/ 295.96 & 4.30 & 60/ 6.15 & 0.10 & 11.59 & 0.28\\
 %    poiV1 & 70/ 614.74 & 8.69 & 80/ 14.46 & 0.13 & 17.12 & 0.28\\
-%    synapse & 60/ 103.38 & 1.78 & 60/ 3.64 & 0.06 & 6.54 & 0.15\\
-%    velocity & 50/ 264.00 & 5.79 & 50/ 8.58 & 0.14 & 17.06 & 0.40\\
-%    xerces & 70/ 194.38 & 1.98 & 50/ 5.42 & 0.08 & 9.08 & 0.22\\
+%    synapseV0 & 60/ 103.38 & 1.78 & 60/ 3.64 & 0.06 & 6.54 & 0.15\\
+%    velocityV0 & 50/ 264.00 & 5.79 & 50/ 8.58 & 0.14 & 17.06 & 0.40\\
+%    xercesV0 & 70/ 194.38 & 1.98 & 50/ 5.42 & 0.08 & 9.08 & 0.22\\
 %    xercesV1 & 70/ 871.91 & 12.57 & 50/ 7.96 & 0.14 & 16.22 & 0.38\\
 %  \end{tabular}
 %  \caption{Time (in seconds) spent on the objective of F with B stop: tune once+ test once}
