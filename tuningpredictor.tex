@@ -4,6 +4,7 @@
 \usepackage{graphics}
 \usepackage{cite}
 \usepackage{rotating}
+\usepackage{eqparbox}
 \usepackage{graphics}
 \usepackage{colortbl} 
 \usepackage{picture}
@@ -79,13 +80,13 @@ For the purposes of learning
 software defect predictors this optimization strategy can quickly
 find  good tunings that  dramatically change   the performance of a learner.
 For example,
-in this paper we show   tunings that  alter deection  precision  
+in this paper we show   tunings that  alter detection  precision  
  from 2\% to 98\%.
 
 These results prompt for a change to standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
-{\em without} first conducting an tuning optimizations study.
+{\em without} first conducting a tuning optimization study.
 The implications for other kinds of software analytics is now an open and pressing questions.
 
 %RQ1: Does tuning affect learners' performance?
@@ -121,7 +122,7 @@ to manually browse all the available software project
 data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
 and this is just one of over a dozen open-source repositories
 that are readily available to researchers~\cite{rod12}.
-For example,  the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub hosts over 14 million projects. 
+For example,  the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
 
 
 
@@ -190,11 +191,11 @@ Hence, many old papers    need to be revisted  and perhaps revised~\cite{bell201
 For example, one of us (Menzies) used data miners
 to assert that some factors were more important than others for predicting
 successful software reuse~\cite{me02k}. That assertion should now be doubted since that
-Menzies study did conduct a tuning study before reporting what factors the data miners
+Menzies study did not conduct a tuning study before reporting what factors the data miners
 found where most influential.
 
-Secondly, several   prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
-that learnerX is better than learnerY for some software analytics task~.
+Secondly, several  prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
+that learnerX is better than learnerY for some software analytics task.
 For example, a recent IEEE TSE article claimed that the 
 CART decision tree learner was far worse than Random Forests for
 software defect prediction~\cite{lessmann2008benchmarking}. 
@@ -210,7 +211,7 @@ encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, one such default setting
   in the Python \mbox{SciKitLearn} toolkit~\cite{scikit-learn}
 is to use $F=10$ decision trees in  Random Forest classifiers.
-Our optimizer settled on  $F$ values that were were nowhere near that default:
+Our optimizer settled on  $F$ values that were nowhere near that default:
 
 {\scriptsize
 \[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
@@ -279,7 +280,8 @@ methods may be very simple to implement and very fast to execute.
 \section{Motivating Example}\label{sect:eg}
 
 This section offers a small demonstration
-of the impact of tuning parameters. It also demonstrates that this issue of tuning effects not jist the complex data miners discussed later in the paper bu t also 
+of the impact of tuning parameters. It also demonstrates that this issue of tuning effects 
+not just the complex data miners discussed later in the paper but also 
 applies for even very simple  learning schemes.
 
 
@@ -322,7 +324,7 @@ That researcher might test that belief by using studying historical
 defect logs with 
 linear regression. Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
 that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$ seen in a
-software module (in this case, a ``C'' function).
+software module (in this case, a  function).
 Note that the Halstead correlation $c_2$
 is worse than those from lines of code $c_1$. This result  seems to suggest that
 despite their potential support for refactoring, our researchers should not use Halstead.
@@ -404,7 +406,7 @@ This is strong motivation to explore the issue of tunings.
 
 
 
-The rest of this paper repeats the analyis of the last section, but for much
+The rest of this paper repeats the analysis of the last section, but for much
 more complex learners. In those results, shown  below, we will find
 examples of {\em rank reversals};
 i.e.  after tuning the top ranked defector becomes last and vice versa.
@@ -486,85 +488,46 @@ post-release bug-tracking system).}\label{fig:ck}
  
 \input{learners}
 
-The psuedocde for differential evolution is shown in Algorithm \ref{alg:DE}
+\subsubsection{Differential Evolution: The Details}
+ 
+ 
+\input{algo}
+The psuedocode for differential evolution is shown in Algorithm~\ref{alg:DE}.
+Note that, as we describe the algorithm,
+  any superscript number denotes a line in that algorithm.
 
-for 
-Differential Evolution (DE)\cite{storn1997differential} is a stochastic search algorithm that 
-optimizes a problem by iteratively trying to improve a  population of candidate solutions with 
-regard to a given quality measurement. Such method makes no assumptions about the 
-problem being optimized and has already been used as a parameter tuner
-\cite{omran2005differential, chiha2012tuning}.
 
-DE starts with creating a population of candidate solutions and then generates new 
-candidates based on $New = X+f*(Y-Z)$, where $X$, $Y$ and $Z$ are randomly selected 
-solutions from the current frontier and $f$ is a crossover factor. The newly generated solution 
-will be added into the next generation of solutions if dominating previous old points in the 
-frontier. To avoid meaning less iteration, early termination strategy is applied that is at the 
-beginning, assign a value to the $life$ parameter, it would be reduced by one each time   
-when the new generation of candidate solutions does not improve in terms of quality 
-measurement. The DE will stop when the $life$ equals to 0.
+DE is an evolutionary algorithm; i.e. the next {\em NewGeneration} is learnt from
+a current {\em Population}.  If the new is no better than the current, then
+we lose one life, terminating when we run out of lives$^5$.
 
-Algorithm \ref{alg:DE} is a list of pseudocode of DE with early termination for maximizing a 
-score function, where $np$ is the number of population in each generation, $f$ is the 
-crossover factor as mentioned, $cf$ is the probability for crossover operation to generate new 
-candidate, $life$ is to control termination.
+Each candidate solution in the {\em Population}  
+is a pair of {\em (Tunings, Scores)}. In this paper, {\em Tunings} are selected from
+\fig{parameters} and {\em Scores} come from training a learner using those parameters
+and applying it to some test data$^{23-28}$.
 
-\begin{algorithm}
-\caption{Pesudocode for DE with Early Termination}
-\label{alg:DE}
-\begin{algorithmic}[1]
-\Require $np = 10$, $f=0.75$, $cr=0.3$, $life = 5$
-\Ensure $S_{best}$
-     
-     \Function{DE}{$np$, $f$, $cr$, $life$}
- \State $Population  \gets $ InitializePopulation($np$)
- \State $S_{best} \gets $GetBestSolution($Population $)
- \While{$life > 0$}
-\State $NewGeneration \gets \emptyset$
-\For{$i=0 \to np-1$}
-\State $S_i \gets$ GenNew($Population [i], Population , cr, f$)
-\If {Score($S_i$) >Score($Population [i]$)}
-\State $NewGeneration$.append($S_i$)
-\Else
-\State $NewGeneration$.append($Population [i]$)
-\EndIf
-\EndFor
-\State $Population  \gets NewGeneration$
-\If{$\neg$ Improve($Population $)}
-\State $life -=1$
-\EndIf
-\State $S_{best} \gets$ GetBestSolution($Population $)
- \EndWhile
-\State \Return $S_{best}$
-\EndFunction
-\Function{Score}{$Candidate$}
-   \State set tuned parameters according to $Candidate$
-   \State TrainLearner()
-   \State $scores \gets$TestLearner()
-   \State \% scocres = [pd, f, precision]
-   \State $s \gets scores[i] $ 
-   \State \% i determines the goal of tuning
-   \State \Return$s$
-\EndFunction
-\Function{GenNew}{$old, pop, cr, f$}
-  \State $a, b, c\gets threeOthers(pop,old)$ 
-  \State \% pick 3 other points from the population
-  \State $newf \gets \emptyset$
-  \For{$i=0 \to np-1$}
-       \If{$cr < random()$}
-         \State $newf$.append($old[i]$)
-                \Else
-                  \If{typeof(old[i]) == bool}
-                    \State $newf$.append(not $old[i]$)
-         \Else
-          \State $newf$.append(trim($i$,($a[i] + f * (b[i] - c[i]$))))
-          \State \%trim() will make new value fall in the range
-         \EndIf
-       \EndIf
-  \EndFor
-\EndFunction
-        \end{algorithmic}            
-\end{algorithm}
+The premise of this algorithm is that the best way to mutate existing tunings
+is to {\em Extrapolate}$^{29}$
+between current solutions.  Three solutions $a,b,c$ are selected at random.
+For each tuning parameter $i$, at some probability {\em cr}, we replace  new tuning is created
+via:
+\bi
+\item For numerics: $a_i+f \times (b_i - c_i)$   where $f$ is a parameter
+controlling the cross-over amount.  The {\em trim} function$^{39}$ limits the new
+value to the legal range min..max of that parameter.
+\item For booleans:  negate the current value$^{37}$.
+\ei
+The main loop of DE$^7$ runs over the {\em Population}, replacing old items
+with new {\em Candidate}s (if the new candidate is better than the old item).
+This means that, as the loop progresses, the {\em Population} is full of increasiningly
+more valuable solutions. This, in turn, also improves  the candidates (which are generated
+from the {\em Population}.
+
+For this experiments of this paper, we collect performance
+values from a data mining, from which a {\em Goal} function extracts one 
+performance value$^{27}$ (so we tun this code many times, each time with
+a different {\em Goal}$^2$).  Technically, this makes this a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
+
 
 %\begin{algorithm}
 %\begin{algorithmic}[1]
@@ -584,27 +547,101 @@ candidate, $life$ is to control termination.
 % \end{algorithmic}
 %\end{algorithm}
 
-\section{Experiment}
+\begin{figure*}[!ht]
 
-\subsection{Data Set}
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c c c c c c c c c c }\hline
+  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
+\\\hline
+  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
+\\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
+\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
+\\  \end{tabular}
+   \caption{Ratios of defective instances in each experimental data set. 
+   E.g., the top left data set has 20 defective classes out of 125 total.
+   This paper runs one experiment for each column
+   shown in this figure. The {\em training} set is used by an untuned learner
+   to build a model, which is then tested on the {\em testing} data.
+   {\em Training} data is used by  differential evolution when it builds
+    a model (using one set of possible tunings) and that model is tested on {\em tunings}.
+    Finally, the best model from by DE is applied to {\em testing}. 
+   This information is continued  in \fig{data2}. 
+   }\label{fig:data1}
+\end{figure*}
+\begin{figure*}[!ht]
+\scriptsize
+\centering
+  \begin{tabular}{c c c c c c c c c c }
+  \hline\hline
+  Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
+\\\hline
+  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
+\\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
+\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
+\\  \end{tabular}
 
-The data used in this study is from PROMISE repository. Ten software defect predicition data 
-sets are analyzed. They're {\it ant}, {\it camel}, {\it ivy}, {\it jedit}, {\it log4j}, {\it lucene}, {\it 
-synapse}, {\it velocity}, {\it xalan} and {\it xerces}. Each of these data sets is composed of 
-several software modules with number of defects and code attributes. For more detailed 
-description of code attributes and the original data sets, please refer to  http://openscience.us/
-repo/
+   \caption{More ratios of  defective instances in each experimental data set. 
+   Same format as \fig{data1}.}\label{fig:data2}
+\end{figure*}
 
-\subsection{Experiment Design}
 
-The experiment aims at investigating whether tuning helps learners improve performance in 
-terms of accuracy measurement. We choose compare WHERE-based learner with and 
-without tuning parameters and two {\it significantly different} learners Random Forest and 
-CART according to \cite{lessmann2008benchmarking}. As mentioned above, we'd like to see 
-whether tuning will help change the rank of CART and make it comparable with Random 
-Forest. 
+\section{Experiments}
 
-To evaluate accuracy performance of learners, several measurements are proposed to use, like 
+The following experiments compare the performance of three learners, tuned and untuned, on 17
+sets of data. 
+
+\subsection{Data Sets}
+
+Our defect data comes from the PROMISE repository\footnote{http://openscience.us/repo}.
+It pertains to 
+open source Java systems defined in terms of \fig{ck}:  {\it ant}, {\it camel}, {\it ivy}, {\it jedit}, {\it log4j}, {\it lucene}, {\it 
+synapse}, {\it velocity}, {\it xalan} and {\it xerces}. 
+
+An important principle in data mining is not to test on the data used
+in training.  There are many ways to design a experiment that satisfies this principle:
+\bi
+\item  Leave-one-out experiments can be impractically slow for large data sets;
+\item Cross-validation can mix up older and newer data sets so it may well be that
+data from the {\em future} is used to train on {\em past data}.
+\ei
+To avoid these problems, we used an incremental learning approach. The following
+experiment ensures that the training data was created at some time before the test
+data.
+
+For this experiment, we looked for data sets that had at least three  
+releases in PROMISE:
+\bi 
+\item The {\em first} release was used for some  {\em training}, to collect a baseline
+   using an untuned learner.
+   \item
+   The {\em first} release was also used  on line 24 of Algorithm~\ref{alg:DE} to
+   build some model using some the tunings found in some {\em Candidate}.
+   \item The {\em second} release was used on 25 of Algorithm~\ref{alg:DE} to 
+   test the model found on line 24.
+   \item Finally the {\em third} release was used to gather the performance statistics
+   reported below from (a)~the model generated by the untuned learner or (b)~the
+   best model found by differential evolution.
+   
+   \ei
+ Note that the above ensures that all treatments get tested on the same final data set.
+ 
+ Some data sets have more than three releases and, for those data, we could run more
+ than one experiment. For example, {\em ant} has five versions in PROMISE so
+ we ran three experiments called V0,V1,V2:
+ \bi
+ \item AntV0: first,second,third = versions 1,2,3
+ \item AntV1: first,second,third = versions 2,3,4
+ \item AntV2: first,second,third = versions 3,4,5
+ \ei 
+These data sets are displayed in \fig{data1} and \fig{data2}.
+
+\subsection{Performance Scores}
+
+
+To evaluate accuracy performance of learners, several measurements are used.
+The 
 probability of  detection({\it pd}) and probability of false alarm ({\it pf})\cite{menzies2007data}, 
 the area under the receiver operating characteristics curve ({\it AUC})
 \cite{lessmann2008benchmarking}, precision and F measure\cite{zhang2007comments}. In this work, we 
@@ -643,41 +680,6 @@ from scikit-learn \cite{scikit-learn} to do a comparative study. The parameters 
 
 
  
-\begin{figure}[!t]
-
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{r@{~}|r@{~}rr|r@{~}rr|r@{~}rr}
-    & \multicolumn{3}{c|}{WHERE}&\multicolumn{3}{c|}{CART}& \multicolumn{3}{c}{Random Forest}\\\cline{2-10} 
-    Goal & tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive &$\frac{\mathit{tuned}}{\mathit{naive}}$& tuned & naive&$\frac{\mathit{tuned}}{\mathit{naive}}$\\\hline
-pd&71.4&1.2&60&4.4&0.1&44&7.1&0.2&36\\ 
-prec&82.8&1.4&59&3.9&0.1&39&7.4&0.2&37\\
-f&86.1&1.2&72&3.3&0.1&33&6.7&0.2&34
-  \end{tabular}
-  \caption{For one train/test set pair (ANT),  time (in seconds) spent tuning,
-  for different goals, or just running the ``off-the-shelf'' learner.}
-\end{figure}
-
-
-\begin{figure}[!t]
-
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-\begin{tabular}{r|rrr}
-goal &	WHERE	&CART&	Random Forest\\\hline
-f	&15	&13	&9\\ 
-pd	&15	&16	&8\\ 
-prec&	14	&14	&8
-\end{tabular}
-\caption{How much slower is tuning vs just running the default
-settings of the learner? E.g. bottom right, tuning to increase
-precision with Random Forests is eight times slower than
-just running Random Forests.}
-\end{figure}
-
-
 \section{Discussion}
 
 \section{Related Work}
@@ -927,35 +929,6 @@ node. \\ \cline{2-5}
 
 %%%%%%%%%%%%%%%% defectives and non-defectives for each datasets%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure*}[!ht]
-
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{c c c c c c c c c c }
-  \hline\hline
-  Dataset &ant&antV1&antV2&camel&camelV1&ivy&jedit&jeditV1&jeditV2
-\\\hline
-  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
-\\  tunning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
-\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
-\\  \end{tabular}
-   \caption{The percentage of defective instances in each experimental data set. For each experiment,  training, tuning and testing data are composed of single chronological data file}
-\end{figure*}
-\begin{figure*}[!ht]
-\scriptsize
-\centering
-  \begin{tabular}{c c c c c c c c c c }
-  \hline\hline
-  Dataset &log4j&lucene&poi&poiV1&synapse&velocity&xerces&xercesV1
-\\\hline
-  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
-\\  tunning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
-\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
-\\  \end{tabular}
-
-   \caption{The percentage of defective instances in each experimental data set. For each experiment,  training, tuning and testing data are composed of single chronological data file}
-\end{figure*}
 
 
 %\begin{figure*}[!th]

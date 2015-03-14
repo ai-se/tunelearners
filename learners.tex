@@ -61,7 +61,7 @@ node. \\ \cline{2-5}
 	 \hline
 
 	\end{tabular}
-    \caption {List of parameters to be tuned in Where-based learner and CART in scikit-learn.}
+    \caption {List of parameters to be tuned.}
 \label{fig:parameters}
 \end{figure*}
  
@@ -179,7 +179,7 @@ majority cluster
 (one that occurs most frequently), then we prune the sub-tree.
 This tree pruning  sometimes
 prunes aways all  cluster selectors branches. To tame this effect, the {\em wriggle} parameter
-blocks tree pruning for at least the the {\em wriggle} number of initial branches.
+blocks tree pruning for at least the first {\em wriggle} number of initial branches.
 
 Other tuning parameters are learner specific. For example,
 {\em max feature} is used by
@@ -279,14 +279,20 @@ kind of ``scout'' that can do a quick preliminary analysis of a data
 set and which can report back if that data really requires a more
 complex analysis.
 
-To find our ``scout'',  we sorted  the above algorithms from simplest to most complex.
+To find our ``scout'',  we used engineering judgement to sort  the above algorithms from simplest to most complex.
 The three simplest optimizers are SA, $\mathcal{E}$-domination, and 
-differential evolution (each can be coded in less than a page of some high-level scripting language). Our reading of the current literature is that there are more current advocated for
+differential evolution (each can be coded in less than a page of some high-level scripting language). Our reading of the current literature is that there are more  advocates for
 differential evolution than
-  SA or $\mathcal{E}$-domination. when the MOEA/D community select a secondary optimizer, then often use  differential evolution~\cite{zhang07,5583335}.
-  Also, Vesterstrom and Thomsen~\cite{Vesterstrom04} found that  differential evolution was competitive with 
+  SA or $\mathcal{E}$-domination:
+  \bi
+  \item
+  When the MOEA/D community requires a secondary optimizer, then often use  differential evolution~\cite{zhang07,5583335}.
+  \item
+ Vesterstrom and Thomsen~\cite{Vesterstrom04} report that DE is competitive with 
    particle swarm optimization and a genetic algorithm. 
-  
+   \ei
+DEs have been applied before for   parameter tuning (e.g. see~\cite{omran2005differential, chiha2012tuning}) but this is the first time they have been applied to
+optimizing defect prediction from static code attributes.  
 
 
  
