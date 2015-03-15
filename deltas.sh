@@ -45,19 +45,19 @@ F > /tmp/F.dat
 
 draw() {
 gnuplot<<EOF
-set key top left
+set key bottom right
 set output "$1.eps
-set title "Tuning's improvements to $1"
+set title "$1"
 set terminal postscript eps color "Helvetica" 15
-set size 0.5,0.5
-set yrange [-50:100]
+set size 0.3,0.5
+set yrange [-100:100]
 set ytics (-50,0,50,100)
-set xlabel "Improvements in 17 experiments, sorted"
+set xlabel "Improvements , sorted"
 set xtics (1,4,8,12,16)
 set arrow 1 from 1,0 to 17,0 nohead
 plot "/tmp/$1.dat" using 1:2 title "WHERE"  with linesp,\
      "/tmp/$1.dat"  using 1:3 title "CART" with linesp,\
-     "/tmp/$1.dat"  using 1:4 title "Random Forest" with linesp,
+     "/tmp/$1.dat"  using 1:4 title "R.Forest" with linesp,
 EOF
 ps2pdf -dEPSCrop $1.eps 
 }
