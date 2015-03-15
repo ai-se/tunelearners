@@ -265,6 +265,8 @@ that quickly find multiple approximations to the problem, each of which holds fo
 Each region has a ``slope'' and examples in that region are pushed along the slope towards better
 solutions~\cite{krall15,Zuluaga:13}.
  
+ 
+\input{algo} 
  \subsubsection{Selecting a Tuning Algorithm}
  
 From all the above methods, how do we select which optimizers to apply to tuning data miners.
@@ -286,7 +288,7 @@ differential evolution than
   SA or $\mathcal{E}$-domination:
   \bi
   \item
-  When the MOEA/D community requires a secondary optimizer, then often use  differential evolution~\cite{zhang07,5583335}.
+  When the MOEA/D community requires a secondary optimizer, they often use  differential evolution~\cite{zhang07,5583335}.
   \item
  Vesterstrom and Thomsen~\cite{Vesterstrom04} report that DE is competitive with 
    particle swarm optimization and a genetic algorithm. 

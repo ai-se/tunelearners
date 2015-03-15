@@ -1,7 +1,6 @@
 
 \begin{algorithm}[!t]
-\caption{Pesudocode for DE with Early Termination}
-\label{alg:DE}
+
 \scriptsize
 \begin{algorithmic}[1]
 \Require $\mathit{np} = 10$, $f=0.75$, $cr=0.3$, $\mathit{life} = 5$, $\mathit{Goal} \in \{\mathit{pd},f,...\}$
@@ -32,9 +31,9 @@
 \EndFunction
 \Function{Score}{$Candidate$}
    \State set tuned parameters according to $Candidate$
-   \State TrainLearner()
-   \State $scores \gets$TestLearner()   
-   \State \Return$\mathit{Goal}(scores)$  
+   \State $model \gets$TrainLearner()
+   \State $result \gets$TestLearner($model$)   
+   \State \Return$\mathit{Goal}(result)$  
 \EndFunction
 \Function{Extrapolate}{$old, pop, cr, f$}
   \State $a, b, c\gets threeOthers(pop,old)$  
@@ -52,5 +51,7 @@
   \EndFor
  \State \Return $newf$
 \EndFunction
-        \end{algorithmic}            
+        \end{algorithmic} 
+\caption{Pesudocode for DE with Early Termination}
+\label{alg:DE}
 \end{algorithm}
