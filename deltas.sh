@@ -52,8 +52,8 @@ set terminal postscript eps color "Helvetica" 15
 set size 0.3,0.75
 set yrange [-100:100]
 set ytics (-50,0,50,100)
-set xlabel "Improvements , sorted"
-set xtics (1,4,8,12,16)
+set xlabel "Improvements, sorted"
+set xtics (1,4,8,12,17)
 set arrow 1 from 1,0 to 17,0 nohead
 plot "/tmp/$1.dat" using 1:2 title "WHERE"  with linesp,\
      "/tmp/$1.dat"  using 1:3 title "CART" with linesp,\
