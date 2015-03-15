@@ -49,7 +49,7 @@ set key bottom right
 set output "$1.eps
 set title "$1"
 set terminal postscript eps color "Helvetica" 15
-set size 0.3,0.5
+set size 0.3,0.75
 set yrange [-100:100]
 set ytics (-50,0,50,100)
 set xlabel "Improvements , sorted"
