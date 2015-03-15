@@ -46,7 +46,7 @@ F > /tmp/F.dat
 draw() {
 gnuplot<<EOF
 set key bottom right
-set output "$1.eps
+set output "${1}1.eps
 set title "$1"
 set terminal postscript eps color "Helvetica" 15
 set size 0.3,0.75
@@ -59,7 +59,7 @@ plot "/tmp/$1.dat" using 1:2 title "WHERE"  with linesp,\
      "/tmp/$1.dat"  using 1:3 title "CART" with linesp,\
      "/tmp/$1.dat"  using 1:4 title "R.Forest" with linesp,
 EOF
-ps2pdf -dEPSCrop $1.eps 
+ps2pdf -dEPSCrop ${1}1.eps 
 }
 
 draw precision 
