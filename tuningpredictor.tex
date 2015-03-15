@@ -3,6 +3,7 @@
 \usepackage{color}
 \usepackage{graphics}
 \usepackage{cite}
+ 
 \usepackage{rotating}
 \usepackage{eqparbox}
 \usepackage{graphics}
@@ -18,15 +19,23 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 %%% graph
 \newcommand{\crule}[3][darkgray]{\textcolor{#1}{\rule{#2}{#3}}}
-\newcommand{\rone}{\crule{1mm}{1.95mm}}
-\newcommand{\rtwo}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
-\newcommand{\rthree}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
-\newcommand{\rfour}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}} 
-\newcommand{\rfive}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
+%\newcommand{\rone}{\crule{1mm}{1.95mm}}
+%\newcommand{\rtwo}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
+%\newcommand{\rthree}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
+%\newcommand{\rfour}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}} 
+%\newcommand{\rfive}{\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}\hspace{0.3pt}\crule{1mm}{1.95mm}}
 \newcommand{\quart}[3]{\begin{picture}(100,6)%1
 {\color{black}\put(#3,3){\circle*{4}}\put(#1,3){\line(1,0){#2}}}\end{picture}}
 \definecolor{Gray}{gray}{0.95}
 \definecolor{LightGray}{gray}{0.975}
+
+
+\newcommand{\rone}{}
+\newcommand{\rtwo}{}
+\newcommand{\rthree}{}
+\newcommand{\rfour}{} 
+\newcommand{\rfive}{}
+
 
 \newcommand{\wei}[1]{\textcolor{red}{Wei: #1}} 
 
@@ -662,50 +671,334 @@ For all other scores, the {\em better} scores are {\em larger}.
 
 The following results make no assumption that (e.g.) minimizing false alarms are 
 more important that maximizing recall or precision. That determination 
-should be make with respect to current business conditions:
-\bi
+should be make with respect to current business conditions. 
+\be
 \item
-For safety critical applications, low false alarm rates are irrelevant since the cost
-of overlooking any critical might outweigh the inconvenience of having to inspect a few more
+For safety critical applications, high false alarm rates may be not be of concern since the cost
+of overlooking any critical can outweigh the inconvenience of having to inspect a few more
 modules. 
 \item
 On the other hand, when rushing a product to market before a competing product is released, there is a business case to 
 avoid the extra rework associated with false alarms.  In that business context, 
 managers might be willing to lower the recall somewhat in order to minimize the false alarms.
-\ei
-What the falling results do show is that once the optimization goal changes, so does everything
-else. Hence, it is important not to overstate  empirical results from software analytics.
+\ee
+These two examples are just the tip of the iceberg. There are many, many other goals we might consider
+for our defect predictors.
+All the above measures relate to the tendency of a predictor to find something. Another style
+of measure would be to check the {\em variability} of that predictor.
+For example,
+in their study on reproducibility of SE results,
+ Anda, Sjoberg and Mockus advocate using the coefficient of variation ($CV=\frac{stddev}{mean}$).
+Using this measure, they defined {\em reproducibility} as $\frac{1}{CV}$~\cite{anda09}.
+Further, 
+there exist other goals that combine defect prediction with other economic
+factors.
+For example, Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12}
+say that a defect predictor should maximizing {\em reward}; i.e. find the fewest lines of code
+that contain the most bugs.
+In other work, Yin et al. are concerned about
+ {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
+These bugs occur  when (say) developers try to fix parts of the code
+where they have very little experience~\cite{yin11}.  To avoid such incorrect bug fixes, we have to optimize
+for finding the most number of bugs in regions that {\em the most programmers have worked with before}.
+Also, in {\em Better-faster-cheaper}, we seek  project changes that lead
+to fewer defects and faster development times using less resources~\cite{Green,elrawas08,elrawas10,me07f,me09a,me09f}.
+Another  {\em  rush-to-market} approach is yet another economic-based optimization measure.
+A learner that tries to maximize ``rush-to-market'' is trying to release the product as soon
+as possible, without too many bugs. Note that ``rush-to-market'' is an appropriate strategy for a company competing
+in a volatile and crowded market place where being first-to-market enables a revenue stream (that can be
+used to subsequently fix any issues with version 1.0)~\cite{huang06}.
+
+There is insufficient space in this paper to explore all the above optimization goals.
+What we can do, however, is show examples of how  changing  optimization goals can also change 
+the conclusions made from that learner on that data. Those examples only relate to precision, recall, and the F-measure
+but the general principle (that the search bias changes the search conclusions) would hold for all the goals
+listed in the previous paragraph.  Hence, we warn that it is important not to overstate  empirical results from software analytics.
 Rather, those results need to be expressed {\em along with} the context within which they are
-relevant.
+relevant (and by ``context'', we mean the optimization goal).
+
 
 \section{Experimental Results}
 
 The introduction of this article made several claims about tuning defect predictor
 that use static code attributes. This section presents
-our results in order of those claims:
+support for those claims:
 \be
-\item Such tuning was easy (see \tion{easy});
-\item Such tuning is fast (see \tion{fast});
-\item Such tuning is can dramatically change the performance scores of a predictor;
+\item  Tuning  can  improve the performance scores of a predictor;
 e.g. one result where precision changes from 2\% to 98\% (see \tion{precision});
-\item Tuning changes conclusions about what factors are most important (see \tion{import});
 \item Tuning changes conclusions about what learners are better than others (see \tion{rank};)
+\item Tuning changes conclusions about what factors are most important (see \tion{import});
+\item  Tuning is easy (see \tion{easy});
+\item Tuning is fast (see \tion{fast});
+\item Data miners should not be used ``off-the-shelf'' with their default tunings (see \tion{variance});
 \ee
 
-\subsection{Tuning is Easy}
 
-All the following results are generated with a a very simple optimizer
-(differential evolution). Further, our DE  is actually much simpler
-than a standard implementation. Recall from Algorithm~1 that
+
+\subsection{Tuning Can  Improves Performance Scores}\label{sect:precision}
+
+\fig{precisionbars} shows precision results before and after tuning using three different learners.
+For each data set, the maximum precision values for each data set are shown in {\bf bold}.
+
+
+These results offer support for the prior conclusions of  
+ Lessmann et al.~\cite{lessmann2008benchmarking} (that CART is worse than Random Forest):
+\bi
+\item
+Untuned CART is indeed the worst learner (none of its
+untuned results are best and {\bf bold}). 
+\item 
+Untuned Random Forest performs better than untuned CART in $\frac{15}{17}$ of these results.
+\ei
+
+Some of the data sets in \fig{precisionbars} proved challenging for all learners.
+To some extend, this can be explained by
+the properties of of the data set. For example, the precision results for {\em ivy} are less
+that impressive since, as shown in \fig{data1}, defective classes in {\em ivy} are very rare.
+
+That said, tuning can repair at least some of the challenging data sets seen in \fig{precisionbars}:
+\bi
+\item
+Observe the {\em xercesV0} results: nearly all learners report precisions of under 20\%. However,
+the WHERE tuned results report an 85\% precision.  
+\item A similar pattern can be seen in results from {\em camelV0},   and {\em jeditV2}.
+In those two data sets, nearly all the precision values are   low {\em except} for
+tuned WHERE that scored 83 and 98\%.
+\ei
+Finally, note the  {\em jeditV2} result for the WHERE learner.
+Here, tuning changes precision fro 2\% to 98\% (!!).
+
+
+
+
+\begin{figure}[!h]
+\renewcommand{\baselinestretch}{0.8} 
+
+\scriptsize    
+
+\begin{tabular}{r|rl|rl|rl|rl|rl|rlrl}
+%\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l@{~}r@{~}l}
+      &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forest}         \\\hline
+  Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
+antV0 & 30 &         & {\bf 89} & {\rfour} & 27 &         & {\bf 89} & {\rfour} & 39 &         & {\bf 89 }& {\rfour}\\
+antV1 & 32 & {\rtwo} & {\bf 74} & {\rfour} & 41 & {\rtwo} & {\bf 74 }& {\rfour} & 43 & {\rtwo} & 0 &        \\
+antV2 & {\bf 78} & {\rfour} & {\bf 78} & {\rfour} & 52 &         & 68 & {\rthree} & 66 & {\rtwo} & 67 & {\rtwo}\\
+camelV0 & {\bf 83} & {\rfour} & {\bf 83} & {\rfour} & 26 &         & 33 &         & 34 &         & 45 & {\rone}\\
+camelV1 & 22 &         & {\bf 28} & {\rfour} & 23 &         & 24 & {\rone} & {\bf 28} & {\rfour} & {\bf 28} & {\rfour}\\
+ivy & 16 &         & {\bf 23} & {\rfour} & 18 & {\rone} & 21 & {\rthree} & 21 & {\rthree} & 20 & {\rtwo}\\
+jeditV0 & 35 &         & {\bf 75} & {\rfour} & 49 & {\rone} & 56 & {\rtwo} & 50 & {\rone} & 48 & {\rone}\\
+jeditV1 & 24 &         & {\bf 87} & {\rfour} & 28 &         & 86 & {\rfour} & 36 &         & 39 & {\rone}\\
+jeditV2 & 2 &         & {\bf 98 }& {\rfour} & 3 &         & 18 &         & 5 &         & 5 &        \\
+log4j & 94 &         & {\bf 100} & {\rfour} & 97 & {\rtwo} & {\bf 100} & {\rfour} & {\bf 100} & {\rfour} & {\bf 100 }& {\rfour}\\
+lucene & 61 &         & 74 & {\rfour} & 67 & {\rone} & 70 & {\rtwo} & 72 & {\rthree} & {\bf 77} & {\rfour}\\
+poiV0 & 70 &         & 68 &         & 77 & {\rfour} & 72 & {\rone} & {\bf 79} & {\rfour} & 76 & {\rthree}\\
+poiV1 & {\bf  100} & {\rfour} & 90 & {\rthree} & 73 &         & 89 & {\rtwo} & 81 & {\rone} & {\bf 100} & {\rfour}\\
+synapse & 66 &         & 66 &         & 71 & {\rone} & {\bf 100} & {\rfour} & 59 &         & 80 & {\rtwo}\\
+velocity & 34 &         & 39 & {\rthree} & 34 &         & 40 & {\rfour} & 40 & {\rfour} & {\bf 41} & {\rfour}\\
+xercesV0 & 13 &         & {\bf 85} & {\rfour} & 14 &         & 13 &         & 15 &         & 13 &        \\
+xercesV1 & {\bf 56} & {\rfour} & 26 &         & 50 & {\rthree} & 26 &         & 41 & {\rtwo} & 26 &        \\
+\end{tabular}
+\caption{Precision results (best results  shown in {\bf bold}).}
+\label{fig:precisionbars}
+\end{figure}
+
+
+\begin{figure*}
+\begin{center}
+{\small\[\begin{array}{r|rrrrrrrrrrrrrrrrrr}\hline
+          &      &      &       &   &       & 25th  &   & &  & 50th     &   &  &      & 75th  &   &   &     &\\
+Precision & WHERE&	-30	&-10	&-2 &	0	&0	&0	&5&	6&	6	&7	&13&	40&	42&	59&	63&	72	&96\\
+																		
+&CART&	-24&	-5	&-1	&1	&3	&3	&3	&6	&7	&7	&15&	16	&16&	29	&33&	58&	62\\
+															
+&RF &	-43&	-15&	-3	&-2	&-2&	-1	&0	&0	&0	&1	&1	&3	&5&	11&	19&	21	&50\\\hline 
+f-measure &	WHERE&	-14&	-14	&-6&	-5	&-4	&-2&	0	&0	&2	&4	&5	&6	&7&	14&	28	&73	&87\\
+	&CART	&-43	&-6	&-2&	-1&	1	&2	&5&	6&	6	&8	&12&	13&	16&	19&	19	&35&	57\\
+	&RF	&-27	&-10	&-4	&-4&	-3	&-2	&-2	&-2&	0	&0	1&	2	&2	&2	&4	&5	&5
+	\end{array} \]}
+	\end{center}
+\caption{Sorted performance deltas, {\em tuned - default} when tuning on precision in \fig{precisionbars}
+and the F-measure in \fig{f-bars}.}
+\end{figure*}
+\subsection{Tuning Changes Learner Rankings}\label{sect:rank}
+
+Suppose we reflected on \fig{precisionbars} to decide which learners were better than others.
+Given the poor showing of untuned CART and the good performance of tuned WHERE, we might recommend
+{\em not} to use CART and {\em always} used tuned WHERE.
+
+Note that this conclusion is not stable and is changed if we elect to tune for different goals. 
+\fig{fbars} shows what happens when we tune for the f-measure. 
+As before, untuned Random Forest generally beats CART. However:
+\bi
+\item
+In  a result that is the direct opposite of   
+ Lessmann et al.~\cite{lessmann2008benchmarking}, tuned CART does better than Random Forest;
+ \item 
+ In another result that is the reverse of \fig{precisionbars}, tuned WHERE is not necessarily
+ any better than anything else.
+ \ei
+The lesson here is that, given a particular task (e.g. optimizing for precision), tuning can offer
+substantial benefits. However, when that task changes (e.g. to optimizing for the F-measure),
+it should not be assumed that conclusions from the previous tuning will hold in the new context.
+In practice, this means that tuning needs to be repeated for each new context.
+
+
+
+
+
+\begin{figure}[!h]
+\renewcommand{\baselinestretch}{0.8} 
+
+\scriptsize  
+~~~\begin{tabular}{r|rl|rl|rl|rl|rl|rlrl}
+      &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forest}         \\\hline
+  Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
+antV0 & {\bf 39} & {\rfour} & 25 & {\rtwo} & 32 & {\rthree} & 31 & {\rthree} & {\bf 39} & {\rfour} & 12 &        \\
+antV1 & 11 &         & 6 &         & 40 & {\rfour} & {\bf 45} & {\rfour} & 39 & {\rfour} & 44 & {\rfour}\\
+antV2 & 0 &         & {\bf 87} & {\rfour} & 44 & {\rtwo} & 1 &         & 50 & {\rtwo} & 51 & {\rtwo}\\
+camelV0 & 0 &         & 28 & {\rfour} & 9 & {\rone} & 28 & {\rfour} & {\bf 34} & {\rfour} & 30 & {\rfour}\\
+camelV1 & {\bf 34} & {\rfour} & {\bf 34} & {\rfour} & 31 &         & 32 & {\rone} & 33 & {\rthree} & 31 &        \\
+ivyV0 & 27 &         & 34 & {\rthree} & 30 & {\rone} & {\bf 38} & {\rfour} & 35 & {\rthree} & 33 & {\rtwo}\\
+jeditV0 & 50 &         & 56 & {\rtwo} & 56 & {\rtwo} & 54 & {\rone} & {\bf 61} & {\rfour} & 59 & {\rfour}\\
+jeditV1 & 37 & {\rone} & 33 &         & 36 &         & {\bf 49} & {\rfour} & 45 & {\rthree} & 47 & {\rfour}\\
+jeditV2 & 4 &         & 8 & {\rtwo} & 5 &         & {\bf 11} & {\rfour} & 9 & {\rthree} & 9 & {\rthree}\\
+log4jV0 & {\bf 62} & {\rfour} & 56 & {\rthree} & 47 & {\rone} & 59 & {\rfour} & 53 & {\rtwo} & 43 &        \\
+luceneV0 & 70 & {\rthree} & {\bf 75} & {\rfour} & 56 &         & {\bf 75} & {\rfour} & 73 & {\rfour} & {\bf 75} & {\rfour}\\
+poiV0 & {\bf 78} & {\rfour} & 64 &         & 74 & {\rthree} & 68 & {\rone} & 73 & {\rthree} & 69 & {\rone}\\
+poiV1 & 5 &         & {\bf 78} & {\rfour} & 21 & {\rone} & {\bf 78} & {\rfour} & 76 & {\rfour} & {\bf 78} & {\rfour}\\
+synapseV0 & 0 &         & 2 &         & 40 & {\rthree} & {\bf 56} & {\rfour} & 51 & {\rfour} & 55 & {\rfour}\\
+velocityV0 & {\bf 51 & {\rfour} & {\bf 51} & {\rfour} & 49 &         & {\bf 51} & {\rfour} & {\bf 51} & {\rfour} & {\bf 51} & {\rfour}\\
+xercesV0 & 22 & {\rone} & 20 &         & 21 &         & {\bf 27} & {\rfour} & 23 & {\rtwo} & 20 &        \\
+xercesV1 & 25 &         & 39 & {\rone} & 18 &         & 53 & {\rthree} & 68 & {\rfour} & {\bf 73} & {\rfour}\\
+\end{tabular}
+\caption{F-value results (best results  shown in {\bf bold}).}
+\label{fig:fbars}
+\end{figure}
+
+
+\subsection{Tuning Changes Factors Rankings }\label{sect:rank}
+
+\fig{counts} shows how the objective goal (in this case,
+{\em pd} (recall) or precision, or the f-measure) changes what factors are most important.
+In this table, ``important'' is defined by how often some factor was used when WHERE generated
+its final trees. Given that we are processing 17 data sets, the maximum counts for any 
+one learner is 17. 
+
+The first thing to note in \fig{counts} is that the counts in the {\em tuned} column are always usually
+much less than in the {\em default} columns. That is, after tuning, different and fewer factors
+are used to make conclusions. Further, given the imr
+\begin{figure}[!h]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c|c c|c c|c c|c c| c c }
+  
+    & \multicolumn{2}{c|}{Pd} &  \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c|}{F} &  \multicolumn{2}{c|}{SUM}\\
+ &&&&&&&&\\
+Features& \begin{sideways}default\end{sideways}
+& \begin{sideways}tuned\end{sideways}
+& \begin{sideways}default\end{sideways}
+& \begin{sideways}tuned\end{sideways}
+& \begin{sideways}default\end{sideways}
+& \begin{sideways}tuned\end{sideways}
+& \begin{sideways}default\end{sideways}
+& \begin{sideways}tuned\end{sideways}
+\\\hline
+noc& & & & & & &  & \\
+ca& & & & & & &  & \\
+max\_cc& & & & 1& & 1&  & 2\\
+ce& & & & 1& & 2&  & 3\\
+moa& & 1& & 1& & 2&  & 4\\
+cbo& & & & 1& & 4&  & 5\\
+avg\_cc& & & & 3& & 2&  & 5\\
+lcom& & & & 3& & 3&  & 6\\
+npm& & 1& & 5& & 4&  & 10\\
+cbm& 4& & 6& 3& 4& 3& 14 & 6\\
+amc& 4& 1& 4& 3& 4& 5& 12 & 9\\
+rfc& 4& 1& 4& 5& 4& 9& 12 & 15\\
+ic& 8& & 7& 4& 9& 4& 24 & 8\\
+wmc& 5& 2& 5& 6& 5& 11& 15 & 19\\
+dit& 8& & 8& 6& 8& 6& 24 & 12\\
+lcom3& 9& 1& 9& 7& 9& 7& 27 & 15\\
+loc& 9& 2& 8& 6& 9& 12& 26 & 20\\
+cam& 9& 1& 9& 8& 9& 10& 27 & 19\\
+dam& 14& 3& 14& 9& 14& 11& 42 & 23\\
+mfa& 16& 3& 16& 11& 16& 13& 48 & 27\\
+
+  \end{tabular}
+    \caption{Counts of features selected by different goals. For each goal, the numbers in right and left columns represent the counts of features selected for all the data sets with and without tuning processes.
+    }\label{fig:counts}
+\end{figure}
+
+
+
+
+\subsection{Tuning is Easy}\label{sect:easy}
+
+Measured in terms of the search space
+required to achieve large changes in learner performance, optimizing defect prediction from static code
+measures is about an order of magnitude {\em easier} than standard optimization.
+Recall from Algorithm~1 that
 DE explores a {\em Population} of size {\em np=10}. This is a very small population size:
 the standard recommendation is to set {\em np} to be ten times larger than the number
-of attributes being optimized~\cite{stron97}
+of attributes being optimized~\cite{stron97}. 
 
+Another measure showing that tuning is easy is the number of evaluations required to complete optimization.
+This is covered in the next section.
+
+
+\subsection{Tuning is Easy}\label{sect:easy}
+ 
+
+
+
+\begin{figure}
+
+{\scriptsize
+
+\renewcommand{\baselinestretch}{0.8}
+\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l@{~}r@{~}l}
+      &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forests}         \\\hline
+  Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
+antV0 & 65 & {\rtwo} & 68 & {\rthree} & 53 &         & $\bigstar$75 & {\rfour} & 69 & {\rthree} & 72 & {\rfour}\\
+antV1 & 12 &         & $\bigstar$70 & {\rfour} & 52 & {\rthree} & 56 & {\rthree} & 62 & {\rfour} & 69 & {\rfour}\\
+antV2 & 0 &         & $\bigstar$69 & {\rfour} & 53 & {\rthree} & 64 & {\rfour} & 68 & {\rfour} & 67 & {\rfour}\\
+camelV0 & 0 &         & 51 & {\rfour} & 10 &         & 56 & {\rfour} & 60 & {\rfour} & $\bigstar$61 & {\rfour}\\
+camelV1 & 45 &         & 55 & {\rthree} & 53 & {\rtwo} & $\bigstar$59 & {\rfour} & 56 & {\rthree} & 57 & {\rfour}\\
+ivyV0 & 53 &         & 71 & {\rfour} & 63 & {\rtwo} & $\bigstar$74 & {\rfour} & 70 & {\rfour} & 71 & {\rfour}\\
+jeditV0 & 59 &         & 69 & {\rthree} & 71 & {\rfour} & 72 & {\rfour} & $\bigstar$73 & {\rfour} & $\bigstar$73 & {\rfour}\\
+jeditV1 & 70 & {\rthree} & 69 & {\rtwo} & 62 &         & 73 & {\rfour} & $\bigstar$75 & {\rfour} & $\bigstar$75 & {\rfour}\\
+jeditV2 & 49 &         & 56 & {\rone} & 48 &         & 61 & {\rtwo} & $\bigstar$78 & {\rfour} & 67 & {\rthree}\\
+log4jV0 & 53 & {\rtwo} & 56 & {\rthree} & 46 &         & $\bigstar$59 & {\rfour} & 56 & {\rthree} & 56 & {\rthree}\\
+luceneV0 & 37 &         & 65 & {\rfour} & 55 & {\rthree} & 56 & {\rthree} & 60 & {\rthree} & $\bigstar$66 & {\rfour}\\
+poiV0 & 45 &         & 60 & {\rthree} & 66 & {\rfour} & 62 & {\rthree} & $\bigstar$68 & {\rfour} & 56 & {\rtwo}\\
+poiV1 & 6 &         & $\bigstar$62 & {\rfour} & 22 & {\rone} & 60 & {\rfour} & 56 & {\rfour} & 57 & {\rfour}\\
+synapseV0 & 0 &         & 61 & {\rfour} & 43 & {\rthree} & 64 & {\rfour} & 63 & {\rfour} & $\bigstar$67 & {\rfour}\\
+velocityV0 & 3 &         & $\bigstar$56 & {\rfour} & 26 & {\rtwo} & 51 & {\rfour} & 51 & {\rfour} & 55 & {\rfour}\\
+xercesV0 & 37 &         & 46 & {\rthree} & 47 & {\rfour} & $\bigstar$49 & {\rfour} & $\bigstar$49 & {\rfour} & 48 & {\rfour}\\
+xercesV1 & 24 &         & $\bigstar$68 & {\rfour} & 19 &         & 32 & {\rone} & 32 & {\rone} & 17 &        \\
+\end{tabular}
+}
+\caption{g values in tune and default runs.
+All data available from http://openscience.us/repo/defect/. {\bf KEY:}
+  percentile ranges:\newline
+80th to 100th= {\rfour};
+60th to 80th= {\rthree};
+40th to 60th= {\rtwo};
+20th to 40th= {\rone};
+an absent bar shows  0th to 20th.
+Percentiles computed  separately
+for each row.}
+\label{fig:gbars}
+
+\end{figure}
 
 The results of this paper are presented 
  
  
 \section{Discussion}
+ 
 
 \section{Related Work}
 
