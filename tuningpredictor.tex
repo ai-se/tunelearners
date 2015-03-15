@@ -8,6 +8,7 @@
 \usepackage{eqparbox}
 \usepackage{graphics}
 \usepackage{colortbl} 
+\usepackage{balance}
 \usepackage{picture}
 \usepackage{algorithm}
 \usepackage{algorithmicx}
@@ -189,7 +190,7 @@ Better yet,  those  tunings (found so quickly)
 in this paper we show that tuning can alter the precision of
 a software defect predictor from 2\% to 98\%.
 
-Our tuning results  challenge much prior work in software analytics. 
+These results challenge much prior work. 
 Firstly, there exist research papers
 that use data miners to   show that certain factors
 are more influential than others for (say)
@@ -238,53 +239,7 @@ it is no longer enough to just run a data miner and report the result
 {\em without} first conducting an tuning optimizations study.
 
  
-
-\subsection{Preliminaries}
-
-Before beginning, we offer four caveats on these results.
-
-Firstly, we are {\em not} saying that {\em all} learning requires
-tuning. For example, when proposing fixes to software, Weimar et al. use a genetic learner
-to propose patches~\cite{Weimer:2009}. Consider one performance criteria for that work; i.e. 
-that   that that method can find and fix known bugs. Note that this is a {\em competency criteria}
-which does not include the phrase  ``{\em better than}''. Such performance criteria do
-not requiring tuning.  However, once {\em better than} enters the performance criteria
-(as done in \cite{lessmann2008benchmarking,hall11,me07b,bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting})
-then this becomes a race between competing methods (or attributes).  In such a race, it is unfair
-to hobble one competitor with poor tunings. 
  
-
-Secondly, the tuning results shown here only came from one  software analytics task 
-(defect prediction from static code attributes).
-There are many other kinds of software analytics tasks 
-(software development effort estimation, social network mining,
-detecting duplicate issue reports, etc) and the implication of this
-study for those tasks is unclear. 
-However,  those other tasks often use the same kinds of learners
-explored in this paper so it is quite possible that
-the conclusions of this paper apply to other SE analytics tasks as well. 
-
-
-Thirdly, this paper explores {\em some} learners using {\em one}  optimizer. Hence, it makes
-no claim that this is the {\em best} optimizer for {\em all} learners.
-Rather, our point is that there exists at least some learners
-whose performance can be dramatically improved by 
-at least one simple optimization scheme.  We hope that this work inspires
-much future work as this community develops and debugs best practices for tuning
-software analytics.
-
-Fourthly, it would be incorrect to say that this paper is arguing that
-software analytics is somehow wrong-headed, misguided, and we should not do it anymore.
-In the age of the Internet and global access to software engineering data,
-there exists the  problem of information overload. {\em Something} must be done to
-allow analysts to make conclusions via an automatic analysis over a lot of data.
-The results of this paper is that for a particular local context
-(a specific data set and a specific goal) there exists  
-methods for optimizing the conclusions reached in that context.  Those conclusions
-may not generalize to other contexts but this  is not a council for despair. While there may
-not exist general conclusions, there does seem to exist general methods for finding
-local conclusions in a particular context. Further, as shown below, those
-methods may be very simple to implement and very fast to execute.
 
 \section{Motivating Example}\label{sect:eg}
 
@@ -305,7 +260,7 @@ scattered, then a single regression line cannot pass through all points and the 
 values is a measure of the error associated with that line.
 Linear regression search for a line that minimizes that
 error and maximizes the correlation\footnote{
-$Correlation$
+{\em Correlation}
 measures how closely two variables co-vary.  It ranges from   from -1
 (perfect negative correlation) through 0 (no correlation) to +1
  (perfect positive correlation).
@@ -341,21 +296,19 @@ despite their potential support for refactoring, our researchers should not use 
 {\scriptsize \[
 \begin{array}{l|l|ll}
 \mathit{measures} & d= \mathit{\#defects} & \mathit{correlation}\\\hline
-\mathit{LOC}   &d_i= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
-\mathit{Halstead} & d_2= 0.231 + 0.00344N     \\    
-                 & +  0.0009V   - 0.185L \\
-                 & - 0.0343D      - 0.00541I \\
-                 & + 0.000019E + 0.711B \\ 
-                 &   - 0.00047T  & c_2=-0.36  
+\mathit{LOC}   &d_1= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
+\mathit{Halstead} & d_2= 0.231 + 0.00344N  +  0.0009V    \\    
+                 &   - 0.185L- 0.0343D      - 0.00541I  \\ 
+                 & + 0.000019E + 0.711B  - 0.00047T  & c_2=-0.36  
 \end{array}
 \]
 }
  
 
 \noindent
-Enter tuning. Suppose the defect predictors $d_1$ and $d_2$  learned from LOC or Halstead
-are used to to call an inspection
-team to check for errors in certain parts of the code using the rule
+We now explore how tuning can alter the above  conclusion. Suppose the  predictors $d_1$ and $d_2$  learned from LOC or Halstead
+are used to call an inspection
+team to check for errors in   parts of the code using:
 \begin{equation}\label{eq:yesno}\scriptsize
 \mathit{inspect}= \left\{
 \begin{array}{ll}
@@ -363,7 +316,7 @@ d_i \ge T \rightarrow \mathit{Yes}\\
 d_i <   T \rightarrow \mathit{No} 
 \end{array}\right.
 \end{equation}
-\fig{pd1} shows the effects of tuning the $T$ variable. Not surprisingly,
+\fig{pd1} shows the effects of tuning. Not surprisingly,
 at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
 problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls below
 20\% at $T=0.45$ (for Halstead). 
@@ -371,6 +324,8 @@ problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls 
  
 
 \begin{figure}[!t] 
+
+\renewcommand{\baselinestretch}{0.8}
 {\scriptsize
 \begin{center}
 
@@ -391,12 +346,12 @@ problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls 
  \end{figure}
 
 
-One  important lesson from  \fig{pd1} is that the ``best'' tunings are context
+One   lesson from  \fig{pd1} is that the ``best'' tunings are context
 specific. For mission critical systems (e.g. a nuclear power plant), management
 might accept the cost of high false alarm rates if it meant increasing the probability
 of detecting errors. For such contexts, we might recommend some very small value of $T$.
 
-The other  important lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
+The other   lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
 detector can work just as well as seemingly better ones.
 Note that either the Halstead or LOC detector can reach some desired
 level of recall, regardless of their correlations, just by
@@ -404,24 +359,16 @@ selecting the appropriate threshold value. For example, in \fig{pd1}, see the re
 found at {\em either} $d_i\ge 0.65$ or $d_2\ge 0.45$ (and at the threshold, the false alarm rates
 were very similar: 14\% and 19\%).
 
-The core point of this example is that    the true value of a detector
+The  point here is that   the true value of a detector
 could not be assessed {\em without} conducting a  tuning study in the context of some business case (in this case, 
 issuing a request to an inspection team to review some module).  
-This is strong motivation to explore the issue of tunings.
-
+Hence, it is important to explore tuning
+so the rest of this paper repeats the analysis of this section, but for 
+more complex learners.
 
 
 \section{Background Notes}
-
-
-
-The rest of this paper repeats the analysis of the last section, but for much
-more complex learners. In those results, shown  below, we will find
-examples of {\em rank reversals};
-i.e.  after tuning the top ranked defector becomes last and vice versa.
-Such examples motivate the extensive exploration of tuning in software analytics.
-Before presenting those results, this section offers some background notes on defect prediction,
-performance measures, and optimization with differential evolution.
+ 
 
 \subsection{Defect Prediction}
 
@@ -434,7 +381,7 @@ plus   some new results from Rahman et al.'s   2014 FSE paper~\cite{rahman14:ics
 \begin{figure*}[!t]
 \renewcommand{\baselinestretch}{0.8}\begin{center}
 {\scriptsize
-\begin{tabular}{c|l|p{4in}}
+\begin{tabular}{c|l|p{4.7in}}
 amc & average method complexity & e.g. number of JAVA byte codes\\\hline
 avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
 in class\\\hline
@@ -461,7 +408,7 @@ not share a reference to an instance variable.\\\hline
 locm3 & another lack of cohesion measure & if $m,a$ are  the number of
 $methods,attributes$
 in a class number and $\mu(a)$  is the number of methods accessing an
-attribute,\newline
+attribute, 
 then
 $lcom3=((\frac{1}{a} \sum_j^a \mu(a_j)) - m)/ (1-m)$.
 \\\hline
@@ -495,30 +442,27 @@ post-release bug-tracking system).}\label{fig:ck}
 
 \subsection{Data Mining Algorithms}
  
-\input{learners}
-
-\subsubsection{Differential Evolution: The Details}
- 
+\input{learners} 
  
 The psuedocode for differential evolution is shown in Algorithm~\ref{alg:DE}.
 Note that, as we describe the algorithm,
   any superscript number denotes a line in that algorithm.
 
 
-DE is an evolutionary algorithm; i.e. the next {\em NewGeneration} is learnt from
-a current {\em Population}.  If the new is no better than the current, then
-we lose one life, terminating when we run out of lives$^5$.
+DE is an evolutionary algorithm where next {\em NewGeneration} is learnt from
+a current {\em Population}.  If the new is no better than  current, then
+we lose one life (terminating when lives is zero)$^5$.
 
 Each candidate solution in the {\em Population}  
-is a pair of {\em (Tunings, Scores)}. In this paper, {\em Tunings} are selected from
+is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \fig{parameters} and {\em Scores} come from training a learner using those parameters
-and applying it to some test data$^{23-28}$.
+and applying it     test data$^{23-28}$.
 
-The premise of this algorithm is that the best way to mutate existing tunings
+The premise of DE  is that the best way to mutate existing tunings
 is to {\em Extrapolate}$^{29}$
 between current solutions.  Three solutions $a,b,c$ are selected at random.
 For each tuning parameter $i$, at some probability {\em cr}, we replace
-the old tuning $x_i$ with $y_i$ found as follows:
+the old tuning $x_i$ with $y_i$:
 \bi
 \item (For numerics) $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
 controlling the cross-over amount.  The {\em trim} function$^{39}$ limits the new
@@ -555,44 +499,7 @@ a different {\em Goal}$^2$).  Technically, this makes this a  {\em single object
 % \end{algorithmic}
 %\end{algorithm}
 
-\begin{figure*}[!ht]
 
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{c c c c c c c c c c }\hline
-  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
-\\\hline
-  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
-\\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
-\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
-\\  \end{tabular}
-   \caption{Ratios of defective instances in each experimental data set. 
-   E.g., the top left data set has 20 defective classes out of 125 total.
-   This paper runs one experiment for each column
-   shown in this figure. The {\em training} set is used by an untuned learner
-   to build a model, which is then tested on the {\em testing} data.
-   {\em Training} data is used by  differential evolution when it builds
-    a model (using one set of possible tunings) and that model is tested on {\em tunings}.
-    Finally, the best model from by DE is applied to {\em testing}. 
-   This information is continued  in \fig{data2}. 
-   }\label{fig:data1}
-\end{figure*}
-\begin{figure*}[!ht]
-\scriptsize
-\centering
-  \begin{tabular}{c c c c c c c c c c }
-  \hline\hline
-  Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
-\\\hline
-  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
-\\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
-\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
-\\  \end{tabular}
-
-   \caption{More ratios of  defective instances in each experimental data set. 
-   Same format as \fig{data1}.}\label{fig:data2}
-\end{figure*}
 
 
 \section{Experimental Design}
@@ -609,7 +516,7 @@ synapse}, {\it velocity}, {\it xalan} and {\it xerces}.
 
 An important principle in data mining is not to test on the data used
 in training.  There are many ways to design a experiment that satisfies this principle.
-Some of those methods have certain drawbacks:
+Some of those methods have  limitations:
 \bi
 \item  Leave-one-out is too slow for large data sets;
 \item Cross-validation can mix up older and newer data sets so it may well be that
@@ -619,14 +526,11 @@ To avoid these problems, we used an incremental learning approach. The following
 experiment ensures that the training data was created at some time before the test
 data.
 
-For this experiment, we looked for data sets that had at least three  
-releases in PROMISE. Note that the following ensures that all treatments 
-get assessed on the same test  set.
+For this experiment, we uses data sets with at least three  
+consecutive releases  (where release $i+1$ was built after release $i$).
 \bi 
 \item The {\em first} release was used for some  {\em training}, to collect a baseline
-   using an untuned learner.
-   \item
-   The {\em first} release was also used  on line 24 of Algorithm~\ref{alg:DE} to
+   using an untuned learner. This release is also used  on line 24 of Algorithm~\ref{alg:DE} to
    build some model using some the tunings found in some {\em Candidate}.
    \item The {\em second} release was used on 25 of Algorithm~\ref{alg:DE} to 
    test the model found on line 24.
@@ -634,6 +538,9 @@ get assessed on the same test  set.
    reported below from (a)~the model generated by the untuned learner or (b)~the
    best model found by differential evolution.
    \ei
+This approach ensures   all treatments 
+are assessed on the same tests.
+
 Some data sets have more than three releases and, for those data, we could run more
  than one experiment. For example, {\em ant} has five versions in PROMISE so
  we ran three experiments called V0,V1,V2:
@@ -642,12 +549,76 @@ Some data sets have more than three releases and, for those data, we could run m
  \item AntV1: first,second,third = versions 2,3,4
  \item AntV2: first,second,third = versions 3,4,5
  \ei 
-These data sets are displayed in \fig{data1} and \fig{data2}.
+These data sets are displayed in \fig{data1}.
+
+
+\begin{figure}[!b]
+\small
+\begin{tabular}{|p{.95\linewidth}|}\hline
+One style
+of measure is to check the {\em variability} of that predictor.
+For example,
+in their study on reproducibility of SE results,
+ Anda, Sjoberg and Mockus advocate using the coefficient of variation ($CV=\frac{stddev}{mean}$).
+Using this measure, they defined {\em reproducibility} as $\frac{1}{CV}$~\cite{anda09}.
+
+There exist other goals that combine defect prediction with other economic
+factors.
+Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12}
+say that a defect predictor should maximizing {\em reward}; i.e. find the fewest lines of code
+that contain the most bugs.
+
+Yin et al. are concerned about
+ {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
+These bugs occur  when (say) developers try to fix parts of the code
+where they have very little experience~\cite{yin11}.  To avoid such incorrect bug fixes, we have to optimize
+for finding the most number of bugs in regions that {\em the most programmers have worked with before}.
+
+In {\em Better-faster-cheaper}, we seek  project changes that lead
+to fewer defects and faster development times using less resources~\cite{Green,elrawas08,elrawas10,me07f,me09a,me09f}.
+
+Another  {\em  rush-to-market} approach is yet another economic-based optimization measure.
+A learner that tries to maximize ``rush-to-market'' is trying to release the product as soon
+as possible, without too many bugs. Note that ``rush-to-market'' is an appropriate strategy for a company competing
+in a volatile and crowded market place where being first-to-market enables a revenue stream (that can be
+used to subsequently fix any issues with version 1.0)~\cite{huang06}.\\\hline
+\end{tabular}
+\caption{Many ways to assess defect predictors.}\label{fig:criteria}
+\end{figure}
+ \begin{figure*}[!t]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c c c c c c c c c c }\hline
+  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
+\\\hline
+  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
+\\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
+\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
+\\ \hline
+  Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
+\\\hline
+  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
+\\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
+\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
+\\  \end{tabular}
+
+   \caption{Ratios of defective instances in each experimental data set. 
+   E.g., the top left data set has 20 defective classes out of 125 total.
+   This paper runs one experiment for each column
+   shown in this figure. The {\em training} set is used by an untuned learner
+   to build a model, which is then tested on the {\em testing} data.
+   {\em Training} data is used by  differential evolution when it builds
+    a model (using one set of possible tunings) and that model is tested on {\em tunings}.
+    Finally, the best model from by DE is applied to {\em testing}.  
+   }\label{fig:data1}
+\end{figure*} 
 
 \subsection{Optimization Goals}
 
-Recall from Algorithm~! that we call differential evolution one time for each
-goal we are trying to optimize. This section lists those optimization goals.
+Recall from Algorithm~1 that we call differential evolution once for each
+ optimization goal. This section lists those optimization goals.
 
 Let $\{A,B,C,D\}$ denote the
 true negatives, 
@@ -657,24 +628,25 @@ true positives
 (respectively) found by a binary detector. 
 Certain standard measures can be computed from
 $A,B,C,D$: 
-\[
+
+{\scriptsize\[
 \begin{array}{ll}
-pd=recall=&\frac{D}{B+D}\\
-pf=&\frac{C}{A+C}\\
+pd=recall=&D/(B+D)\\
+pf=&C/(A+C)\\
 pf'=& 1 - pf\\
-prec=precision=&\frac{D}{D+C}\\ 
- g = & \frac{2*pd*pf'}{pd + pf'}
+prec=precision=&D/(D+C) 
 \end{array}
-\]
+\]}
+
 All the above vary from zero to one. For $pf$, the {\em better} scores and {\em smaller}.
 For all other scores, the {\em better} scores are {\em larger}.
 
-The following results make no assumption that (e.g.) minimizing false alarms are 
-more important that maximizing recall or precision. That determination 
-should be make with respect to current business conditions. 
+The following results make no assumption that (e.g.) minimizing false alarms is 
+more important than maximizing   precision. That determination 
+depends on current business conditions:
 \be
 \item
-For safety critical applications, high false alarm rates may be not be of concern since the cost
+For safety critical applications, high false alarm rates may be acceptable if the cost
 of overlooking any critical can outweigh the inconvenience of having to inspect a few more
 modules. 
 \item
@@ -682,34 +654,8 @@ On the other hand, when rushing a product to market before a competing product i
 avoid the extra rework associated with false alarms.  In that business context, 
 managers might be willing to lower the recall somewhat in order to minimize the false alarms.
 \ee
-These two examples are just the tip of the iceberg. There are many, many other goals we might consider
-for our defect predictors.
-All the above measures relate to the tendency of a predictor to find something. Another style
-of measure would be to check the {\em variability} of that predictor.
-For example,
-in their study on reproducibility of SE results,
- Anda, Sjoberg and Mockus advocate using the coefficient of variation ($CV=\frac{stddev}{mean}$).
-Using this measure, they defined {\em reproducibility} as $\frac{1}{CV}$~\cite{anda09}.
-Further, 
-there exist other goals that combine defect prediction with other economic
-factors.
-For example, Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12}
-say that a defect predictor should maximizing {\em reward}; i.e. find the fewest lines of code
-that contain the most bugs.
-In other work, Yin et al. are concerned about
- {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
-These bugs occur  when (say) developers try to fix parts of the code
-where they have very little experience~\cite{yin11}.  To avoid such incorrect bug fixes, we have to optimize
-for finding the most number of bugs in regions that {\em the most programmers have worked with before}.
-Also, in {\em Better-faster-cheaper}, we seek  project changes that lead
-to fewer defects and faster development times using less resources~\cite{Green,elrawas08,elrawas10,me07f,me09a,me09f}.
-Another  {\em  rush-to-market} approach is yet another economic-based optimization measure.
-A learner that tries to maximize ``rush-to-market'' is trying to release the product as soon
-as possible, without too many bugs. Note that ``rush-to-market'' is an appropriate strategy for a company competing
-in a volatile and crowded market place where being first-to-market enables a revenue stream (that can be
-used to subsequently fix any issues with version 1.0)~\cite{huang06}.
-
-There is insufficient space in this paper to explore all the above optimization goals.
+These two examples are just the tip of the iceberg (see other criteria in \fig{criteria})
+and there is insufficient space in this paper to explore all the above optimization goals.
 What we can do, however, is show examples of how  changing  optimization goals can also change 
 the conclusions made from that learner on that data. Those examples only relate to precision, recall, and the F-measure
 but the general principle (that the search bias changes the search conclusions) would hold for all the goals
@@ -724,16 +670,32 @@ The introduction of this article made several claims about tuning defect predict
 that use static code attributes. This section presents
 support for those claims:
 \be
-\item  Tuning  can  improve the performance scores of a predictor;
-e.g. one result where precision changes from 2\% to 98\% (see \tion{precision});
-\item Tuning changes conclusions about what learners are better than others (see \tion{rank};)
-\item Tuning changes conclusions about what factors are most important (see \tion{import});
-\item  Tuning is easy (see \tion{easy});
-\item Tuning is fast (see \tion{fast});
-\item Data miners should not be used ``off-the-shelf'' with their default tunings (see \tion{variance});
+\item  Tuning    improves the performance scores of a predictor;
+e.g.  precision changes from 2\% to 98\%: see \tion{precision};
+\item Tuning changes conclusions on what learners are better than others: see \tion{rank};
+\item Tuning changes conclusions about what factors are most important: see \tion{import};
+\item  Tuning is easy: see \tion{easy};
+\item Tuning is fast: see \tion{fast};
+\item Data miners should not be used ``off-the-shelf'' with their default tunings: see \tion{variance}.
 \ee
 
 
+One comment before continuing. The following text does not
+show results for tuning on recall
+or false alarms. The reason is that false alarm and recall focus on {\em only}
+the non-defective and defective modules (respectively). Hence:
+\bi
+\item
+When DE tunes for recall, we can achieve near
+100\% recall-- but the cost of a near 100\% false alarms.
+\item
+Similarly, the tuner
+could achieve near zero false alarm rates by effectively turning off
+the detector (driving recall to zero).
+\ei
+Hence, in the
+following, we explore performance measures that comment on all the possible
+target classes (i.e. precision and ``F''). 
 
 \subsection{Tuning Can  Improves Performance Scores}\label{sect:precision}
 
@@ -748,30 +710,32 @@ These results offer support for the prior conclusions of
 Untuned CART is indeed the worst learner (none of its
 untuned results are best and {\bf bold}). 
 \item 
-Untuned Random Forest performs better than untuned CART in $\frac{15}{17}$ of these results.
+In $\frac{15}{17}$ cases, untuned Random Forest out-performs  untuned CART.  
 \ei
-
-Some of the data sets in \fig{precisionbars} proved challenging for all learners.
+Some of the data sets in \fig{precisionbars} proved challenging for all learners;
+e.g. the precision results for {\em ivy} are less
+that impressive.
 To some extend, this can be explained by
-the properties of of the data set. For example, the precision results for {\em ivy} are less
-that impressive since, as shown in \fig{data1}, defective classes in {\em ivy} are very rare.
+the properties of of the data set (as shown in \fig{data1}, defective classes in {\em ivy} are very rare).
 
-That said, tuning can repair at least some of the challenging data sets seen in \fig{precisionbars}:
+That said,  tuning can improve those poor performing detectors:
 \bi
 \item
-Observe the {\em xercesV0} results: nearly all learners report precisions of under 20\%. However,
-the WHERE tuned results report an 85\% precision.  
+For {\em xercesV0}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 85\% precision.  
 \item A similar pattern can be seen in results from {\em camelV0},   and {\em jeditV2}.
 In those two data sets, nearly all the precision values are   low {\em except} for
-tuned WHERE that scored 83 and 98\%.
+tuned WHERE that scored 83\% and 98\%.
 \ei
 Finally, note the  {\em jeditV2} result for the WHERE learner.
-Here, tuning changes precision fro 2\% to 98\% (!!).
+Here, tuning changes precision from 2\% to 98\%.
+
+\fig{deltas} shows that tuning usually has a positive effect on performance scores. This figure sorts
+the deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
+figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
+ 
 
 
-
-
-\begin{figure}[!h]
+\begin{figure}[!t]
 \renewcommand{\baselinestretch}{0.8} 
 
 \scriptsize    
@@ -802,21 +766,24 @@ xercesV1 & {\bf 56} & {\rfour} & 26 &         & 50 & {\rthree} & 26 &         & 
 \label{fig:precisionbars}
 \end{figure}
 
+\begin{figure}[!b]
 \begin{center}
-\noindent
-\includegraphics[width=1.5in]{precision1.pdf}\includegraphics[width=1.5in]{F1.pdf}
- 
-\caption{Deltas in performance scores seen in \fig{precisionbars} (left)
-and \fig{fbars} (right).}
+\includegraphics[width=1.25in]{precision1.pdf}\includegraphics[width=1.25in]{F1.pdf}
+ \end{center}
+\caption{Deltas in performance  seen in \fig{precisionbars} (left)
+and \fig{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
  \end{figure}
- 
+
 \subsection{Tuning Changes Learner Rankings}\label{sect:rank}
+Researchers often use performance criteria to assert that one learner is better is another~\cite{lessmann2008benchmarking,hall11,me07b}.
+Such conclusions are   not reliable since they can change when we elect to tune for different goals. 
 
-Suppose we reflected on \fig{precisionbars} to decide which learners were better than others.
-Given the poor showing of untuned CART and the good performance of tuned WHERE, we might recommend
-{\em not} to use CART and {\em always} used tuned WHERE.
+For example, given the poor showing of untuned CART and the good performance of tuned WHERE
+in   \fig{precisionbars}, we might recommend
+{\em not} to use CART and {\em always} used tuned WHERE. In turns out that this
+conclusion is not stable across the tuning process.
 
-Note that this conclusion is not stable and is changed if we elect to tune for different goals. 
+
 \fig{fbars} shows what happens when we tune for the f-measure. 
 As before, untuned Random Forest generally beats CART. However:
 \bi
@@ -836,7 +803,7 @@ In practice, this means that tuning needs to be repeated for each new context.
 
 
 
-\begin{figure}[!h]
+\begin{figure}[!t]
 \renewcommand{\baselinestretch}{0.8} 
 
 \scriptsize  
@@ -857,7 +824,7 @@ luceneV0 & 70 & {\rthree} & {\bf 75} & {\rfour} & 56 &         & {\bf 75} & {\rf
 poiV0 & {\bf 78} & {\rfour} & 64 &         & 74 & {\rthree} & 68 & {\rone} & 73 & {\rthree} & 69 & {\rone}\\
 poiV1 & 5 &         & {\bf 78} & {\rfour} & 21 & {\rone} & {\bf 78} & {\rfour} & 76 & {\rfour} & {\bf 78} & {\rfour}\\
 synapseV0 & 0 &         & 2 &         & 40 & {\rthree} & {\bf 56} & {\rfour} & 51 & {\rfour} & 55 & {\rfour}\\
-velocityV0 & {\bf 51 & {\rfour} & {\bf 51} & {\rfour} & 49 &         & {\bf 51} & {\rfour} & {\bf 51} & {\rfour} & {\bf 51} & {\rfour}\\
+velocityV0 & {\bf 51} & {\rfour} & {\bf 51} & {\rfour} & 49 &         & {\bf 51} & {\rfour} & {\bf 51} & {\rfour} & {\bf 51} & {\rfour}\\
 xercesV0 & 22 & {\rone} & 20 &         & 21 &         & {\bf 27} & {\rfour} & 23 & {\rtwo} & 20 &        \\
 xercesV1 & 25 &         & 39 & {\rone} & 18 &         & 53 & {\rthree} & 68 & {\rfour} & {\bf 73} & {\rfour}\\
 \end{tabular}
@@ -866,152 +833,337 @@ xercesV1 & 25 &         & 39 & {\rone} & 18 &         & 53 & {\rthree} & 68 & {\
 \end{figure}
 
 
-\subsection{Tuning Changes Factors Rankings }\label{sect:rank}
+\subsection{Tuning Changes Factors Rankings }\label{sect:import}
+
+
+Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
+As above, we can show that such conclusions are not reliable since they can be changed by tuning.
 
 \fig{counts} shows how the objective goal (in this case,
-{\em pd} (recall) or precision, or the f-measure) changes what factors are most important.
-In this table, ``important'' is defined by how often some factor was used when WHERE generated
-its final trees. Given that we are processing 17 data sets, the maximum counts for any 
-one learner is 17. 
+{\em pd} (recall) or precision, or the f-measure) changed what attributes were used
+in the decision tree learners
+(in this case, WHERE building trees to select for different clusters). 
 
-The first thing to note in \fig{counts} is that the counts in the {\em tuned} column are always usually
-much less than in the {\em default} columns. That is, after tuning, different and fewer factors
-are used to make conclusions. Further, given the XXX
-\begin{figure}[!h]
+
+Note that the counts in the {\em tuned} column are   usually
+different to those in the {\em default} columns (the tuned learners used more attributes
+than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column).
+
+
+
+
+\subsection{Tuning is Easy}\label{sect:easy}
+
+In terms of the search space
+explored via tuning, optimizing defect prediction from static code
+measures is much {\em smaller} than standard optimization.
+
+To see this,
+recall from Algorithm~1 that
+DE explores a {\em Population} of size {\em np=10}. This is a very small population size since
+Rainer Storm (one of the inventors of DE) recommends  setting {\em np} to be ten times larger than the number
+of attributes being optimized~\cite{storn1997differential}.
+
+From \fig{parameters},
+we see that Storn would therefore recommend {\em np} values of
+90, 50, 60 for WHERE, CART and Random Forests (respectively). Yet we achieve our results
+using a constant {\em np=10}; i.e. $\frac{10}{90}, \frac{10}{50}, \frac{10}{60}$ of the
+recommended search space.
+
+Another measure showing that tuning is easy 
+(for static code defect predictors)
+is the number of evaluations required to complete optimization
+(see next section).
+
+
+
+\begin{figure}[!t]
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
 \centering
   \begin{tabular}{c|c c|c c|c c|c c| c c }
   
-    & \multicolumn{2}{c|}{Pd} &  \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c|}{F} &  \multicolumn{2}{c|}{SUM}\\
- &&&&&&&&\\
-Features& \begin{sideways}default\end{sideways}
-& \begin{sideways}tuned\end{sideways}
-& \begin{sideways}default\end{sideways}
-& \begin{sideways}tuned\end{sideways}
-& \begin{sideways}default\end{sideways}
-& \begin{sideways}tuned\end{sideways}
-& \begin{sideways}default\end{sideways}
-& \begin{sideways}tuned\end{sideways}
+    &   \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c|}{F} &  \multicolumn{2}{c|}{SUM}\\
+ &&&&&&&\\
+Features&   
+  default
+& tuned
+& default
+& tuned
+& default
+& tuned
 \\\hline
-noc& & & & & & &  & \\
-ca& & & & & & &  & \\
-max\_cc& & & & 1& & 1&  & 2\\
-ce& & & & 1& & 2&  & 3\\
-moa& & 1& & 1& & 2&  & 4\\
-cbo& & & & 1& & 4&  & 5\\
-avg\_cc& & & & 3& & 2&  & 5\\
-lcom& & & & 3& & 3&  & 6\\
-npm& & 1& & 5& & 4&  & 10\\
-cbm& 4& & 6& 3& 4& 3& 14 & 6\\
-amc& 4& 1& 4& 3& 4& 5& 12 & 9\\
-rfc& 4& 1& 4& 5& 4& 9& 12 & 15\\
-ic& 8& & 7& 4& 9& 4& 24 & 8\\
-wmc& 5& 2& 5& 6& 5& 11& 15 & 19\\
-dit& 8& & 8& 6& 8& 6& 24 & 12\\
-lcom3& 9& 1& 9& 7& 9& 7& 27 & 15\\
-loc& 9& 2& 8& 6& 9& 12& 26 & 20\\
-cam& 9& 1& 9& 8& 9& 10& 27 & 19\\
-dam& 14& 3& 14& 9& 14& 11& 42 & 23\\
-mfa& 16& 3& 16& 11& 16& 13& 48 & 27\\
 
+noc &		  &    &    &   \\
+ca  &    &    &    &    &    &\\   
+max\_cc  &    &  1  &    &  1  &    &  2\\
+ce  &    &  1  &    &  2  &    &  3\\
+moa  &    &  1  &    &  2  &    &  3\\
+cbo  &    &  1  &    &  4  &    &  5\\
+avg\_cc  &    &  3  &    &  2  &    &  5\\
+lcom  &    &  3  &    &  3  &    &  6\\
+npm  &    &  5  &    &  4  &    &  9\\
+cbm  &  6  &  3  &  4  &  3  &  10  &  6\\
+amc  &  4  &  3  &  4  &  5  &  8  &  8\\
+rfc  &  4  &  5  &  4  &  9  &  8  &  14\\
+ic  &  7  &  4  &  9  &  4  &  16  &  8\\
+wmc  &  5  &  6  &  5  &  11  &  10  &  17\\
+dit  &  8  &  6  &  8  &  6  &  16  &  12\\
+lcom3  &  9  &  7  &  9  &  7  &  18  &  14\\
+loc  &  8  &  6  &  9  &  12  &  17  &  18\\
+cam  &  9  &  8  &  9  &  10  &  18  &  18\\
+dam  &  14  &  9  &  14  &  11  &  28  &  20\\
+mfa  &  16  &  11  &  16  &  13  &  32  &  24
+ 
   \end{tabular}
-    \caption{Counts of features selected by different goals. For each goal, the numbers in right and left columns represent the counts of features selected for all the data sets with and without tuning processes.
+    \caption{Counts of features selected by different goals.Given that we are processing 17 data sets, the maximum counts for any 
+one cell in the ``precision'' or ``F'' column is 17.  
     }\label{fig:counts}
 \end{figure}
-
-
-
-
-\subsection{Tuning is Easy}\label{sect:easy}
-
-Measured in terms of the search space
-required to achieve large changes in learner performance, optimizing defect prediction from static code
-measures is about an order of magnitude {\em easier} than standard optimization.
-Recall from Algorithm~1 that
-DE explores a {\em Population} of size {\em np=10}. This is a very small population size:
-the standard recommendation is to set {\em np} to be ten times larger than the number
-of attributes being optimized~\cite{stron97}. 
-
-Another measure showing that tuning is easy is the number of evaluations required to complete optimization.
-This is covered in the next section.
-
-
-\subsection{Tuning is Easy}\label{sect:easy}
  
 
-
-
-\begin{figure}
-
-{\scriptsize
+\begin{figure*}[!ht]
 
 \renewcommand{\baselinestretch}{0.8}
-\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l@{~}r@{~}l}
-      &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forests}         \\\hline
-  Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
-antV0 & 65 & {\rtwo} & 68 & {\rthree} & 53 &         & $\bigstar$75 & {\rfour} & 69 & {\rthree} & 72 & {\rfour}\\
-antV1 & 12 &         & $\bigstar$70 & {\rfour} & 52 & {\rthree} & 56 & {\rthree} & 62 & {\rfour} & 69 & {\rfour}\\
-antV2 & 0 &         & $\bigstar$69 & {\rfour} & 53 & {\rthree} & 64 & {\rfour} & 68 & {\rfour} & 67 & {\rfour}\\
-camelV0 & 0 &         & 51 & {\rfour} & 10 &         & 56 & {\rfour} & 60 & {\rfour} & $\bigstar$61 & {\rfour}\\
-camelV1 & 45 &         & 55 & {\rthree} & 53 & {\rtwo} & $\bigstar$59 & {\rfour} & 56 & {\rthree} & 57 & {\rfour}\\
-ivyV0 & 53 &         & 71 & {\rfour} & 63 & {\rtwo} & $\bigstar$74 & {\rfour} & 70 & {\rfour} & 71 & {\rfour}\\
-jeditV0 & 59 &         & 69 & {\rthree} & 71 & {\rfour} & 72 & {\rfour} & $\bigstar$73 & {\rfour} & $\bigstar$73 & {\rfour}\\
-jeditV1 & 70 & {\rthree} & 69 & {\rtwo} & 62 &         & 73 & {\rfour} & $\bigstar$75 & {\rfour} & $\bigstar$75 & {\rfour}\\
-jeditV2 & 49 &         & 56 & {\rone} & 48 &         & 61 & {\rtwo} & $\bigstar$78 & {\rfour} & 67 & {\rthree}\\
-log4jV0 & 53 & {\rtwo} & 56 & {\rthree} & 46 &         & $\bigstar$59 & {\rfour} & 56 & {\rthree} & 56 & {\rthree}\\
-luceneV0 & 37 &         & 65 & {\rfour} & 55 & {\rthree} & 56 & {\rthree} & 60 & {\rthree} & $\bigstar$66 & {\rfour}\\
-poiV0 & 45 &         & 60 & {\rthree} & 66 & {\rfour} & 62 & {\rthree} & $\bigstar$68 & {\rfour} & 56 & {\rtwo}\\
-poiV1 & 6 &         & $\bigstar$62 & {\rfour} & 22 & {\rone} & 60 & {\rfour} & 56 & {\rfour} & 57 & {\rfour}\\
-synapseV0 & 0 &         & 61 & {\rfour} & 43 & {\rthree} & 64 & {\rfour} & 63 & {\rfour} & $\bigstar$67 & {\rfour}\\
-velocityV0 & 3 &         & $\bigstar$56 & {\rfour} & 26 & {\rtwo} & 51 & {\rfour} & 51 & {\rfour} & 55 & {\rfour}\\
-xercesV0 & 37 &         & 46 & {\rthree} & 47 & {\rfour} & $\bigstar$49 & {\rfour} & $\bigstar$49 & {\rfour} & 48 & {\rfour}\\
-xercesV1 & 24 &         & $\bigstar$68 & {\rfour} & 19 &         & 32 & {\rone} & 32 & {\rone} & 17 &        \\
-\end{tabular}
+\scriptsize
+\centering
+  \begin{tabular}{r|c |c |c |c |c |c }
+    \hline\hline
+    Datasets & Tuned\_Where & Default\_Where & Tuned\_CART & Default\_CART & Tuned\_RanFst & Default\_RanFst\\
+    \hline
+    antV0 & 50 /  77.16 & 1.30 & 60 /  3.47 & 0.07 & 50 /  6.54 & 0.14\\
+    antV1 & 50 /  135.16 & 2.33 & 60 /  4.84 & 0.08 & 50 /  8.61 & 0.19\\
+    antV2 & 50 /  368.50 & 6.23 & 60 /  6.67 & 0.14 & 50 /  11.75 & 0.40\\
+    camelV0 & 50 /  479.03 & 8.25 & 60 /  11.73 & 0.18 & 60 /  15.69 & 0.31\\
+    camelV1 & 60 /  1551.51 & 26.87 & 60 /  18.47 & 0.28 & 80 /  37.96 & 0.73\\
+    ivyV0 & 80 /  83.80 & 1.01 & 50 /  3.07 & 0.07 & 60 /  7.63 & 0.17\\
+    jeditV0 & 60 /  349.99 & 5.95 & 70 /  8.33 & 0.11 & 50 /  13.40 & 0.30\\
+    jeditV1 & 50 /  442.35 & 7.48 & 70 /  8.63 & 0.11 & 70 /  15.52 & 0.37\\
+    jeditV2 & 50 /  360.04 & 7.90 & 60 /  8.63 & 0.12 & 60 /  14.33 & 0.38\\
+    log4jV0 & 60 /  97.23 & 1.49 & 70 /  3.31 & 0.06 & 80 /  8.79 & 0.17\\
+    luceneV0 & 70 /  206.41 & 2.89 & 80 /  6.90 & 0.08 & 60 /  10.30 & 0.25\\
+    poiV0 & 70 /  338.44 & 4.28 & 60 /  6.47 & 0.13 & 60 /  12.45 & 0.29\\
+    poiV1 & 60 /  468.73 & 7.95 & 50 /  7.24 & 0.14 & 70 /  17.66 & 0.30\\
+    synapseV0 & 50 /  111.30 & 1.87 & 60 /  3.85 & 0.05 & 60 /  7.82 & 0.15\\
+    velocityV0 & 60 /  192.83 & 2.66 & 90 /  6.11 & 0.06 & 80 /  12.99 & 0.22\\
+    xercesV0 & 70 /  139.33 & 2.23 & 60 /  6.47 & 0.11 & 50 /  8.89 & 0.25\\
+    xercesV1 & 50 /  759.82 & 13.11 & 50 /  8.62 & 0.14 & 60 /  16.90 & 0.37\\
+  \end{tabular}
+  \caption{Evaluations/runtimes  (in seconds), optimizing for  precision.  }\label{fig:etimes}
+\end{figure*}
+
+ 
+%%%%parameters for prec %%%%%%
+\begin{figure*}[!ht]
+ 
+\resizebox{\textwidth}{!}{
+\scriptsize
+\centering
+  \begin{tabular}{|c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |}
+    \hline
+  \begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular}&Parameters  & Default &antV0&antV1&antV2&camelV0&camelV1&ivyV0&jeditV0&jeditV1&jeditV2&log4jV0&luceneV0&poiV0&poiV1&synapseV0&velocityV0&xercesV0&xercesV1\\ 
+ \hline
+\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where\\based\\ Learner\end{tabular}}
+& threshold& 0.5& 0.53& 0.57& 0.14& 0.67& 0.9& 1& 1& 0.72& 0.91& 0.96& 0.67& 1.0& 0.41& 0.24& 1& 0.47& 0.74\\ \cline{2-20}
+& infoPrune& 0.33& 0.68& 0.45& 0.53& 0.26& 0.81& 0.42& 0.39& 0.21& 0.05& 0.57& 0.35& 0.53& 0.68& 0.52& 0.56& 0.5& 0.75\\ \cline{2-20}
+& min\_sample\_split& 4& 3& 9& 9& 8& 6& 5& 2& 8& 6& 1& 3& 7& 1& 4& 6& 9& 7\\ \cline{2-20}
+& min\_Size& 0.5& 0.07& 0.26& 0.39& 0.73& 0.29& 0.49& 0.19& 0.44& 0.36& 1.0& 0.93& 0.45& 0.52& 0.22& 0.91& 0.19& 0.87\\ \cline{2-20}
+& wriggle& 0.2& 0.91& 0.63& 0.31& 0.18& 0.97& 0.74& 0.98& 0.59& 0.61& 0.34& 0.92& 0.71& 1& 0.95& 0.25& 0.01& 0.17\\ \cline{2-20}
+& depthMin& 2& 4& 5& 1& 5& 3& 1& 4& 1& 3& 3& 1& 3& 1& 2& 5& 3& 2\\ \cline{2-20}
+& depthMax& 10& 10& 17& 6& 6& 12& 19& 14& 15& 12& 12& 18& 19& 11& 8& 10& 11& 18\\ \cline{2-20}
+& wherePrune& False& True& True& True& False& True& True& True& True& False& False& True& True& True& True& False& True& True\\ \cline{2-20}
+& treePrune& True& True& True& False& False& False& True& True& False& False& False& False& False& True& False& False& True& False\\ \cline{2-20}
+\hline
+\multirow{4}{*}{CART}
+& threshold& 0.5& 0.83& 1& 0.99& 0.85& 0.9& 0.93& 1& 0.98& 0.88& 0.9& 0.7& 1& 0.63& 1& 1& 0.91& 0.81\\ \cline{2-20}
+& max\_feature& None& 0.01& 0.35& 0.35& 0.73& 0.63& 0.76& 0.76& 0.01& 0.13& 0.01& 0.83& 0.01& 0.02& 0.19& 0.28& 0.97& 0.1\\ \cline{2-20}
+& min\_samples\_split& 2& 18& 11& 6& 18& 20& 19& 3& 6& 14& 12& 8& 12& 17& 2& 11& 5& 16\\ \cline{2-20}
+& min\_samples\_leaf& 1& 3& 19& 6& 1& 4& 2& 14& 1& 2& 6& 2& 19& 4& 6& 15& 1& 17\\ \cline{2-20}
+\hline
+\multirow{6}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}} 
+& threshold& 0.5& 0.86& 0.61& 0.71& 0.17& 1& 1& 0.87& 1& 1& 1& 0.97& 1& 0.41& 0.33& 1& 0.83& 0.94\\ \cline{2-20}
+& max\_feature& None& 0.05& 0.34& 0.31& 0.45& 0.54& 0.94& 0.93& 0.81& 0.01& 1& 0.69& 0.42& 1& 0.01& 0.01& 0.75& 1\\ \cline{2-20}
+& max\_leaf\_nodes& None& 16& 11& 38& 47& 18& 38& 27& 33& 16& 24& 41& 50& 15& 15& 30& 47& 28\\ \cline{2-20}
+& min\_samples\_split& 2& 3& 3& 4& 19& 17& 19& 18& 5& 13& 19& 1& 5& 2& 6& 7& 11& 11\\ \cline{2-20}
+& min\_samples\_leaf& 1& 7& 11& 10& 16& 8& 14& 4& 2& 7& 14& 12& 7& 10& 12& 7& 8& 4\\ \cline{2-20}
+& n\_estimators& 100& 85& 111& 99& 121& 128& 140& 141& 63& 100& 69& 99& 109& 123& 88& 125& 107& 131\\ \cline{2-20}
+\hline  \end{tabular}
 }
-\caption{g values in tune and default runs.
-All data available from http://openscience.us/repo/defect/. {\bf KEY:}
-  percentile ranges:\newline
-80th to 100th= {\rfour};
-60th to 80th= {\rthree};
-40th to 60th= {\rtwo};
-20th to 40th= {\rone};
-an absent bar shows  0th to 20th.
-Percentiles computed  separately
-for each row.}
-\label{fig:gbars}
+  \caption{Parameters tuned on different models over the objective of prec.}\label{fig:preselect}
+\end{figure*}
 
-\end{figure}
 
-The results of this paper are presented 
+%%%%parameters for F %%%%%%
+\begin{figure*}[!ht]
+ 
+\resizebox{\textwidth}{!}{
+\scriptsize
+\centering
+  \begin{tabular}{|c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |c |}
+    \hline
+    
+  \begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular}&Parameters  & Default &antV0&antV1&antV2&camelV0&camelV1&ivyV0&jeditV0&jeditV1&jeditV2&log4jV0&luceneV0&poiV0&poiV1&synapseV0&velocityV0&xercesV0&xercesV1\\ 
+ \hline
+\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where\\based\\ Learner\end{tabular}}
+& threshold& 0.5& 0.02& 0.72& 0.97& 0.01& 0.87& 1& 0.59& 0.49& 0.77& 0.38& 0.25& 0.94& 0.01& 0.81& 0.53& 0.83& 0.99\\ \cline{2-20}
+& infoPrune& 0.33& 0.13& 0.64& 0.57& 0.33& 0.92& 0.37& 0.43& 0.53& 0.68& 0.56& 0.55& 0.74& 0.04& 0.34& 0.62& 1& 0.36\\ \cline{2-20}
+& min\_sample\_split& 4& 5& 1& 1& 5& 3& 3& 8& 9& 2& 4& 6& 2& 2& 2& 2& 9& 7\\ \cline{2-20}
+& min\_Size& 0.5& 0.59& 0.56& 0.29& 0.03& 0.64& 0.5& 1.0& 0.45& 1& 0.79& 0.22& 0.97& 1& 0.6& 0.68& 0.47& 0.35\\ \cline{2-20}
+& wriggle& 0.2& 0.51& 0.88& 0.92& 0.67& 0.81& 0.82& 0.45& 0.93& 0.39& 0.92& 0.16& 0.48& 0.22& 0.98& 0.7& 0.57& 0.02\\ \cline{2-20}
+& depthMin& 2& 4& 2& 5& 3& 2& 1& 5& 2& 2& 1& 3& 3& 3& 1& 4& 2& 5\\ \cline{2-20}
+& depthMax& 10& 16& 12& 1& 11& 19& 12& 20& 7& 8& 17& 19& 17& 12& 9& 9& 13& 3\\ \cline{2-20}
+& wherePrune& False& True& True& False& False& False& True& False& False& True& False& False& True& False& False& False& False& False\\ \cline{2-20}
+& treePrune& True& True& False& False& False& True& False& False& False& True& True& False& False& False& False& True& False& False\\ \cline{2-20}
+\hline
+\multirow{4}{*}{CART}
+& threshold& 0.5& 0.06& 0.63& 0.99& 0.01& 1& 0.98& 0.47& 0.74& 0.99& 0.36& 0.6& 0.95& 0.01& 0.01& 0.01& 0.43& 0.01\\ \cline{2-20}
+& max\_feature& None& 0.3& 0.81& 0.01& 1& 0.98& 0.26& 0.36& 0.76& 0.29& 0.5& 0.12& 0.01& 0.01& 0.01& 0.16& 0.96& 0.01\\ \cline{2-20}
+& min\_samples\_split& 2& 13& 10& 15& 14& 13& 7& 7& 4& 5& 5& 15& 20& 8& 20& 6& 10& 2\\ \cline{2-20}
+& min\_samples\_leaf& 1& 9& 17& 1& 9& 1& 20& 1& 20& 17& 4& 9& 3& 12& 10& 16& 4& 8\\ \cline{2-20}
+\hline
+\multirow{6}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}} 
+& threshold& 0.5& 0.92& 0.49& 0.24& 0.01& 1& 1& 1& 1& 1& 0.7& 0.21& 1& 0.01& 0.17& 0.4& 0.81& 0.01\\ \cline{2-20}
+& max\_feature& None& 0.02& 0.55& 0.01& 0.01& 0.81& 0.52& 0.01& 0.76& 0.01& 0.01& 0.67& 0.3& 0.01& 0.06& 0.36& 0.34& 0.93\\ \cline{2-20}
+& max\_leaf\_nodes& None& 13& 10& 34& 10& 15& 25& 34& 24& 40& 20& 33& 14& 27& 40& 47& 44& 41\\ \cline{2-20}
+& min\_samples\_split& 2& 8& 1& 15& 15& 10& 11& 10& 5& 1& 9& 6& 7& 13& 13& 12& 15& 15\\ \cline{2-20}
+& min\_samples\_leaf& 1& 2& 14& 17& 19& 5& 13& 5& 2& 3& 11& 17& 2& 5& 9& 7& 18& 14\\ \cline{2-20}
+& n\_estimators& 100& 132& 50& 81& 150& 63& 59& 85& 141& 96& 106& 71& 95& 121& 135& 112& 104& 92\\ \cline{2-20}
+\hline  \end{tabular}
+}
+  \caption{Parameters tuned on different models over the objective of F.}\label{fig:fselect}
+\end{figure*}
+
+
+
+\subsection{Tuning is Fast}\label{sect:fast}
  
  
-\section{Discussion}
+The number of evaluations/runtimes used by our optimizers is shown in \fig{etimes}.
+WHERE's runtimes are slower than CART and Random Forest since WHERE has yet to benefit from decades
+of implementation experience with these older algorithms. For example, SciKitLearn's  CART and Random Forest
+ make extensive use of an underlying ``C'' library whereas WHERE is a purely interpreted Python.
+
+Looking over \fig{etimes}, the general pattern is that 50 to 80 evaluations suffice for finding the tuning
+improvements reported in this paper. 
+50 to 80 evaluations is  much less than our pre-experimental intuition.
+Prior to this paper, the authors have conducted numerous explorations of evolutionary algorithms
+for search-based SE applications~\cite{krall15,krall15:hm,fea02a,me07f,Green}. Based
+on that work, our expectations were that non-parametric evolutionary optimization would
+take thousands, if not millions, of evaluations of candidate tunings. Hence, originally,
+we used Storn's advise on the size of {\em np} and ran our optimizers for 24 hours. 
+Then, just
+to get a baseline, we tried {\em np=10} and the early stopping rules (number of lives used in
+Algorithm~1 on line 5) and obtained the results of this paper
+
+
+
+\subsection{Do not use ``off-the-shelf''  Default Tunings}\label{sect:variance}
  
+ \fig{preselect} and \fig{fselect} show the tunings learned by differential evolution. 
+The left hand side columns shows some standard default values. Note that:
+\bi
+\item
+The tunings learned by DE
+we often very different to the default. That is, to achieve the performance improvements seen in the paper,
+the default tuning parameters required a wide range of adjustments.
+\item The tunings learned by DE were different in different data sets and for different goals.
+That is, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
+sets are changed.
+\ei
+Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
+tuning is so easy and so fast (at least for defect predictors from static code attributes).
+\section{Conclusions}
+ 
+Prior to this work, our intuition was that tuning would change the behavior or a data miner. Nevertheless, we rarely tuned
+since we reasoned:
+\bi
+\item A data miner's default tunings have been well-explored by the developers of those algorithms. Hence, tuning may rarely improve a data miner.
+\item 
+Tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
+\ei
+The results of this paper show that neither of these points is supportable, at least for learning
+defect detectors for static code attributes. 
 
-\section{Related Work}
+Using differential evolution, this paper has found that it is remarkably simple to find effective tunings. We have seen in this paper that:
+\bi
+\item
+Tuning improves the performance scores of a predictor.
+That improvement is usually positive (see \fig{deltas} and sometimes
+it can be quite   dramatic (precision changing from 2\% to 98\%). 
+\item Tuning changes conclusions on what learners are better than others.
+Hence, it is time to revisit numerous prior publications of our own~\cite{me07b}
+and others~\cite{lessmann2008benchmarking,hall11}.
+\item
+Tuning changes conclusions about what factors are most important in software development.
+Once again, this means that old papers may need to be revised including those
+some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
+\item
+Data miners should not be used ``off-the-shelf'' with their default tunings. 
+\fig{preselect} and \fig{fselect}    show just how much tuning can alter default settings
+both for different data sets and for different goals. Hence, tuning needs to be repeated
+whenever data or goals are changed.
+\item
+Fortunately, the cost of find good tunings is not excessive since, at least for
+static code defect predictors, tuning is easy and fast.
+\ei
+These conclusions need two caveats.
+Firstly, the tuning results shown here only came from one  software analytics task 
+(defect prediction from static code attributes).
+There are many other kinds of software analytics tasks 
+(software development effort estimation, social network mining,
+detecting duplicate issue reports, etc) and the implication of this
+study for those tasks is unclear. 
+However,  those other tasks often use the same kinds of learners
+explored in this paper so it is quite possible that
+the conclusions of this paper apply to other SE analytics tasks as well. 
 
-Tuning in efforts estimation, software engineering.
+Secondly, it would be incorrect to say that this paper is arguing that
+software analytics is somehow wrong-headed, misguided, and we should not do it anymore.
+In the age of the Internet and global access to software engineering data,
+there exists the  problem of information overload. {\em Something} must be done to
+allow analysts to make conclusions via an automatic analysis over a lot of data.
+The results of this paper is that for a particular local context
+(a specific data set and a specific goal) there exists  
+methods for optimizing the conclusions reached in that context.  
+Those conclusions
+may not generalize to other contexts but this  is not a council for despair. While there may
+not exist general conclusions, there does seem to exist general methods for finding
+local conclusions in a particular context. Further, as shown above, those
+methods may be very simple to implement and very fast to execute.
 
-Defect Prediction
+\section{Future Work}
+ This paper has explored  {\em some} learners using {\em one}  optimizer. Hence, we can make
+no claim that DE is the {\em best} optimizer for {\em all} learners.
+Rather, our point is that there exists at least some learners
+whose performance can be dramatically improved by 
+at least one simple optimization scheme.  We hope that this work inspires
+much future work as this community develops and debugs best practices for tuning
+software analytics.
 
-
-
-\section{Threats to Validity}
-
-Internal and external threats
-
-\section{Conclusion}
+More speculatively,  this notion of using an optimizer to tune
+a data miner might need revisiting. As noted by
+F\"{u}rnkranz~\cite{furnkranz05}, data mining is inherently a multi-objective optimization
+problem that seeks the smallest model with the highest performance, 
+that generalizes best for
+future examples (perhaps learned in minimal time using the least amount of data).
+In this view, we are using DE to optimize an optimizer. Perhaps a better approach might be
+to dispense with the separation of ``optimizer'' and ``learner'' and combine them both
+into one system that learns how to tune itself as it executes. If this view is useful,
+then instead of adding elaborations to data miners (as done in this paper, or by researchers
+exploring hyper-heuristics~\cite{jia2013learning}), it should be possible to radically simplify optimization and data
+mining with a single system that rapidly performs both task.
 
 \section{Acknowledgments}
-
+The work has partially funded by a National Science Foundation CISE CCF award \#1506586.
+ 
 \vspace*{0.5mm}
  
  \scriptsize
-\bibliographystyle{unsrt}
-\bibliography{tuningpredictor}  
+\bibliographystyle{plain}
 
+\balance
+\bibliography{tuningpredictor}  
 
    
 

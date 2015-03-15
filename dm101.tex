@@ -57,6 +57,57 @@ For example, depending on the review methods 8 to 20 LOC/minute can be
 inspected and this effort repeats for all members of the review team,
 which can be as large as four or six~\cite{me02f}. 
 
+%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\arraystretch{1.2}
+\begin{figure*}[t!]
+\scriptsize
+  \centering
+	\begin{tabular}{|c|c|c|c|l|}
+	\cline{1-5}
+	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
+\multicolumn{1}{c|}{Description} \\ \hline
+	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
+	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
+	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider  for the best 
+split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
+one is for clustering and the second one is building prediction model. we explicitly call Where-
+clustering tree and CART tree, respectively}. \\ \cline{2-5} 
+	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
+CART tree. \\ \cline{2-5} 
+	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}Finds min\_sample 
+in Where-clustering trees  using  ${n\_samples}^ {min\_Size}$.
+\end{tabular} \\ \cline{2-5} 
+    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
+	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
+clustering tree. \\ \cline{2-5} 
+	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
+	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5}
+	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ \cline{2-5} 
+\hline
+\multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{1-5}  
+       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
+\cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{2-5} 
+	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
+	 \hline
+
+	\end{tabular}
+    \caption {List of parameters to be tuned.}
+\label{fig:parameters}
+\end{figure*}
 {\em Widely used:} Many researchers and industrial practitioners  use static attributes to guide software 
 quality predictions.
  Defect prediction models have been reported
@@ -73,8 +124,7 @@ they are fault prone.
 
 
 {\em Useful:}
-A
-standard result for defect predictors is that they find the location of  70\% (or more)
+Defect predictors often  find the location of  70\% (or more)
 of the defects in code~\cite{me07b}.
 Defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
 A subsequent study on the Turkish software
@@ -91,12 +141,11 @@ $(87-25)/87=71$\%less effort
 \cite{tosun09}.
 
 
-Defect prediction scales well to a commercial
-context. Defect predicting technology has been
+Defect predicting technology has been
 commercialized in many tools including {\it Predictive}~\cite{turner06}, a
  product suite to analyze and predict
 defects in software projects. Predictive was observed to
-highlight simimilar issues to those found   with the more expensive tools. Significantly,
+highlight similar issues to those found   with the more expensive tools. Significantly,
 Predictive was able to faster process a larger code
 base than the more expensive tool~\cite{turner06}.
 
@@ -115,16 +164,15 @@ industrial review methods:   around 50\%
 
 Note only do static code defect predictors perform well compared to manual methods,
 they also are competititve with certain automatic methods.
-At ICSE'14, Rahman et al.~\cite{rahman14:icse} offered an extensive comparison of:
+At ICSE'14, Rahman et al.~\cite{rahman14:icse} compared:
 \bi
 \item The static code analysis tools FindBugs, Jlint, and Pmd;
 \item Against static code defect predictors
 (which they called ``statistical defect prediction'') build using logistic regression.
 \ei
-That study assessed the cost-effectiveness of finding bugs using either method.
-They found   no significant differences in the cost-effectiveness
-of the two approaches. Given this equivalence, it is significant to note that 
-static code defect prediction can be quickly adapted to new languages, just by building lightweight
-parsers that can extract information like \fig{ck}. The same cannot be said for   static code analyzers that require extensive modification before they can be applied to a new
-language.
+They found  no significant differences in the cost-effectiveness
+of these  approaches. Given this equivalence, it is significant to note that 
+static code defect prediction can be quickly adapted to new languages by building lightweight
+parsers that find   information like \fig{ck}. The same is not true for   static code analyzers-- these need  extensive modification before they can be used on new
+languages.
 

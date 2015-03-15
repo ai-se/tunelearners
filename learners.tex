@@ -1,74 +1,23 @@
-This section describes this study's learners (CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
-and WHERE~\cite{menzies2013local}) and their
-tuning parameters (summarised in \fig{parameters}).
-
-Our implementations
+This section describes this study's learners: CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
+and WHERE~\cite{menzies2013local}.
+The implementations
 for CART and Random Forest comes from 
 SciKitLearn~\cite{scikit-learn}.
 WHERE is available from
-github.com/ai-se/where\footnote{\wei{ need a nice  where repo. with an
-data and code examples sub-directory. clean code. throw out anything not needed. before april1.}}.
+github.com/ai-se/where.
+ 
+\fig{parameters} shows the tuning parameters of these learners.
 WHERE has the most tuning parameters. This turns out
 to be important since, in the experiments shown below, tuned WHERE 
 out-performed the other learners-- a result suggesting that
 if you are going to tune learners, then use one with many tuning options.
 
-%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
-\renewcommand\arraystretch{1.2}
-\begin{figure*}[t!]
-\scriptsize
-  \centering
-	\begin{tabular}{|c|c|c|c|l|}
-	\cline{1-5}
-	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
-\multicolumn{1}{c|}{Description} \\ \hline
-	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
-	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
-	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider  for the best 
-split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
-one is for clustering and the second one is building prediction model. we explicitly call Where-
-clustering tree and CART tree, respectively}. \\ \cline{2-5} 
-	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
-CART tree. \\ \cline{2-5} 
-	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}The value to determine the minimum 
-number of samples to be a Where-clustering tree \\ based on  ${n\_samples}^ {min\_Size}$.
-\end{tabular} \\ \cline{2-5} 
-    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
-	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
-clustering tree. \\ \cline{2-5} 
-	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
-	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5}
-	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ \cline{2-5} 
-\hline
-\multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
 
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{1-5}  
-       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
-\cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
-	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{2-5} 
-	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
-	 \hline
-
-	\end{tabular}
-    \caption {List of parameters to be tuned.}
-\label{fig:parameters}
-\end{figure*}
  
 \subsection{Why Study These Algorithms?}
 
 
-This paper studies WHERE since this was the first learner we tried to tune and, as shown below,
+This paper presents results with WHERE since, as shown below,
 it offers an interesting case study on the benefits of tuning.
 
 This paper also studies  CART and Random Forest since  these were used in 
@@ -93,7 +42,7 @@ K-Star
 \item
 {\em Neural networks:}
 Multi-Layer Perceptron,
-Radial bias function network,
+Radial bias functions,
 
 \item
 {\em Support vector machine-based classifiers:}
@@ -105,17 +54,17 @@ Voted perceptron,
 
 \item
 {\em Decision-tree approaches:}
-C4.5 decision tree,
+C4.5,
 CART,
-Alternating decision tree.
+Alternating DTs
 \item
 {\em Ensemble methods:}
 Random Forest,
 Logistic Model Tree.
 \ei
-In that study, CART was severely trounced (was ranked last) and Random Forest was
-the standout best method. However, in a result consistent with the theme of this paper,
-we show below that we can reverse those rankings such that, under certain conditions,
+In that study, CART  was ranked last  and Random Forest was
+the standout best method.
+We show below that we can reverse those rankings such that, under certain conditions,
   the worst learner found by Lessmann et al. (CART) performed better
 than Random Forest.
   
@@ -143,9 +92,9 @@ of defects\footnote{If an attribute ranges $r_i$ is found in
 $n_i$ rows each with a  defect count variance of $v_i$, then CART seeks the attributes
 whose ranges minimizes $\sum_i \left(\sqrt{v_i}\times n_i/(\sum_i n_i)\right)$.}.
 \item
-Random Forest    divides data like CART,
-but it builds $F>1$  trees, each time with a subset of
-the attributes (selected at random). 
+Random Forest    divides data like CART then  builds $F>1$  trees,
+each time using some random subset of
+the attributes. 
 \item
 WHERE projects the data on to a dimension it synthesizes from the raw data using
 a process analogous to principle component analysis\footnote{
@@ -239,8 +188,8 @@ SA was invented   in the 1950s, when
  software engineering, particularly in test case generation~\cite{andrews07,andrews10}
  or refactoring~\cite{Weimer:2009}
 
- Later work focused on creative ways to control the
- mutation process. Tabu search and scatter search
+ Later work focused on smarter  
+ mutations. Tabu search and scatter search
  work to bias new mutations away from prior
  mutations~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350}.
  Particle swarm
@@ -250,12 +199,18 @@ SA was invented   in the 1950s, when
  particle and/or by the neighborhood around that
  particle~\cite{pan08}.
  Differential evolution mutates solutions by
- interpolating between members of the current
+ interpolating between items in the current
  population~\cite{storn1997differential}.  
  
-Another more recent technique that has claimed much attention
-are   heuristics that decompose the total space into many smaller problems, and then which use a simpler optimizer for each region. 
-For example, in $\mathcal{E}$-domination~\cite{deb05}, the  user is asked
+ 
+
+\input{algo} 
+ 
+ 
+Another approach uses
+    heuristics to decompose the total space into   small problems,   then applies a
+    simpler optimizer to each region. 
+In $\mathcal{E}$-domination~\cite{deb05}, the  user is asked
 `what is the lower threshold $\mathcal{E}$ on the size of a useful effect?''. The solution space
 is then divided into boxes of size $\mathcal{E}$ and linked such that  the  set $X.\mathit{lower}$ contains boxes with worse objective scores that $X$.  Solutions in pairs boxes are  quickly compared  using   small samples from each  and, if some box $X$ is found to be inferior, then it is quickly pruned along with all
 solutions in the $X.\mathit{lower}$ boxes.
@@ -266,7 +221,6 @@ Each region has a ``slope'' and examples in that region are pushed along the slo
 solutions~\cite{krall15,Zuluaga:13}.
  
  
-\input{algo} 
  \subsubsection{Selecting a Tuning Algorithm}
  
 From all the above methods, how do we select which optimizers to apply to tuning data miners.
@@ -300,6 +254,4 @@ optimizing defect prediction from static code attributes.
  
  
 
-
- 
  
