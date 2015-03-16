@@ -164,8 +164,8 @@ of applying automatic optimizers to tune data miners for defect prediction,
 
 Prior to this work, our intuition was that tuning would change the behavior or a data miner, to some degree. Nevertheless, we rarely tuned our  defect predictors 
 since we reasoned
-that a data miner's default tunings have been well-explored by the developers of those algorithms, in which case
-tuning would not lead to large performance improvements.
+that a data miner's default tunings have been well-explored by the developers of those algorithms (in which case
+tuning would not lead to large performance improvements).
 Also, we suspected that
 tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
 
@@ -219,7 +219,7 @@ we have defended that approach on methodological grounds arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, suppose our default
 number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation). 
-Our optimizer settled on  $F$ values that were nowhere near that default:
+After tuning, we see that our optimizer often used $F$ values that were nowhere near that default:
 
 % {\scriptsize
 % \[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
@@ -256,7 +256,7 @@ methods for optimizing the conclusions reached in that context.
 Those conclusions
 may not generalize to other contexts but this  is not a council for despair. While there may
 not exist general conclusions, there does seem to exist general methods for finding
-local conclusions in a particular context. Further, as shown above, those
+local conclusions in a particular context. Further, as shown here, those
 methods may be very simple to implement and very fast to execute.
 
 
@@ -514,13 +514,14 @@ a different {\em Goal}$^2$).  Technically, this makes a  {\em single objective} 
 
 
 
+\input{algo} 
 
 \section{Experimental Design}\label{sect:design}
 
 The following experiment aims to compare the performance of three learners, tuned and untuned, on 17
 sets of data. 
 
-\subsection{Data Sets}
+\subsection{Data Sets}\label{sect:dataa}
 
 Our defect data comes from the PROMISE repository\footnote{http://openscience.us/repo}.
 It pertains to 
@@ -567,7 +568,63 @@ Some data sets have more than three releases and, for those data, we could run m
 These data sets are displayed in \fig{data1}.
 
 
-\begin{figure}[!t]
+
+ \begin{figure*}[!t]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c c c c c c c c c c }\hline
+  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
+\\\hline
+  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
+\\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
+\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
+\\ \hline
+  Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
+\\\hline
+  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
+\\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
+\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
+\\  \end{tabular}
+
+   \caption{Data used in this data. 
+   E.g., the top left data set has 20 defective classes out of 125 total.
+   See \tion{dataa} for explanation of {\em training, tuning, testing} sets.
+   }\label{fig:data1}
+\end{figure*} 
+
+\subsection{Optimization Goals}
+
+Recall from Algorithm~1 that we call differential evolution once for each
+ optimization goal. This section lists those optimization goals.
+
+Let $\{A,B,C,D\}$ denote the
+true negatives, 
+false negatives, 
+false positives, and 
+true positives
+(respectively) found by a binary detector. 
+Certain standard measures can be computed from
+$A,B,C,D$: 
+
+{\scriptsize\[
+\begin{array}{ll}
+pd=recall=&D/(B+D)\\
+pf=&C/(A+C)\\ 
+prec=precision=&D/(D+C) \\
+F =&2*pd*prec/(pd + prec)
+\end{array}
+\]}
+
+All the above vary from zero to one. For $pf$, the {\em better} scores are {\em smaller}.
+For all other scores, the {\em better} scores are {\em larger}.
+One technical detail:   {\em prec}
+and {\em F} refer to {\em both} the defect and non-defective modules. This is different to {\em pf} and {\em recall} which only
+refer to either non-defective or defective modules (repsectively).
+
+
+\begin{figure}[!b]
 \small
 \begin{tabular}{|p{.95\linewidth}|}\hline
 One style
@@ -600,64 +657,7 @@ used to subsequently fix any issues with version 1.0)~\cite{huang06}.\\\hline
 \end{tabular}
 \caption{Many ways to assess defect predictors.}\label{fig:criteria}
 \end{figure}
- \begin{figure*}[!t]
 
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{c c c c c c c c c c }\hline
-  Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
-\\\hline
-  training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
-\\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
-\\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
-\\ \hline
-  Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
-\\\hline
-  training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
-\\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
-\\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
-\\  \end{tabular}
-
-   \caption{Ratios of defective instances in each experimental data set. 
-   E.g., the top left data set has 20 defective classes out of 125 total.
-   This paper runs one experiment for each column
-   shown in this figure. The {\em training} set is used by an untuned learner
-   to build a model, which is then tested on the {\em testing} data.
-   {\em Training} data is used by  differential evolution when it builds
-    a model (using one set of possible tunings) and that model is tested on {\em tuning} data.
-    Finally, the best model from by DE is applied to {\em testing}.  
-   }\label{fig:data1}
-\end{figure*} 
-
-\subsection{Optimization Goals}
-
-Recall from Algorithm~1 that we call differential evolution once for each
- optimization goal. This section lists those optimization goals.
-
-Let $\{A,B,C,D\}$ denote the
-true negatives, 
-false negatives, 
-false positives, and 
-true positives
-(respectively) found by a binary detector. 
-Certain standard measures can be computed from
-$A,B,C,D$: 
-
-{\scriptsize\[
-\begin{array}{ll}
-pd=recall=&D/(B+D)\\
-pf=&C/(A+C)\\ 
-prec=precision=&D/(D+C) \\
-F =&2*pd*prec/(pd + prec)
-\end{array}
-\]}
-
-All the above vary from zero to one. For $pf$, the {\em better} scores are {\em smaller}.
-For all other scores, the {\em better} scores are {\em larger}.
-One technical detail:   {\em prec}
-and {\em F} refer to {\em both} the defect and non-defective modules. This is different to {\em pf} and {\em recall} which only
-refer to either non-defective or defective modules (repsectively).
 
 Our analysis results make no assumption that (e.g.) minimizing false alarms is 
 more important than maximizing   precision. That determination 
@@ -715,45 +715,8 @@ Hence, in the
 following, we explore performance measures that comment on all the possible
 target classes (i.e. precision and ``F''). 
 
-\subsection{Tuning Can  Improves Performance Scores}\label{sect:precision}
 
-\fig{precisionbars} shows precision results before and after tuning using three different learners.
-For each data set, the maximum precision values for each data set are shown in {\bf bold}.
-
-
-These results offer support for the prior conclusions of  
- Lessmann et al.~\cite{lessmann2008benchmarking} (that CART is worse than Random Forest):
-\bi
-\item
-Untuned CART is indeed the worst learner (none of its
-untuned results are best and {\bf bold}). 
-\item 
-In $\frac{15}{17}$ cases, untuned Random Forest out-performs  untuned CART.  
-\ei
-Some of the data sets in \fig{precisionbars} proved challenging for all learners;
-e.g. the precision results for {\em ivy} are less
-that impressive.
-To some extent, this can be explained by
-the properties of of the data set (as shown in \fig{data1}, defective classes in {\em ivy} are very rare in tuning data).
-
-That said,  tuning can improve those poor performing detectors:
-\bi
-\item
-For {\em xercesV0}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 85\% precision.  
-\item A similar pattern can be seen in results from {\em camelV0},   and {\em jeditV2}.
-In those two data sets, nearly all the precision values are   low {\em except} for
-tuned WHERE that scored 83\% and 98\%.
-\ei
-Finally, note the  {\em jeditV2} result for the WHERE learner.
-Here, tuning changes precision from 2\% to 98\%.
-
-\fig{deltas} shows that tuning usually has a positive effect on performance scores. This figure sorts
-the deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
-figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
- 
-
-
-\begin{figure}[!t]
+\begin{figure}[!b]
 \renewcommand{\baselinestretch}{0.8} 
 
 \scriptsize    
@@ -784,7 +747,46 @@ xercesV1 & {\bf 56} & {\rfour} & 26 &         & 50 & {\rthree} & 26 &         & 
 \label{fig:precisionbars}
 \end{figure}
 
-\begin{figure}[!h]
+\subsection{Tuning Can  Improves Performance Scores}\label{sect:precision}
+
+\fig{precisionbars} shows precision results before and after tuning using three different learners.
+For each data set, the maximum precision values for each data set are shown in {\bf bold}.
+
+
+These results offer support for the prior conclusions of  
+ Lessmann et al.~\cite{lessmann2008benchmarking} (that CART is worse than Random Forest):
+\bi
+\item
+Untuned CART is indeed the worst learner (none of its
+untuned results are best and {\bf bold}). 
+\item 
+In $\frac{15}{17}$ cases, untuned Random Forest out-performs  untuned CART.  
+\ei
+Some of the data sets in \fig{precisionbars} proved challenging for all learners;
+e.g. the precision results for {\em ivy} are less
+that impressive.
+To some extent, this is due to
+the properties of   the data set (as shown in \fig{data1}, defective classes in {\em ivy} are very rare in tuning data).
+
+That said,  tuning can improve those poor performing detectors:
+\bi
+\item
+For {\em xercesV0}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 85\% precision.  
+\item A similar pattern can be seen in results from {\em camelV0},   and {\em jeditV2}.
+In those two data sets, nearly all the precision values are   low {\em except} for
+tuned WHERE that scored 83\% and 98\%.
+\ei
+Finally, note the  {\em jeditV2} result for the WHERE learner.
+Here, tuning changes precision from 2\% to 98\%.
+
+\fig{deltas} shows that tuning usually has a positive effect on performance scores. This figure sorts
+the deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
+figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
+ 
+
+
+
+\begin{figure}[!t]
 \begin{center}
 \includegraphics[width=1.25in]{precision1.pdf}\includegraphics[width=1.25in]{F1.pdf}
  \end{center}
@@ -792,7 +794,7 @@ xercesV1 & {\bf 56} & {\rfour} & 26 &         & 50 & {\rthree} & 26 &         & 
 and \fig{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
  \end{figure}
 
-\subsection{Tuning Changes Learner Rankings}\label{sect:rank}
+\subsection{Tuning Changes the Rankings of Learner  }\label{sect:rank}
 Researchers often use performance criteria to assert that one learner is better than another~\cite{lessmann2008benchmarking,hall11,me07b}.
 Such conclusions are   not reliable since they can change when we elect to tune for different goals. 
 
@@ -851,21 +853,15 @@ xercesV1 & 25 &         & 39 & {\rone} & 18 &         & 53 & {\rthree} & 68 & {\
 \end{figure}
 
 
-\subsection{Tuning Changes Factors Rankings }\label{sect:import}
+\subsection{Tuning Changes the Ranking of Project Factors  }\label{sect:import}
 
 
 Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
-As above, we can show that such conclusions are not reliable since they can be changed by tuning.
-
-\fig{counts} shows how the objective goal (in this case,
- precision or the f-measure) changed what attributes were used
-in the decision tree learners
-(in this case, WHERE building trees to select for different clusters). 
-
-
+\fig{counts} shows that such conclusions are not reliable since they can be changed by tuning.
+This figure shows what attributes appeared in WHERE's final decision trees when optimizing for different goals.
 Note that the counts in the {\em tuned} column are   usually
 different to those in the {\em default} columns (the tuned learners used more attributes
-than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column).
+than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column). 
 
 
 
@@ -1003,6 +999,49 @@ one cell in the ``precision'' or ``F'' column is 17.
 \end{figure*}
 
 
+
+\subsection{Tuning is Fast}\label{sect:fast}
+ 
+ 
+The number of evaluations/runtimes used by our optimizers is shown in \fig{etimes}
+and \fig{ftimes}.
+WHERE's runtimes are slower than CART and Random Forest since WHERE has yet to benefit from decades
+of implementation experience with these older algorithms. For example, SciKitLearn's  CART and Random Forest
+ make extensive use of an underlying ``C'' library whereas WHERE is a purely interpreted Python.
+
+Looking over \fig{etimes} and \fig{ftimes}, the general pattern is that 50 to 80 evaluations suffice for finding the tuning
+improvements reported in this paper. 
+50 to 80 evaluations is  much less than our pre-experimental intuition.
+Prior to this paper, the authors have conducted numerous explorations of evolutionary algorithms
+for search-based SE applications~\cite{krall15,krall15:hm,fea02a,me07f,Green}. Based
+on that work, our expectations were that non-parametric evolutionary optimization would
+take thousands, if not millions, of evaluations of candidate tunings. Hence, originally,
+we used Storn's advise on the size of {\em np} and ran our optimizers for 24 hours. 
+Then, just
+to get a baseline, we tried {\em np=10} and the early stopping rules (number of lives used in
+Algorithm~1 on line 5) and obtained the results of this paper
+
+
+
+\subsection{Do not use ``off-the-shelf''  Default Tunings}\label{sect:variance}
+ 
+ \fig{preselect} and \fig{fselect} show   tunings learned by DE. 
+The left hand side columns shows some standard default values. Note that:
+\bi
+\item
+The tunings learned by DE
+were often very different to the default. That is, to achieve the performance improvements seen in the paper,
+the default tuning parameters required a wide range of adjustments.
+\item The tunings learned by DE were different in different data sets and for different goals.
+That is, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
+sets are changed.
+\ei
+Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
+tuning is so easy and so fast (at least for defect predictors from static code attributes).
+
+
+
+
  
 %%%%parameters for prec %%%%%%
 \begin{figure*}[!ht]
@@ -1086,46 +1125,6 @@ one cell in the ``precision'' or ``F'' column is 17.
   \caption{Parameters tuned on different models over the objective of ``F''.}\label{fig:fselect}
 \end{figure*}
 
-
-
-\subsection{Tuning is Fast}\label{sect:fast}
- 
- 
-The number of evaluations/runtimes used by our optimizers is shown in \fig{etimes}
-and \fig{ftimes}.
-WHERE's runtimes are slower than CART and Random Forest since WHERE has yet to benefit from decades
-of implementation experience with these older algorithms. For example, SciKitLearn's  CART and Random Forest
- make extensive use of an underlying ``C'' library whereas WHERE is a purely interpreted Python.
-
-Looking over \fig{etimes} and \fig{ftimes}, the general pattern is that 50 to 80 evaluations suffice for finding the tuning
-improvements reported in this paper. 
-50 to 80 evaluations is  much less than our pre-experimental intuition.
-Prior to this paper, the authors have conducted numerous explorations of evolutionary algorithms
-for search-based SE applications~\cite{krall15,krall15:hm,fea02a,me07f,Green}. Based
-on that work, our expectations were that non-parametric evolutionary optimization would
-take thousands, if not millions, of evaluations of candidate tunings. Hence, originally,
-we used Storn's advise on the size of {\em np} and ran our optimizers for 24 hours. 
-Then, just
-to get a baseline, we tried {\em np=10} and the early stopping rules (number of lives used in
-Algorithm~1 on line 5) and obtained the results of this paper
-
-
-
-\subsection{Do not use ``off-the-shelf''  Default Tunings}\label{sect:variance}
- 
- \fig{preselect} and \fig{fselect} show   tunings learned by DE. 
-The left hand side columns shows some standard default values. Note that:
-\bi
-\item
-The tunings learned by DE
-were often very different to the default. That is, to achieve the performance improvements seen in the paper,
-the default tuning parameters required a wide range of adjustments.
-\item The tunings learned by DE were different in different data sets and for different goals.
-That is, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
-sets are changed.
-\ei
-Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
-tuning is so easy and so fast (at least for defect predictors from static code attributes).
 
 \section{Reliability and Validity}\label{sect:construct}
 

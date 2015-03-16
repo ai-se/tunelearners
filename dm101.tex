@@ -68,21 +68,19 @@ which can be as large as four or six people~\cite{me02f}.
 \multicolumn{1}{c|}{Description} \\ \hline
 	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
 	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
-	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider  for the best 
-split to build CART tree\footnote{Since the Where-based learner will build two trees, the first 
-one is for clustering and the second one is building prediction model. we explicitly call Where-
-clustering tree and CART tree, respectively}. \\ \cline{2-5} 
+	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider for the best 
+split to build its final decision tree. \\ \cline{2-5} 
 	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
-CART tree. \\ \cline{2-5} 
+its final  decision tree. \\ \cline{2-5} 
 	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}Finds min\_sample 
-in Where-clustering trees  using  ${n\_samples}^ {min\_Size}$.
+in the initial clustering tree  using  ${n\_samples}^ {min\_Size}$.
 \end{tabular} \\ \cline{2-5} 
-    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  Where tree to be pruned\\ \cline{2-5}
-	 & depthMin & 2 & [1,6]&The minimum depth of the tree below which no pruning for Where-
+    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  the initial clustering tree to be pruned\\ \cline{2-5}
+	 & depthMin & 2 & [1,6]&The minimum depth of the initial clustering tree below which no pruning for the
 clustering tree. \\ \cline{2-5} 
-	 & depthMax & 10 &[1,20]& The maximum depth of the Where-clustering tree. \\ \cline{2-5} 
-	 & wherePrune & False &T/F& Whether or not to prune the Where-clustering tree. \\ \cline{2-5}
-	 & treePrune & True &T/F& Whether or not to prune the classification tree built by CART. \\ \cline{2-5} 
+	 & depthMax & 10 &[1,20]& The maximum depth of the initial clustering tree. \\ \cline{2-5} 
+	 & wherePrune & False &T/F& Whether or not to prune the initial clustering tree. \\ \cline{2-5}
+	 & treePrune & True &T/F& Whether or not to prune the final decision tree. \\ \cline{2-5} 
 \hline
 \multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
 	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
