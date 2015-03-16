@@ -77,9 +77,9 @@
 \conferenceinfo{FSE}{'15 Bergamo, Italy}
 \title{ Analytics Without Parameter Tuning Considered Harmful?}
 \numberofauthors{1}
-\author{\alignauthor Wei Fu, Tim Menzies, Vivek Nair\\
+\author{\alignauthor Wei Fu, Tim Menzies \\
        \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
-       fuwei.ee, tim.menzies, vivekaxl@gmail.com}
+       fuwei.ee, tim.menzies@gmail.com}
 \maketitle
 \begin{abstract}
 One of the ``black arts'' of data mining is setting the tuning
@@ -157,14 +157,20 @@ search space~\cite{cora10,Krogmann10}.
 The field of {\em hyper-heuristics} explores methods for auto-adapting
 options within the device searching for solutions~\cite{jia2013learning} in applications
 like test-case generation and code refactorings.
-
 To the best of our knowledge, this paper is the first extensive exploration 
 of applying automatic optimizers to tune data miners for defect prediction,
 (though see~\cite{cora10,balogh12,Minku13,minku13z} for tuning effort estimators).
-The one similar study  we can find in the period 2004 to 2014\footnote{See the GECCO and SSBSE proceedings at    goo.gl/2MY602 and goo.gl/uzvU8e.} was
-Bouktiff et al.~\cite{Bouktif06} who used  simulated annealing to tune Bayes classifiers.
-That was a very limited study, applied to a  single defect data set.
-The analysis of this paper is far more extensive and offers the following novel results:
+
+
+Prior to this work, our intuition was that tuning would change the behavior or a data miner, to some degree. Nevertheless, we rarely tuned our  defect predictors 
+since we reasoned
+that a data miner's default tunings have been well-explored by the developers of those algorithms, in which case
+tuning would not lead to large performance improvements.
+Also, we suspected that
+tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
+
+The results of this paper show that neither of these points is supportable, att least when learning
+defect detectors from static code attributes since:
 \bi
 \item
 Tuning static code defect predictors is {\em remarkably simple} and can {\em dramatically improve the performance}
@@ -211,14 +217,21 @@ analytics now need to be revisited and perhaps revised.
 Thirdly, it is a standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
 we have defended that approach on methodological grounds arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
-can no longer be condoned. For example, one such default setting
-  in the Python \mbox{SciKitLearn} toolkit~\cite{scikit-learn}
-is to use $F=10$ decision trees in  Random Forest classifiers.
+can no longer be condoned. For example, suppose our default
+number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation). 
 Our optimizer settled on  $F$ values that were nowhere near that default:
 
+% {\scriptsize
+% \[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
+%                                 108,  119, 133,  140, 140,   147,  145,  142   \end{array}\right\}
+% \]}
+
+
 {\scriptsize
-\[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
-                                108,  119, 133,  140, 140,   147,  145,  142   \end{array}\right\}
+\[F \in \left\{\begin{array}{l} 50, 59, 63, 63, 69, 71, 81, 85,85, 88,\\
+                                92, 95, 96, 99, 99,  100, 104, 106, 107,\\
+                                109, 111, 112, 121, 121, 123, 125, 128,\\
+                                131, 132, 135, 140, 141, 141, 150   \end{array}\right\}
 \]}
 
 
@@ -231,8 +244,21 @@ Further,
 it is no longer enough to just run a data miner and report the result
 {\em without} first conducting an tuning optimizations study.
 
- 
- 
+Before beginning, we digress for one important clarification.
+It would be incorrect to say that this paper is arguing that
+software analytics is somehow wrong-headed, misguided, and we should not do it anymore.
+In the age of the Internet and global access to software engineering data,
+there exists the  problem of information overload. {\em Something} must be done to
+allow analysts to make conclusions via an automatic analysis over a lot of data.
+The results of this paper is that for a particular local context
+(a specific data set and a specific goal) there exists  
+methods for optimizing the conclusions reached in that context.  
+Those conclusions
+may not generalize to other contexts but this  is not a council for despair. While there may
+not exist general conclusions, there does seem to exist general methods for finding
+local conclusions in a particular context. Further, as shown above, those
+methods may be very simple to implement and very fast to execute.
+
 
 \section{Motivating Example}\label{sect:eg}
 
@@ -299,7 +325,7 @@ despite their potential support for refactoring, our researchers should not use 
  
 
 \noindent
-We now explore how tuning can alter the above  conclusion. Suppose the  predictors $d_1$ and $d_2$  learned from LOC or Halstead
+We now explore how tuning can change the above  conclusion. Suppose the  predictors $d_1$ and $d_2$  learned from LOC or Halstead
 are used to call an inspection
 team to check for errors in   parts of the code using:
 \begin{equation}\label{eq:yesno}\scriptsize
@@ -316,7 +342,7 @@ problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls 
 
  
 
-\begin{figure}[!t] 
+\begin{figure}[!b] 
 
 \renewcommand{\baselinestretch}{0.8}
 {\scriptsize
@@ -337,14 +363,8 @@ problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls 
   Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp.
  }\label{fig:pd1}
  \end{figure}
-
-
-One   lesson from  \fig{pd1} is that the ``best'' tunings are context
-specific. For mission critical systems (e.g. a nuclear power plant), management
-might accept the cost of high false alarm rates if it meant increasing the probability
-of detecting errors. For such contexts, we might recommend some very small value of $T$.
-
-The other   lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
+ 
+The    lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
 detector can work just as well as seemingly better ones.
 Note that either the Halstead or LOC detector can reach some desired
 level of recall, regardless of their correlations, just by
@@ -495,7 +515,7 @@ a different {\em Goal}$^2$).  Technically, this makes a  {\em single objective} 
 
 
 
-\section{Experimental Design}
+\section{Experimental Design}\label{sect:design}
 
 The following experiment aims to compare the performance of three learners, tuned and untuned, on 17
 sets of data. 
@@ -532,7 +552,9 @@ consecutive releases  (where release $i+1$ was built after release $i$).
    best model found by differential evolution.
    \ei
 This approach ensures   all treatments 
-are assessed on the same tests.
+are assessed on the same tests. Note that we did consider
+one other experimental design but rejected it for reasons of
+internal validity (see \tion{construct}).
 
 Some data sets have more than three releases and, for those data, we could run more
  than one experiment. For example, {\em ant} has five versions in PROMISE so
@@ -545,7 +567,7 @@ Some data sets have more than three releases and, for those data, we could run m
 These data sets are displayed in \fig{data1}.
 
 
-\begin{figure}[!b]
+\begin{figure}[!t]
 \small
 \begin{tabular}{|p{.95\linewidth}|}\hline
 One style
@@ -567,7 +589,7 @@ These bugs occur  when (say) developers try to fix parts of the code
 where they have very little experience~\cite{yin11}.  To avoid such incorrect bug fixes, we have to optimize
 for finding the most number of bugs in regions that {\em the most programmers have worked with before}.
 
-In {\em Better-faster-cheaper},   project want changes that lead
+In {\em Better-faster-cheaper},   managers want changes that lead
 to fewer defects,  faster development,  using less resources~\cite{Green,elrawas08,elrawas10,me07f,me09a,me09f}.
 
 Another  {\em  rush-to-market} approach is yet another economic-based optimization measure.
@@ -625,16 +647,19 @@ $A,B,C,D$:
 {\scriptsize\[
 \begin{array}{ll}
 pd=recall=&D/(B+D)\\
-pf=&C/(A+C)\\
-pf'=& 1 - pf\\
-prec=precision=&D/(D+C) 
+pf=&C/(A+C)\\ 
+prec=precision=&D/(D+C) \\
+F =&2*pd*prec/(pd + prec)
 \end{array}
 \]}
 
 All the above vary from zero to one. For $pf$, the {\em better} scores are {\em smaller}.
 For all other scores, the {\em better} scores are {\em larger}.
+One technical detail:   {\em prec}
+and {\em F} refer to {\em both} the defect and non-defective modules. This is different to {\em pf} and {\em recall} which only
+refer to either non-defective or defective modules (repsectively).
 
-The following results make no assumption that (e.g.) minimizing false alarms is 
+Our analysis results make no assumption that (e.g.) minimizing false alarms is 
 more important than maximizing   precision. That determination 
 depends on current business conditions:
 \be
@@ -759,7 +784,7 @@ xercesV1 & {\bf 56} & {\rfour} & 26 &         & 50 & {\rthree} & 26 &         & 
 \label{fig:precisionbars}
 \end{figure}
 
-\begin{figure}[!b]
+\begin{figure}[!h]
 \begin{center}
 \includegraphics[width=1.25in]{precision1.pdf}\includegraphics[width=1.25in]{F1.pdf}
  \end{center}
@@ -1088,12 +1113,12 @@ Algorithm~1 on line 5) and obtained the results of this paper
 
 \subsection{Do not use ``off-the-shelf''  Default Tunings}\label{sect:variance}
  
- \fig{preselect} and \fig{fselect} show the tunings learned by differential evolution. 
+ \fig{preselect} and \fig{fselect} show   tunings learned by DE. 
 The left hand side columns shows some standard default values. Note that:
 \bi
 \item
 The tunings learned by DE
-we often very different to the default. That is, to achieve the performance improvements seen in the paper,
+were often very different to the default. That is, to achieve the performance improvements seen in the paper,
 the default tuning parameters required a wide range of adjustments.
 \item The tunings learned by DE were different in different data sets and for different goals.
 That is, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
@@ -1101,42 +1126,50 @@ sets are changed.
 \ei
 Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
 tuning is so easy and so fast (at least for defect predictors from static code attributes).
-\section{Conclusions}
- 
-Prior to this work, our intuition was that tuning would change the behavior or a data miner. Nevertheless, we rarely tuned
-since we reasoned:
-\bi
-\item A data miner's default tunings have been well-explored by the developers of those algorithms. Hence, tuning may rarely improve a data miner.
-\item 
-Tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
-\ei
-The results of this paper show that neither of these points is supportable, at least for learning
-defect detectors for static code attributes. 
 
-Using differential evolution, this paper has found that it is remarkably simple to find effective tunings. We have seen in this paper that:
+\section{Reliability and Validity}\label{sect:construct}
+
+
+{\em Reliability} refers to the consistency of the results obtained
+from the research.  For example,   how well independent researchers
+could reproduce the study? To increase external
+reliability, this paper has taken care to either  clearly define our
+algorithms or use implementations from the public domain
+(SciKitLearn). Also, all the data used in this work is available
+on-line in the PROMISE code repository and all our algorithms
+are on-line at github.com/a-se/where.
+
+
+{\em Validity} refers to the extent to which a piece of research actually
+investigates what the researcher purports to investigate.
+{\em Internal validity} checks that if the differences found in
+the treatments can be ascribed to the treatments under study. 
+One internal validity issue with our experiments is the choice
+of {\em training, tuning, and testing} data sets discussed in 
+\tion{design}. Recall that while all our learners used the same
+{\em testing} data set, our untuned learners were only given
+access to {\em training} while DEs could get feedback from
+{\em training} and
+{\em tuning}.  This mean that, potentially,  the performance increases
+reported above are merely an artificat of the DEs being able to access
+more data. However:
 \bi
-\item
-Tuning improves the performance scores of a predictor.
-That improvement is usually positive (see \fig{deltas} and sometimes
-it can be quite   dramatic (precision changing from 2\% to 98\%). 
-\item Tuning changes conclusions on what learners are better than others.
-Hence, it is time to revisit numerous prior publications of our own~\cite{me07b}
-and others~\cite{lessmann2008benchmarking,hall11}.
-\item
-Tuning changes conclusions about what factors are most important in software development.
-Once again, this means that old papers may need to be revised including those
-some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
-\item
-Data miners should not be used ``off-the-shelf'' with their default tunings. 
-\fig{preselect} and \fig{fselect}    show just how much tuning can alter default settings
-both for different data sets and for different goals. Hence, tuning needs to be repeated
-whenever data or goals are changed.
-\item
-Fortunately, the cost of find good tunings is not excessive since, at least for
-static code defect predictors, tuning is easy and fast.
+\item Note that
+DEs assess their performance using a model built from {\em training}
+then applied to the {\em tuning} data. If we gave the untuned
+learners double the training data, then this would be inherently
+biased against DEs.
+\item In practice, this is much ado about nothing. We have
+repeated all the experiments of this paper with the untuned
+learners building models from {\em training} + {\em tuning}.
+While the exact numbers found in this way
+may differ from the above in some small way, we can report that 
+those repeated runs do not substantively change the above conclusions.
 \ei
-These conclusions need two caveats.
-Firstly, the tuning results shown here only came from one  software analytics task 
+{\em External validity} checks if the results are of relevance
+for other cases, or can be generalized from samples
+to populations.  
+The tuning results shown here only came from one  software analytics task 
 (defect prediction from static code attributes).
 There are many other kinds of software analytics tasks 
 (software development effort estimation, social network mining,
@@ -1146,31 +1179,52 @@ However,  those other tasks often use the same kinds of learners
 explored in this paper so it is quite possible that
 the conclusions of this paper apply to other SE analytics tasks as well. 
 
-Secondly, it would be incorrect to say that this paper is arguing that
-software analytics is somehow wrong-headed, misguided, and we should not do it anymore.
-In the age of the Internet and global access to software engineering data,
-there exists the  problem of information overload. {\em Something} must be done to
-allow analysts to make conclusions via an automatic analysis over a lot of data.
-The results of this paper is that for a particular local context
-(a specific data set and a specific goal) there exists  
-methods for optimizing the conclusions reached in that context.  
-Those conclusions
-may not generalize to other contexts but this  is not a council for despair. While there may
-not exist general conclusions, there does seem to exist general methods for finding
-local conclusions in a particular context. Further, as shown above, those
-methods may be very simple to implement and very fast to execute.
+That said, there exist some class of data mining papers for which
+tuning may not be required. Consider  Le Goues et al.'s 2012
+ICSE paper that used a evolutionary program to learn
+repairs to code~\cite{leGoues12}. The performance criteria
+in that paper was ``can we fix any of the known bugs?''. Note
+that this criteria is a ``{\em competency}'' statement, and
+not a ``{\em better than}'' statement (the difference being that
+one is 
+``can do'' and the other is ``can do better''). For such
+competency claims, tuning is not necessary. However, as soon
+as {\em better than} enters the performance criteria then this
+becomes a race between competing methods. In such a race,
+it is unfair to hobble one competitor with poor tunings.
 
-\section{Future Work}
- This paper has explored  {\em some} learners using {\em one}  optimizer. Hence, we can make
-no claim that DE is the {\em best} optimizer for {\em all} learners.
-Rather, our point is that there exists at least some learners
-whose performance can be dramatically improved by 
-at least one simple optimization scheme.  We hope that this work inspires
-much future work as this community develops and debugs best practices for tuning
-software analytics.
 
-More speculatively,  this notion of using an optimizer to tune
-a data miner might need revisiting. As noted by
+
+\section{Conclusions}
+
+When learning defect predictors for static code
+attributes,   analytics without parameter tuning is considered {\em harmful} and {\em misleading}:
+\bi
+\item Tuning improves the performance scores of a predictor.
+That improvement is usually positive (see \fig{deltas}) and sometimes
+it can be quite   dramatic (e.g. precision changing from 2\% to 98\%). \item 
+Tuning changes conclusions on what learners are better than others.
+Hence, it is time to revisit numerous prior publications of our own~\cite{me07b}
+and others~\cite{lessmann2008benchmarking,hall11}.
+\item
+Tuning changes also changes conclusions on what factors are most important in software development.
+Once again, this means that old papers may need to be revised including those
+some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
+\ei
+Accordingly, we strongly advise that data miners should not be used ``off-the-shelf'' with their default tunings. 
+\fig{preselect} and \fig{fselect}    show just how much tuning can alter default settings
+both for different data sets and for different goals. 
+
+Since the results from tuning are unstable,
+tuning needs to be repeated
+whenever data or goals are changed.
+Fortunately, the cost of find good tunings is not excessive since, at least for
+static code defect predictors, tuning is easy and fast.
+
+As to future work:
+\bi
+\item
+ As noted by
 F\"{u}rnkranz~\cite{furnkranz05}, data mining is inherently a multi-objective optimization
 problem that seeks the smallest model with the highest performance, 
 that generalizes best for
@@ -1180,7 +1234,19 @@ to dispense with the separation of ``optimizer'' and ``learner'' and combine the
 into one system that learns how to tune itself as it executes. If this view is useful,
 then instead of adding elaborations to data miners (as done in this paper, or by researchers
 exploring hyper-heuristics~\cite{jia2013learning}), it should be possible to radically simplify optimization and data
-mining with a single system that rapidly performs both task.
+mining with a single system that rapidly performs both tasks.
+\item
+Another issue for future work is the implications of these
+conclusions to other kinds of software analytics.
+ This paper has explored  {\em some} learners using {\em one}  optimizer. Hence, we can make
+no claim that DE is the {\em best} optimizer for {\em all} learners.
+Rather, our point is that there exists at least some learners
+whose performance can be dramatically improved by 
+at least one simple optimization scheme.  We hope that this work inspires
+much future work as this community develops and debugs best practices for tuning
+software analytics.
+\ei
+ 
 
 \section{Acknowledgments}
 The work has partially funded by a National Science Foundation CISE CCF award \#1506586.
