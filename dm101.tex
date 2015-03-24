@@ -82,14 +82,16 @@ clustering tree. \\ \cline{2-5}
 	 & wherePrune & False &T/F& Whether or not to prune the initial clustering tree. \\ \cline{2-5}
 	 & treePrune & True &T/F& Whether or not to prune the final decision tree. \\ \cline{2-5} 
 \hline
-\multirow{4}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
+\multirow{5}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
 	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
 split. \\ \cline{2-5} 
 
 	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
 internal node. \\ \cline{2-5} 
 	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{1-5}  
+node. \\ \cline{2-5} 
+     & max\_depth & None & [1, 50]& The maximum depth of the tree. \\
+     \cline{1-5}  
        \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
 \cline{2-5} 
 	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
