@@ -12,7 +12,7 @@ while assessment effectiveness increases
 exponentially with assessment effort.
 For example, for  black-box testing methods,
 a {\em linear} increase
-in the confidence $C$ that we have found all defects
+in the confidence $C$ of finding  defects
 can take {\em exponentially} more effort)\footnote{A randomly selected 
 input to a program will find a fault with probability $p$.
 After $N$ random black-box tests, the chances of the inputs 
@@ -21,7 +21,7 @@ is $(1-p)^N$. Hence, the chances $C$ of seeing the fault is $1-(1-p)^N$
 which can be rearranged to 
  $N(C,p)=log(1 -
 C)/log(1-p)$. For example, $N(0.90,10^{-3})=2301$
-but $N(0.98,10^{-3})=3901$ (nearly double the number of tests).}.
+but $N(0.98,10^{-3})=3901$; i.e. nearly double the number of tests.}.
 Exponential costs quickly exhaust finite resources so
 standard practice is to apply the best
 available  methods on code sections that seem   most critical. 

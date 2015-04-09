@@ -5,25 +5,24 @@ For this study, we use the CART and Random Forest  from
 SciKitLearn~\cite{scikit-learn} (and
 WHERE is available from
 github.com/ai-se/where).
-\fig{parameters} shows these learner's tuning options.
-
-
  We use  these algorithms, for the following reasons.
 CART and Random Forest were mentioned in
 a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that compared 21  
 learners for  defect prediction.
 That study ranked  CART  worst  and Random Forest as best.
 In a demonstration of the impact of tuning,
-this paper shows  we can {\em reverse} those rankings (sometimes)
-such that  the worst learner found by Lessmann et al. (CART) can perform better
-than Random Forest.
-
+this paper shows  we can {\em reverse} the conclusions of  Lessmann et al. such that CART
+performs just as well as
+ Random Forest.
 This
  paper also presents results with WHERE-based learner since, as shown below,
 it offers an interesting case study on the benefits of tuning.
   
 
 \subsection{Learners and Their Tunings}
+
+
+Our learners use the tuning parameters of \fig{parameters}. This section describes those parameters.
 
 CART, Random Forest, and WHERE-based learner are all  tree learners that divide a data set, then recurse
 on each split.
@@ -39,8 +38,8 @@ WHERE-based learner firstly computes this parameter $m$={\em min\_samples\_leaf}
 sets via  $m=\mathit{size}^\mathit{min\_size}$ to build an initial  clustering tree.
 Note that WHERE builds {\em two} trees: the initial clustering tree (to find similar sets of data)
 then a final decision tree (to learn rules that predict for each similar cluster)\footnote{A
-frequently asked question is why WHERE so complex?
-Would not   a single tree suffice? The answer is, as shown below,  tuned WHERE's twin-tree approach 
+frequently asked question is why does WHERE build two trees--
+would not   a single tree suffice? The answer is, as shown below,  tuned WHERE's twin-tree approach 
 generates very precise predictors.}.
 The tuning parameter  {\em min\_sample\_ split } controls the construction of the
 final decision tree (so, for WHERE-based learner,
@@ -129,90 +128,45 @@ drive the learner into very different modes with very different performance prop
  \subsubsection{Non-Parametric Tuning Algorithms}
  
 Non-parametric  optimizers   make no assumption
-about the model being only differential functions. One such optimizer
-is simulated annealing. SA generates {\em new} solutions
- by randomly perturbing (a.k.a. ``mutating'') some part of an {\em old}
- solution.  {\em New} replaces {\em old} if (a) it scores higher; or
- (b) it reaches some probability set by a ``temperature'' constant. Initially,
- temperature is high so SA jumps to sub-optimal solutions (this allows
- the algorithm to escape from local minima). Subsequently, the
- ``temperature'' cools and SA only ever moves to better {\em new}
- solutions. 
- SA is often used in search-based SE
- e.g.~\cite{fea02a,me07f}, perhaps due to its simplicity.
-
-SA was invented   in the 1950s, when
- computer RAM was very small~\cite{kirkpatrick83}. A standard SA algorithm needs
- only space for three solutions {\em new, old} and the {\em best} seen so far.
-  In the 1960s, when more RAM became available, it became standard to
- generate many {\em new} mutants, and then combine together parts of
- promising solutions~\cite{goldberg79}.  Such {\em evolutionary
-   algorithms} (EA) work in {\em generations} over a population of
- candidate solutions.  Initially, the population is created at random.
- Subsequently, each generation makes use of select+crossover+mutate
- operators to pick promising solutions, mix them up in some way, and
- then slightly adjust them.
- EAs are also often used in search-based
- software engineering, particularly in test case generation~\cite{andrews07,andrews10}
- or refactoring~\cite{Weimer:2009}
-
- Later work focused on smarter  
- mutations. Tabu search and scatter search
- work to bias new mutations away from prior
- mutations~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350}.
- Particle swarm
- optimization randomly mutates multiple solutions
- (which are called ``particles''), but biases those
- mutations towards the best solution seen by one
- particle and/or by the neighborhood around that
- particle~\cite{pan08}.
- Differential evolution mutates solutions by
- interpolating between items in the current
- population~\cite{storn1997differential}.  
- 
- 
-
- 
- 
-Another approach uses
+about the internal structure of the model.
+There are many such optimizers:
+\bi
+\item
+Simulated annealing~\cite{fea02a,me07f};
+\item
+A wide range of genetic algorithms~\cite{goldberg79} augmented by
+techniques such as differential evolution~\cite{storn1997differential}, tabu search and scatter search~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350};
+\item
+Particle swarm optimization~\cite{pan08}; 
+\item 
+Numerous ``decomposition approaches'' that uses
     heuristics to decompose the total space into   small problems,   then applies a
-    simpler optimizer to each region. 
-In $\mathcal{E}$-domination~\cite{deb05}, the  user is asked
-`what is the lower threshold $\mathcal{E}$ on the size of a useful effect?''. The solution space
-is then divided into boxes of size $\mathcal{E}$ and linked such that  the  set $X.\mathit{lower}$ contains boxes with worse objective scores that $X$.  Solutions in pairs boxes are  quickly compared  using   small samples from each  and, if some box $X$ is found to be inferior, then it is quickly pruned along with all
-solutions in the $X.\mathit{lower}$ boxes.
-Later research generalized this approach. MOEA/D (multiobjective
-evolutionary algorithm based on decomposition~\cite{zhang07}) is a generic framework that decomposes a multiobjective optimization problem into many smaller single problems, then applies a second optimizer to each smaller subproblem, simultaneously.   Other work in this area are the response surface methods
-that quickly find multiple approximations to the problem, each of which holds for a very tiny region.
-Each region has a ``slope'' and examples in that region are pushed along the slope towards better
-solutions~\cite{krall15,Zuluaga:13}.
- 
- 
- \subsubsection{Selecting a Tuning Algorithm}
- 
+    simpler optimizer to each region including \mbox{$\varepsilon$-domination}~\cite{deb05} and MOEA/D ~\cite{zhang07};
+    \item 
+    Response surface methods~\cite{krall15,Zuluaga:13};
+    \item
+    And many others as well.
+    \ei
 From all the above methods, how do we select which optimizers to apply to tuning data miners?
-Cohen~\cite{cohen95} advises comparing any supposedly more
-sophisticated method against the simplest possible alternative. For
-example, in one study with ``floor effects'', Holte showed that,
-often, much of the performance of complex multi-level decision trees
-could be easily achieved using a much simpler single-level decision
-tree learner called 1R~\cite{holte93}. He therefore recommends a very simple rule learner
-(called ``1R'') as a
-kind of ``scout'' that can do a quick preliminary analysis of a data
-set and which can report back if that data really requires a more
-complex analysis.
+Cohen~\cite{cohen95} advises comparing new 
+ methods against the simplest possible alternative. 
+Holte~\cite{holte93} recommends using very simple  learners
+ as a
+kind of ``scout'' for a  preliminary analysis of a data
+set (to check if that data really requires a more
+complex analysis).
 
 To find our ``scout'',  we used engineering judgement to sort  the above algorithms from simplest to most complex.
-The three simplest optimizers are SA, $\mathcal{E}$-domination, and 
+Of the optimizers listed above, the simplest are are SA  and 
 differential evolution (each can be coded in less than a page of some high-level scripting language). Our reading of the current literature is that there are more  advocates for
 differential evolution than
-  SA or $\mathcal{E}$-domination:
+  SA:
   \bi
   \item
   When the MOEA/D community requires a secondary optimizer, they often use  differential evolution~\cite{zhang07,5583335}.
   \item
- Vesterstrom and Thomsen~\cite{Vesterstrom04} report that DE is competitive with 
-   particle swarm optimization and a genetic algorithm. 
+ Vesterstrom and Thomsen~\cite{Vesterstrom04} found DE to be competitive with 
+   particle swarm optimization and other GAs.
    \ei
 DEs have been applied before for   parameter tuning (e.g. see~\cite{omran2005differential, chiha2012tuning}) but this is the first time they have been applied to
 optimize defect prediction from static code attributes.  
