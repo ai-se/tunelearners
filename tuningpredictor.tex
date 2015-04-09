@@ -1,7 +1,8 @@
-\documentclass{sig-alternative}
+% \documentclass{sig-alternative}
+\documentclass[conference]{IEEEtran}
 \usepackage{multirow}
 \usepackage{color}
-\usepackage{graphics}
+\usepackage{graphics} 
 \usepackage{cite}
  
 \usepackage{rotating}
@@ -51,8 +52,7 @@
 
 %% space saving measures
 
-\usepackage[shortlabels]{enumitem} 
-\usepackage{times}
+\usepackage[shortlabels]{enumitem}  
 
 \usepackage{url}
 \def\baselinestretch{1}
@@ -69,25 +69,23 @@
 
 \usepackage[compact,small]{titlesec}
 \DeclareMathSizes{7}{7}{7}{7} 
-\pagenumbering{arabic}
 \setlength{\columnsep}{7mm}
 
 \begin{document}
-
-\conferenceinfo{FSE}{'15 Bergamo, Italy}
-\title{ Analytics Without Parameter Tuning Considered Harmful?}
-\numberofauthors{1}
-\author{\alignauthor Wei Fu, Tim Menzies \\
+% \conferenceinfo{FSE}{'15 Bergamo, Italy}
+\title{ Analytics Without  Tuning Considered Harmful?}
+% \numberofauthors{1}
+\author{\alignauthor Wei Fu, Tim Menzies, Xipeng Shen \\
        \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
-       fuwei.ee, tim.menzies@gmail.com}
+       fuwei.ee, tim.menzies, xipengshen@gmail.com}
 \maketitle
+\pagestype{plain}
 \begin{abstract}
 One of the ``black arts'' of data mining is setting the tuning
-parameters that control   choices within a data miner.  We offer a simple,
+parameters that control  the miner.  We offer a simple,
 automatic, and very effective  method for finding those tunings.
-
 For the purposes of learning
-software defect predictors this optimization strategy can quickly
+software defect predictors this  methid can quickly
 find  good tunings that  dramatically change   the performance of a learner.
 For example,
 in this paper we show   tunings that  alter detection  precision  
@@ -96,8 +94,8 @@ in this paper we show   tunings that  alter detection  precision
 These results prompt for a change to standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
-{\em without} first conducting a tuning optimization study.
-The implications for other kinds of software analytics are now open and pressing questions.
+{\em without}  conducting a tuning optimization study.
+The implications for other kinds of  analytics is now  an open and pressing issue.
 
 %RQ1: Does tuning affect learners' performance?
 %RQ2: How to choose 
@@ -137,31 +135,9 @@ defect predictors from static code measures.
 Such   measures can be
 automatically extracted from the code base, with very little effort
 even for very large software systems~\cite{nagappan05}. 
-In addition, they have  some generality
-across multiple projects: e.g. defect
-predictors developed at NASA~\cite{me07b} have also been successfully
-applied in Turkey~\cite{tosun09}.
-Such detectors reduce the effort required for 
-defect prediction: if 
-inspection teams let themselves be guided by defect predictors then
-they can find 80\% to 88\% of the defects
-after inspecting  20\% to 25\% of the code~\cite{ostrand04,tosun10}.
-
 
 One of the ``black arts'' of data mining is setting the tuning
 parameters that control  the choices within that data miner.
-Many researchers have applied automatic optimizers to find good tunings.
-The search-based SE community has   developed techniques
-for tuning that treat parameters  as a configuration
-search space~\cite{cora10,Krogmann10}. 
-The field of {\em hyper-heuristics} explores methods for auto-adapting
-options within the device searching for solutions~\cite{jia2013learning} in applications
-like test-case generation and code refactorings.
-To the best of our knowledge, this paper is the first extensive exploration 
-of applying automatic optimizers to tune data miners for defect prediction,
-(though see~\cite{cora10,balogh12,Minku13,minku13z} for tuning effort estimators).
-
-
 Prior to this work, our intuition was that tuning would change the behavior or a data miner, to some degree. Nevertheless, we rarely tuned our  defect predictors 
 since we reasoned
 that a data miner's default tunings have been well-explored by the developers of those algorithms (in which case
@@ -173,8 +149,7 @@ The results of this paper show that neither of these points is supportable, at l
 defect detectors from static code attributes since:
 \bi
 \item
-Tuning static code defect predictors is {\em remarkably simple} and can {\em dramatically improve the performance}
-of those learners. 
+Tuning static code defect predictors is {\em remarkably simple} and can {\em dramatically improve the performance}. 
 \ei
 Prior to these experiments, our expectation was tuning
 would be an  extensive and expensive evolutionary optimization procedure. 
@@ -214,8 +189,8 @@ after tuning, the worst untuned learner (CART) can out-perform the supposedly
 best learner (Random Forests). Hence, all those prior results that ranked learners for software
 analytics now need to be revisited and perhaps revised.
 
-Thirdly, it is a standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
-we have defended that approach on methodological grounds arguing that it
+Thirdly, it is standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
+we have defended that approach, arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, suppose our default
 number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation). 
@@ -227,26 +202,34 @@ After tuning, we see that our optimizer often used $F$ values that were nowhere 
 % \]}
 
 
-{\scriptsize
-\[F \in \left\{\begin{array}{l} 50, 59, 63, 63, 69, 71, 81, 85,85, 88,\\
-                                92, 95, 96, 99, 99,  100, 104, 106, 107,\\
-                                109, 111, 112, 121, 121, 123, 125, 128,\\
-                                131, 132, 135, 140, 141, 141, 150   \end{array}\right\}
-\]}
+% {\scriptsize
+% \[F \in \left\{\begin{array}{l} 50, 59, 63, 63, 69, 71, 81, 85,85, 88,\\
+%                                 92, 95, 96, 99, 99,  100, 104, 106, 107,\\
+%                                 109, 111, 112, 121, 121, 123, 125, 128,\\
+%                                 131, 132, 135, 140, 141, 141, 150   \end{array}\right\}
+% \]}
 
+
+
+{\scriptsize
+\[F \in \left\{\begin{array}{l} 50, 58, 59, 63, 63, 66, 67, 73, 74, 74, \\
+                                75, 77, 80, 82, 85, 96, 96, 97, 97, 101, \\
+                                103, 107, 111, 111, 112, 120, 125, 125,  \\
+                                130,130, 138, 144, 149, 150   \end{array}\right\}
+\]}
 
 In summary, it is now an open and pressing research issue to check if
 analytics without parameter tuning is considered {\em harmful} or, at the 
 very least, {\em misleading}.
-Clearly, we must now doubt  conclusions based on
+Clearly, we  now doubt  conclusions based on
 ``off-the-shelf'' tunings.
 Further,
 it is no longer enough to just run a data miner and report the result
 {\em without} first conducting an tuning optimizations study.
 
-Before beginning, we digress for one important clarification.
-It would be incorrect to say that this paper is arguing that
-software analytics is somehow wrong-headed, misguided, and we should not do it anymore.
+Before beginning, we digress for one  clarification.
+This paper is {\bf not} arguing that
+software analytics is somehow wrong-headed or misguided.
 In the age of the Internet and global access to software engineering data,
 there exists the  problem of information overload. {\em Something} must be done to
 allow analysts to make conclusions via an automatic analysis over a lot of data.
@@ -254,30 +237,21 @@ The results of this paper is that for a particular local context
 (a specific data set and a specific goal) there exists  
 methods for optimizing the conclusions reached in that context.  
 Those conclusions
-may not generalize to other contexts but this  is not a council for despair. While there may
-not exist general conclusions, there does seem to exist general methods for finding
-local conclusions in a particular context. Further, as shown here, those
-methods may be very simple to implement and very fast to execute.
+may not generalize to other contexts but this  is not a council for despair. 
+As shown here, 
+there  exists general methods for finding
+local conclusions in a particular context. Further,
+those
+methods are  very simple to implement and very fast to execute.
 
 
 \section{Motivating Example}\label{sect:eg}
 
-This section offers a small demonstration
-of the impact of tuning parameters. It also demonstrates that this issue of tuning effects 
-not just the complex data miners discussed later in the paper but also 
-applies for even very simple  learning scheme.
+This section is  a  demonstration
+of the impact of tuning.
 
 
-One way to generate a  defect predictor from
-static code is to use 
-linear  regression.
-This is a standard statistical
-method that fits a straight line to a set of points. The line
-offers a set of predicted values.
-If the points are somewhat
-scattered, then a single regression line cannot pass through all points and the distance from these predicted values to the actual
-values is a measure of the error associated with that line.
-Linear regression search for a line that minimizes that
+Linear  regression fits a  line to a set of points in order to minimize  predictive
 error and maximizes the correlation\footnote{
 {\em Correlation}
 measures how closely two variables co-vary.  It ranges from   from -1
@@ -292,25 +266,23 @@ $S_{p}=(\sum_i (p_i - \overline{p})^2)(n-1)$
 and 
 $S_{a}=(\sum_i (a_i - \overline{a})^2)/(n-1)$ and
 correlation is  $c=S_{\mathit{PA}}/\sqrt{S_pS_a}$.}  denoted as $c$.
-
 Suppose  a researcher wants to use linear regression
 to test if Halstead's~\cite{halstead77} measures
 of   function complexity
 (number of symbols programmers has to understand) are   {\em better than}
 mere lines of code for predicting
-software defects.  That researcher might argue that Halstead's cognitive approach to
+software defects.  That researcher might believe that Halstead's cognitive approach to
 software bugs is better suited to code refactoring tools since it offers 
 more ways to alter functions that just some coarse grain lines of code measure.
 
 
-That researcher might test that belief by studying historical
-defect logs with 
-linear regression. Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
+To test that belief, our  researcher applies regression to  some defect logs.
+ Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
 that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$ seen in a
 software module (in this case, a  function).
 Note that the Halstead correlation $c_2$
-is worse than those from lines of code $c_1$. This result  seems to suggest that
-despite their potential support for refactoring, our researchers should not use Halstead.
+is worse than the $c_1$ correlation  from lines of code-- which suggests
+ our researcher should not use Halstead .
 
 {\scriptsize \[
 \begin{array}{l|l|ll}
@@ -337,12 +309,12 @@ d_i <   T \rightarrow \mathit{No}
 \end{equation}
 \fig{pd1} shows the effects of tuning. Not surprisingly,
 at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
-problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls below
+problem, we can increase $T$:   the false alarm rate falls below
 20\% at $T=0.45$ (for Halstead). 
 
  
 
-\begin{figure}[!b] 
+\begin{figure}[!t] 
 
 \renewcommand{\baselinestretch}{0.8}
 {\scriptsize
@@ -364,8 +336,6 @@ problem, we can increase $T$. \fig{pd1} reports that the false alarm rate falls 
  }\label{fig:pd1}
  \end{figure}
  
-The    lesson from   \fig{pd1}  is that, with tuning, a seemingly poor
-detector can work just as well as seemingly better ones.
 Note that either the Halstead or LOC detector can reach some desired
 level of recall, regardless of their correlations, just by
 selecting the appropriate threshold value. For example, in \fig{pd1}, see the recall=75\% values
@@ -387,7 +357,7 @@ more complex learners.
 
 
 This section is our standard introduction to defect prediction~\cite{me15:book1},
-plus   some new results from Rahman et al.'s   2014 FSE paper~\cite{rahman14:icse}. 
+plus    new results from Rahman et al.~\cite{rahman14:icse}. 
  
 
 
@@ -443,9 +413,7 @@ defect & defect & Boolean: where defects found in post-release bug-tracking syst
 \end{tabular}
 }
 \end{center}
-\caption{OO measures used in our defect data sets.  Last line is
-the dependent attribute (whether a defect is reported to  a
-post-release bug-tracking system).}\label{fig:ck}
+\caption{OO measures used in our defect data sets.}\label{fig:ck}
 \end{figure*}
 
 
@@ -788,7 +756,7 @@ figure is that, overall, tuning rarely makes performance   worse and usually can
 
 \begin{figure}[!t]
 \begin{center}
-\includegraphics[width=1.25in]{precision1.pdf}\includegraphics[width=1.25in]{F1.pdf}
+\includegraphics[width=1.25in]{precision_W.eps}\includegraphics[width=1.25in]{F_W.eps}
  \end{center}
 \caption{Deltas in performance  seen in \fig{precisionbars} (left)
 and \fig{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
@@ -891,7 +859,7 @@ is the number of evaluations required to complete optimization
 
 
 
-\begin{figure}[!t]
+\begin{figure}[!ht]
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize

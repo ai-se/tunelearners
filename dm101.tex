@@ -5,50 +5,38 @@ the wrong functionality. For a very long list of software-related errors,
 see  Peter Neumann's ``Risk Digest'' at catless.ncl.ac.uk/Risks.
 
 Since programming inherently
-introduces defects into  programs, is important to thoroughly {\em test} software before it is {\em used}.
-Such testing  can be very expensive.
+introduces defects into  programs, is important to test it before it is used.
+Testing is expensive.
 Software assessment budgets are finite
 while assessment effectiveness increases 
 exponentially with assessment effort.
-Lowry et al. warn that  
-the state space explosion problem imposes
-strict limits on how much a system can be explored
-via automatic formal methods~\cite{lowrey98}.
-For standard black-box testing methods,
+For example, for  black-box testing methods,
 a {\em linear} increase
 in the confidence $C$ that we have found all defects
-can take {\em exponentially} more effort.
-For example, for one-in-a-thousand detects,
-moving $C$ from  
-90\% to 98\% nearly doubles the number of  tests (2301 to   3910 black box
-probes, respectively)\footnote{A randomly selected 
+can take {\em exponentially} more effort)\footnote{A randomly selected 
 input to a program will find a fault with probability $p$.
 After $N$ random black-box tests, the chances of the inputs 
 not revealing any fault 
 is $(1-p)^N$. Hence, the chances $C$ of seeing the fault is $1-(1-p)^N$
 which can be rearranged to 
  $N(C,p)=log(1 -
-C)/log(1-p)$. For example, $N(0.90,10^{-3})=2301$.}.
-
-Exponential costs quickly exhaust finite resources.
-Standard practice is to apply the best
-available assessment methods on the sections of the program that the
-best available domain knowledge declares is most critical.  We endorse
-this approach.  Clearly, the most critical sections require the best
-known assessment methods. However, this focus on certain sections
-can blind us to defects in other areas.
-Therefore, standard practice should be augmented
-with a  {\em
-lightweight sampling policy} to explore the rest of the system.  This
+C)/log(1-p)$. For example, $N(0.90,10^{-3})=2301$
+but $N(0.98,10^{-3})=3901$ (nearly double the number of tests).}.
+Exponential costs quickly exhaust finite resources so
+standard practice is to apply the best
+available  methods on code sections that seem   most critical. 
+But 
+Any method that focuses on parts of the code
+can blind us to defects in other areas. Some  {\em
+lightweight sampling policy} should be used to explore the rest of the system.  This
 sampling policy will always be incomplete.
 Nevertheless, it is the recommended option when
 resources do not permit a complete assessment of the whole system.
 
 One such lightweight sampling policy is defect predictors learned from static code attributes.
-Given software described using (for example) the attributes of \fig{ck}, it is possible
-to use standard data mining technology to learn where the probability of software defects is highest.
-Such defect predictors learned from
-static code attributes are   {\em easy to
+Given software described in (e.g.) the attributes of \fig{ck},   data miners can
+learn where the probability of software defects is highest.
+This approach is   {\em easy to
 use}, {\em widely-used}, and {\em useful} to use.
 
 {\em Easy to use:} Static code attributes can be automatically collected, even for very large systems~\cite{nagappan05}.
@@ -115,40 +103,14 @@ to have been used at Google~\cite{lewis13}.
 Verification and validation (V\&V) textbooks
 (\cite{rakitin01}) advise using static code complexity attributes
 to decide which modules are worthy of manual inspections.  
-For several  years, one of us (Menzies) worked on-site at the NASA software Independent Verification
-and Validation facility
-and he
-knows of several large government software contractors that won't
-review software modules {\em unless} tools like McCabe predict that
-they are fault prone.  
 
 
 {\em Useful:}
 Defect predictors often  find the location of  70\% (or more)
 of the defects in code~\cite{me07b}.
-Defect predictors developed at NASA~\cite{me07b} have also been used in software development companies outside the US (in Turkey). When the inspection teams focused on the modules that trigger the defect predictors, they found up to 70\% of the defects using just 40\% of their QA effort (measured in staff hours)~\cite{tosun10}.
-A subsequent study on the Turkish software
-compared how much code needs to be inspected using
-random selection vs. selection via defect
-predictors. Using random testing, 87\% of the files
-would have to be inspected in order to detect 87\%
-of the defects. Further, if the inspection process
-was restricted to the 25\% of the files that trigger
-the defect predictors, then 88\% of the defects
-could be found. That is, the same level of defect
-detection (after inspection) can be achieved using
-$(87-25)/87=71$\%less effort
-\cite{tosun09}.
-
-
-Defect predicting technology has been
-commercialized in many tools including {\it Predictive}~\cite{turner06}, a
- product suite to analyze and predict
-defects in software projects. Predictive was observed to
-highlight similar issues to those found   with the more expensive tools. Significantly,
-Predictive was able to faster process a larger code
-base than the more expensive tool~\cite{turner06}.
-
+Defect predictors have some level of generality:
+predictors learned at NASA~\cite{me07b} have also been found useful elsewhere
+(e.g. in Turkey~\cite{tosun10,tosun09}.
 The success of this method in  predictors in finding bugs is   markedly
 higher than other currently-used
 industrial
@@ -163,13 +125,11 @@ industrial review methods:   around 50\%
 21\% for less-structured inspections.
 
 Note only do static code defect predictors perform well compared to manual methods,
-they also are competititve with certain automatic methods.
-At ICSE'14, Rahman et al.~\cite{rahman14:icse} compared:
-\bi
-\item The static code analysis tools FindBugs, Jlint, and Pmd;
-\item Against static code defect predictors
-(which they called ``statistical defect prediction'') build using logistic regression.
-\ei
+they also are competitive with certain automatic methods.
+A recent study at ICSE'14, Rahman et al.~\cite{rahman14:icse} compared
+(a) static code analysis tools FindBugs, Jlint, and Pmd and (b)
+static code defect predictors
+(which they called ``statistical defect prediction'') built using logistic regression.
 They found  no significant differences in the cost-effectiveness
 of these  approaches. Given this equivalence, it is significant to note that 
 static code defect prediction can be quickly adapted to new languages by building lightweight
