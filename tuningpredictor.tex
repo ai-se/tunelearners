@@ -86,7 +86,7 @@ One of the ``black arts'' of data mining is setting the tuning
 parameters that control  the miner.  We offer a simple,
 automatic, and very effective  method for finding those tunings.
 For the purposes of learning
-software defect predictors this  methid can quickly
+software defect predictors this  method can quickly
 find  good tunings that  dramatically change   the performance of a learner.
 For example,
 in this paper we show   tunings that  alter detection  precision  
@@ -124,7 +124,7 @@ to manually browse all the available software project
 data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
 and this is just one of over a dozen open-source repositories
 that are readily available to researchers~\cite{rod12}.
-For example,  the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
+For example, at the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
 
 Faced with this information overload,
 researchers in empirical SE
@@ -171,7 +171,7 @@ are more influential than others for (say)
 predicting defects. As shown below, such conclusions can be dramatically
 changed by the tuning process since those  ``influential'' factors are very different pre- and post- tuning. Also, those factors tend to  change from project to project or if the goal
 of the tuning is altered.
-Hence, many old papers    need to be revisted  and perhaps revised~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}.  
+Hence, many old papers    need to be revisited  and perhaps revised~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}.  
 For example, one of us (Menzies) used data miners
 to assert that some factors were more important than others for predicting
 successful software reuse~\cite{me02k}. That assertion should now be doubted since that
@@ -189,12 +189,12 @@ after tuning, the worst untuned learner (CART) can perform just as well as the s
 best learner (Random Forest). Hence, all those prior results that ranked learners for software
 analytics now need to be revisited (and perhaps revised).
 
-Thirdly, it is standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
+Thirdly, it is a standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
 we have defended that approach, arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, suppose our default
 number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation). 
-After tuning, we see that our optimizer often used $F$ values that were nowhere near that default:
+After tuning, we see that our optimizer often uses $F$ values that are nowhere near that default:
 
 % {\scriptsize
 % \[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
@@ -245,94 +245,94 @@ those
 methods are  very simple to implement and very fast to execute.
 
 
-\section{Motivating Example}\label{sect:eg}
+% \section{Motivating Example}\label{sect:eg}
 
-This section is  a  demonstration
-of the impact of tuning.
+% This section is  a  demonstration
+% of the impact of tuning.
  
-Suppose  a researcher wants to use linear regression
-to test if Halstead's~\cite{halstead77} measures
-of   function complexity
-(number of symbols programmers has to understand) are   {\em better than}
-mere lines of code for predicting
-software defects.  That researcher might believe that Halstead's cognitive approach to
-software bugs is better suited to code refactoring tools since it offers 
-more ways to alter functions that just some coarse grain lines of code measure.
+% Suppose  a researcher wants to use linear regression
+% to test if Halstead's~\cite{halstead77} measures
+% of   function complexity
+% (number of symbols programmers has to understand) are   {\em better than}
+% mere lines of code for predicting
+% software defects.  That researcher might believe that Halstead's cognitive approach to
+% software bugs is better suited to code refactoring tools since it offers 
+% more ways to alter functions that just some coarse grain lines of code measure.
 
 
-To test that belief, our  researcher applies regression to  some defect logs.
- Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
-that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$ seen in a
-software module (in this case, a  function).
-Note that the Halstead correlation $c_2$
-is worse than the $c_1$ correlation  from lines of code-- which suggests
- our researcher should not use Halstead .
+% To test that belief, our  researcher applies regression to  some defect logs.
+%  Here are two equations (learned from the NASA data at goo.gl/pGDfvp)
+% that use just lines of code or the Halstead measures $N,V,L,D,I,E,B,T$ seen in a
+% software module (in this case, a  function).
+% Note that the Halstead correlation $c_2$
+% is worse than the $c_1$ correlation  from lines of code-- which suggests
+%  our researcher should not use Halstead .
 
-{\scriptsize \[
-\begin{array}{l|l|ll}
-\mathit{measures} & d= \mathit{\#defects} & \mathit{correlation}\\\hline
-\mathit{LOC}   &d_1= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
-\mathit{Halstead} & d_2= 0.231 + 0.00344N  +  0.0009V    \\    
-                 &   - 0.185L- 0.0343D      - 0.00541I  \\ 
-                 & + 0.000019E + 0.711B  - 0.00047T  & c_2=-0.36  
-\end{array}
-\]
-}
- 
-
-\noindent
-We now explore how tuning can change the above  conclusion. Suppose the  predictors $d_1$ and $d_2$  learned from LOC or Halstead
-are used to call an inspection
-team to check for errors in   parts of the code using:
-\begin{equation}\label{eq:yesno}\scriptsize
-\mathit{inspect}= \left\{
-\begin{array}{ll}
-d_i \ge T \rightarrow \mathit{Yes}\\
-d_i <   T \rightarrow \mathit{No} 
-\end{array}\right.
-\end{equation}
-\fig{pd1} shows the effects of tuning. Not surprisingly,
-at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
-problem, we can increase $T$:   the false alarm rate falls below
-20\% at $T=0.45$ (for Halstead). 
-
+% {\scriptsize \[
+% \begin{array}{l|l|ll}
+% \mathit{measures} & d= \mathit{\#defects} & \mathit{correlation}\\\hline
+% \mathit{LOC}   &d_1= 0.0164 +0.0114\mathit{LOC}\ & c_1 = 0.65\\\hline
+% \mathit{Halstead} & d_2= 0.231 + 0.00344N  +  0.0009V    \\    
+%                  &   - 0.185L- 0.0343D      - 0.00541I  \\ 
+%                  & + 0.000019E + 0.711B  - 0.00047T  & c_2=-0.36  
+% \end{array}
+% \]
+% }
  
 
-\begin{figure}[!t] 
+% \noindent
+% We now explore how tuning can change the above  conclusion. Suppose the  predictors $d_1$ and $d_2$  learned from LOC or Halstead
+% are used to call an inspection
+% team to check for errors in   parts of the code using:
+% \begin{equation}\label{eq:yesno}\scriptsize
+% \mathit{inspect}= \left\{
+% \begin{array}{ll}
+% d_i \ge T \rightarrow \mathit{Yes}\\
+% d_i <   T \rightarrow \mathit{No} 
+% \end{array}\right.
+% \end{equation}
+% \fig{pd1} shows the effects of tuning. Not surprisingly,
+% at $T=0$, all modules get inspected so the false alarm rate is very high. To reduce that
+% problem, we can increase $T$:   the false alarm rate falls below
+% 20\% at $T=0.45$ (for Halstead). 
 
-\renewcommand{\baselinestretch}{0.8}
-{\scriptsize
-\begin{center}
-
-\% recall (probability of detection):   
-
-\includegraphics[width=3in]{lsrvscostpd.pdf}
-
-\% false alarms:
-
-\includegraphics[width=3in]{lsrvscostpf.pdf}
-\end{center}}
-\caption{
- Y-axis shows probability of false alarm,
-  and
-  probability of recognizing defective modules  seen using \mbox{$d_i \ge T$}.
-  Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp.
- }\label{fig:pd1}
- \end{figure}
  
-Note that either the Halstead or LOC detector can reach some desired
-level of recall, regardless of their correlations, just by
-selecting the appropriate threshold value. For example, in \fig{pd1}, see the recall=75\% values
-found at {\em either} $d_i\ge 0.65$ or $d_2\ge 0.45$ (and at the threshold, the false alarm rates
-were very similar: 14\% and 19\%).
 
-The  point here is that   the true value of a detector
-could not be assessed {\em without} conducting a  tuning study in the context of some business case (in this case, 
-issuing a request to an inspection team to review some module).  
-Hence, it is important to explore tuning.
+% \begin{figure}[!t] 
 
-The rest of this paper repeats the analysis of this section, but for 
-more complex learners.
+% \renewcommand{\baselinestretch}{0.8}
+% {\scriptsize
+% \begin{center}
+
+% \% recall (probability of detection):   
+
+% \includegraphics[width=3in]{lsrvscostpd.pdf}
+
+% \% false alarms:
+
+% \includegraphics[width=3in]{lsrvscostpf.pdf}
+% \end{center}}
+% \caption{
+%  Y-axis shows probability of false alarm,
+%   and
+%   probability of recognizing defective modules  seen using \mbox{$d_i \ge T$}.
+%   Curves calculated from the KC2 dataset from the PROMISE repository goo.gl/pGDfvp.
+%  }\label{fig:pd1}
+%  \end{figure}
+ 
+% Note that either the Halstead or LOC detector can reach some desired
+% level of recall, regardless of their correlations, just by
+% selecting the appropriate threshold value. For example, in \fig{pd1}, see the recall=75\% values
+% found at {\em either} $d_i\ge 0.65$ or $d_2\ge 0.45$ (and at the threshold, the false alarm rates
+% were very similar: 14\% and 19\%).
+
+% The  point here is that   the true value of a detector
+% could not be assessed {\em without} conducting a  tuning study in the context of some business case (in this case, 
+% issuing a request to an inspection team to review some module).  
+% Hence, it is important to explore tuning.
+
+% The rest of this paper repeats the analysis of this section, but for 
+% more complex learners.
 
 
 \section{Background Notes}
@@ -567,8 +567,8 @@ set (to check if that data really requires a more
 complex analysis).
 
 To find our ``scout'',  we used engineering judgement to sort  the above algorithms from simplest to most complex.
-Of the optimizers listed above, the simplest are are SA  and 
-differential evolution (each can be coded in less than a page of some high-level scripting language). Our reading of the current literature is that there are more  advocates for
+Of the optimizers listed above, the simplest are are simulated annealing (SA)  and 
+differential evolution (DE), each of which can be coded in less than a page of some high-level scripting language. Our reading of the current literature is that there are more  advocates for
 differential evolution than
   SA:
   \bi
@@ -604,7 +604,7 @@ In the following description,
 \\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
 \\  \end{tabular}
 
-   \caption{Data used in this data. 
+   \caption{Data used in this experiment. 
    E.g., the top left data set has 20 defective classes out of 125 total.
    See \tion{dataa} for explanation of {\em training, tuning, testing} sets.
    }\label{fig:data1}
@@ -612,24 +612,24 @@ In the following description,
 
 DE is an evolutionary algorithm where the next {\em NewGeneration} is learnt from
 a current {\em Population}.  Our DE's lose one ``life''
-when e new is no better than  current (terminating when ``life'' is zero)$^5$.
+when e new is no better than  current (terminating when ``life'' is zero)$^{L5}$.
 Each candidate solution in the {\em Population}  
 is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \fig{parameters} and {\em Scores} come from training a learner using those parameters
-and applying it     test data$^{23-28}$.
+and applying it     test data$^{L23-L28}$.
 
 The premise of DE  is that the best way to mutate existing tunings
-is to {\em Extrapolate}$^{29}$
+is to {\em Extrapolate}$^{L29}$
 between current solutions.  Three solutions $a,b,c$ are selected at random.
 For each tuning parameter $i$, at some probability {\em cr}, we replace
 the old tuning $x_i$ with $y_i$:
 \bi
 \item (For numerics) $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
-controlling the cross-over amount.  The {\em trim} function$^{39}$ limits the new
+controlling the cross-over amount.  The {\em trim} function$^{L39}$ limits the new
 value to the legal range min..max of that parameter.
 \item (For booleans) $y_i= \neg x_i$ (see line 37).
 \ei
-The main loop of DE$^7$ runs over the {\em Population}, replacing old items
+The main loop of DE$^{L7}$ runs over the {\em Population}, replacing old items
 with new {\em Candidate}s (if the new candidate is better than the old item).
 This means that, as the loop progresses, the {\em Population} is full of increasiningly
 more valuable solutions. This, in turn, also improves  the candidates, which are {\em Extrapolate}d
@@ -637,8 +637,8 @@ from the {\em Population}.
 
 For the experiments of this paper, we collect performance
 values from a data mining, from which a {\em Goal} function extracts one 
-performance value$^{27}$ (so we run this code many times, each time with
-a different {\em Goal}$^2$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
+performance value$^{L27}$ (so we run this code many times, each time with
+a different {\em Goal}$^{L2}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
 
 
 %\begin{algorithm}
@@ -691,7 +691,7 @@ consecutive releases  (where release $i+1$ was built after release $i$).
 \item The {\em first} release was used for some  {\em training}, to collect a baseline
    using an untuned learner. This release is also used  on line 24 of Algorithm~\ref{alg:DE} to
    build some model using some the tunings found in some {\em Candidate}.
-   \item The {\em second} release was used on 25 of Algorithm~\ref{alg:DE} to 
+   \item The {\em second} release was used on line 25 of Algorithm~\ref{alg:DE} to 
    test the model found on line 24.
    \item Finally the {\em third} release was used to gather the performance statistics
    reported below from (a)~the model generated by the untuned learner or (b)~the
@@ -965,7 +965,7 @@ than otherwise as witnessed by the taller columns of numbers in the ``tuned'' co
 
 In terms of the search space
 explored via tuning, optimizing defect prediction from static code
-measures is much {\em smaller} than standard optimization.
+measures is much {\em smaller} than the standard optimization.
 
 To see this,
 recall from Algorithm~1 that
@@ -1237,7 +1237,7 @@ are on-line at github.com/a-se/where.
 
 {\em Validity} refers to the extent to which a piece of research actually
 investigates what the researcher purports to investigate.
-{\em Internal validity} checks that if the differences found in
+{\em Internal validity} checks if the differences found in
 the treatments can be ascribed to the treatments under study. 
 One internal validity issue with our experiments is the choice
 of {\em training, tuning, and testing} data sets discussed in 
@@ -1346,12 +1346,12 @@ software analytics.
 \ei
  
 
-\section{Acknowledgments}
+\section*{Acknowledgments}
 The work has partially funded by a National Science Foundation CISE CCF award \#1506586.
  
 \vspace*{0.5mm}
  
- \scriptsize
+ 
 \bibliographystyle{plain}
 
 \balance

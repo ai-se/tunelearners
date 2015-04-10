@@ -35,7 +35,7 @@ If data contains more than {\em min\_sample\_split}, then a split is attempted.
 On the other hand, if a split contains no more than {\em min\_samples\_leaf}, then recursion stops. For CART and Random Forest use a 
 user-supplied constant for this parameter while
 WHERE-based learner firstly computes this parameter $m$={\em min\_samples\_leaf} from the size of the data
-sets via  $m=\mathit{size}^\mathit{min\_size}$ to build an initial  clustering tree.
+sets via  $m=\mathit{n_samples}^\mathit{min\_size}$ to build an initial  clustering tree.
 Note that WHERE builds {\em two} trees: the initial clustering tree (to find similar sets of data)
 then a final decision tree (to learn rules that predict for each similar cluster)\footnote{A
 frequently asked question is why does WHERE build two trees--
@@ -58,7 +58,7 @@ each time using some random subset of
 the attributes. 
 \item
 When building the initial cluster tree, WHERE projects the data on to a dimension it synthesizes from the raw data using
-a process analogous to principle component analysis\footnote{
+a process analogous to principle component analysis(PCA)\footnote{
 PCA  synthesises  new
 attributes $e_i, e_2,...$
 that extends across the dimension of greatest  variance in the data  with attributes $d$.  
