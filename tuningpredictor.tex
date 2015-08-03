@@ -1,10 +1,9 @@
-% \documentclass{sig-alternative}
-\documentclass[conference]{IEEEtran}
+\documentclass{sig-alternative}
+% \documentclass[conference]{IEEEtran}
 \usepackage{multirow}
 \usepackage{color}
 \usepackage{graphics} 
 \usepackage{cite}
- 
 \usepackage{rotating}
 \usepackage{eqparbox}
 \usepackage{graphics}
@@ -30,15 +29,11 @@
 {\color{black}\put(#3,3){\circle*{4}}\put(#1,3){\line(1,0){#2}}}\end{picture}}
 \definecolor{Gray}{gray}{0.95}
 \definecolor{LightGray}{gray}{0.975}
-
-
-\newcommand{\rone}{}
-\newcommand{\rtwo}{}
-\newcommand{\rthree}{}
-\newcommand{\rfour}{} 
-\newcommand{\rfive}{}
-
-
+% \newcommand{\rone}{}
+% \newcommand{\rtwo}{}
+% \newcommand{\rthree}{}
+% \newcommand{\rfour}{} 
+% \newcommand{\rfive}{}
 \newcommand{\wei}[1]{\textcolor{red}{Wei: #1}} 
 
 %% timm tricks
@@ -53,23 +48,22 @@
 %% space saving measures
 
 \usepackage[shortlabels]{enumitem}  
-
 \usepackage{url}
-\def\baselinestretch{1}
+% \def\baselinestretch{1}
 
 
-\setlist{nosep}
- \usepackage[font={small}]{caption, subfig}
-\setlength{\abovecaptionskip}{1ex}
- \setlength{\belowcaptionskip}{1ex}
+% \setlist{nosep}
+%  \usepackage[font={small}]{caption, subfig}
+% \setlength{\abovecaptionskip}{1ex}
+%  \setlength{\belowcaptionskip}{1ex}
 
- \setlength{\floatsep}{1ex}
- \setlength{\textfloatsep}{1ex}
- \newcommand{\subparagraph}{}
+%  \setlength{\floatsep}{1ex}
+%  \setlength{\textfloatsep}{1ex}
+%  \newcommand{\subparagraph}{}
 
-\usepackage[compact,small]{titlesec}
-\DeclareMathSizes{7}{7}{7}{7} 
-\setlength{\columnsep}{7mm}
+% \usepackage[compact,small]{titlesec}
+% \DeclareMathSizes{7}{7}{7}{7} 
+% \setlength{\columnsep}{7mm}
 
 \begin{document}
 % \conferenceinfo{FSE}{'15 Bergamo, Italy}
@@ -96,7 +90,7 @@ These results prompt for a change to standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
 {\em without}  conducting a tuning optimization study.
-The implications for other kinds of  analytics is now  an open and pressing issue.
+The implication for other kinds of  analytics is now  an open and pressing issue.
 
 %RQ1: Does tuning affect learners' performance?
 %RQ2: How to choose 
@@ -117,6 +111,9 @@ I.2.6 [Artificial Intelligence]: Induction
 differential evolution,
 search-based software engineering.
 
+\pagenumbering{arabic} %XXX delete before submission
+ 
+ 
 \section{Introduction}
  
 In the $21^{st}$ century, it is now impossible
@@ -124,7 +121,7 @@ to manually browse all the available software project
 data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
 and this is just one of over a dozen open-source repositories
 that are readily available to researchers~\cite{rod12}.
-For example, at the time of this writing (Feb  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
+For example, at the time of this writing (May  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
 
 Faced with this information overload,
 researchers in empirical SE
@@ -151,21 +148,66 @@ Tuning  defect predictors is {\em remarkably simple};
 \item
 And can {\em dramatically improve the performance}. 
 \ee
-Prior to these experiments, our expectation was tuning
-would be an  extensive and expensive evolutionary optimization procedure. 
-A standard run of such evolutionary optimizers requires   thousands,
-if not millions, of evaluations.
-To
-our surprise, we achieved dramatic improvements in the performance scores
-of our data miners after  mere 50 to 80 evaluations (!!) of a very simple evolutionary 
-optimizer  called differential evolution~\cite{storn1997differential}.
-Better yet,  those  tunings (found so quickly)   
-  have a dramatic change to the performance of a learner. For example,
-in this paper we show that tuning can alter the precision of
-a software defect predictor from 2\% to 98\%.
+More specifically,
+this paper explores six research questions about tuning defect predictors for
+static code measures:
+\bi
+\item RQ1: {\em Does   tuning    improve the performance scores of a predictor?} We will show below
+ examples of truly dramatic improvement;
+e.g.  precision changes from 2\% to 98\%.
+\item RQ2: {\em Does tuning change conclusions on what learners are better than others?} 
+Numerous recent SE papers (e.g. \cite{lessmann2008benchmarking,hall11,me07b}) claim that some learners are better than others. We show that at least
+some of those conclusions are completely changed by tuning.
+\item RQ3: {\em Does tuning change conclusions about what factors are most important in software engineering?} Numerous recent SE papers (e.g. ~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,%
+herzig2013predicting}) use data miners to conclude that {\em this}
+is more important than {\em that} for (e.g.) reducing software project defects.
+Given the  tuning results of this paper, we show that such conclusions need to be revisited.
+\item  RQ4: {\em Is tuning easy?} We show that one of the simpler multi-objective optimizers
+(differential evolution~\cite{storn1997differential}) works very well for tuning defect predictors. 
+\item RQ5: {\em Is tuning impractically slow?}. We achieved dramatic improvements in the performance scores
+of our data miners in less than 100 evaluations (!!); i.e. very
+quickly.
+\item RQ6: {\em Should data miners be used ``off-the-shelf'' with their default tunings?} 
+At least for defect prediction from static code measures, our answer is an emphatic ``no'' (and
+the implication for other kinds of software analytics is now an open and urgent question).
+\ei
+Before beginning, we digress for one  clarification.
+This paper is {\em not} arguing that
+software analytics is somehow wrong-headed or misguided.
+In the age of the Internet and global access to software engineering data,
+there exists the  problem of information overload. {\em Something} must be done to
+allow analysts to make conclusions via an automatic analysis over a lot of data.
+The results of this paper is that for a particular local context
+(a specific data set and a specific goal) there exists  
+methods for optimizing the conclusions reached in that context.  
+Those conclusions
+may not generalize to other contexts but this  is not a council for despair. 
+As shown here, 
+there  exists general methods for finding
+local conclusions in a particular context. Further,
+those
+methods are  very simple to implement and very fast to execute.
 
-These results challenge much prior work. 
-Firstly, there exist research papers
+
+\section{But is This a New Result?}
+
+
+In  other fields, the impact of tuning is well understood. However, as we argue
+in this section, this result is not properly  acknowledged  in the field of software analytics. 
+
+The formal definitions of data mining stresses that these learners are heuristic explorers
+of a truly   vast space of the possible models within a data set~\cite{mitchell1982generalization}. For example, given 20 columns of boolean variables,
+there are $2^{20}$ possible models. Data mining is practical since various heuristics
+allow automatic algorithms to ignore most of those possibilities. 
+
+While that heuristic search makes data mining possible, it also means that tunings
+can significantly affect what comes out of a data miner.
+When we tune a data miner, what we are really doing is changing how a learner applies
+its heuristics. This means tuned data miners use different heuristics, which means they ignore different possible models, which means they return different models.     
+
+The fact that {\em how} we learn changes {\em what} we learn is not acknowledged
+in the field of software analytics.
+There exists many research papers
 that use data miners to   show that certain factors
 are more influential than others for (say)
 predicting defects. As shown below, such conclusions can be dramatically
@@ -175,17 +217,17 @@ Hence, many old papers    need to be revisited  and perhaps revised~\cite{bell20
 For example, one of us (Menzies) used data miners
 to assert that some factors were more important than others for predicting
 successful software reuse~\cite{me02k}. That assertion should now be doubted since that
-Menzies study did not conduct a tuning study before reporting what factors the data miners
-found where most influential.
+Menzies did not conduct a tuning study before reporting what factors the data miners
+found were most influential.
 
-Secondly, several  prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
+Further, several  prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
 that learnerX is better than learnerY for some software analytics task.
 For example, a recent IEEE TSE article claimed that the 
 CART decision tree learner was far worse than Random Forests for
 software defect prediction~\cite{lessmann2008benchmarking}. 
 Such conclusions do not survive tuning.
 For example,
-after tuning, the worst untuned learner (CART) can perform just as well as the supposedly
+after tuning, the worst learner (CART) can perform just as well as the supposedly
 best learner (Random Forest). Hence, all those prior results that ranked learners for software
 analytics now need to be revisited (and perhaps revised).
 
@@ -193,7 +235,7 @@ Thirdly, it is a standard practice to use the default ``off-the-shelf'' tunings 
 we have defended that approach, arguing that it
 encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
 can no longer be condoned. For example, suppose our default
-number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation). 
+number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation).
 After tuning, we see that our optimizer often uses $F$ values that are nowhere near that default:
 
 % {\scriptsize
@@ -218,32 +260,89 @@ After tuning, we see that our optimizer often uses $F$ values that are nowhere n
                                 130,130, 138, 144, 149, 150   \end{array}\right\}
 \]}
 
-In summary, it is now an open and pressing research issue to check if
+\begin{figure*}[t]
+\renewcommand{\baselinestretch}{0.8}\begin{center}
+{\scriptsize
+\begin{tabular}{c|l|p{4.7in}}
+amc & average method complexity & e.g. number of JAVA byte codes\\\hline
+avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
+in class\\\hline
+ca & afferent couplings & how many other classes use the specific
+class. \\\hline
+cam & cohesion amongst classes & summation of number of different
+types of method parameters in every method divided by a multiplication
+of number of different method parameter types in whole class and
+number of methods. \\\hline
+cbm &coupling between methods &  total number of new/redefined methods
+to which all the inherited methods are coupled\\\hline
+cbo & coupling between objects & increased when the methods of one
+class access services of another.\\\hline
+ce & efferent couplings & how many other classes is used by the
+specific class. \\\hline
+dam & data access & ratio of the number of private (protected)
+attributes to the total number of attributes\\\hline
+dit & depth of inheritance tree &\\\hline
+ic & inheritance coupling &  number of parent classes to which a given
+class is coupled (includes counts of methods and variables inherited)
+\\\hline
+lcom & lack of cohesion in methods &number of pairs of methods that do
+not share a reference to an instance variable.\\\hline
+locm3 & another lack of cohesion measure & if $m,a$ are  the number of
+$methods,attributes$
+in a class number and $\mu(a)$  is the number of methods accessing an
+attribute, 
+then
+$lcom3=((\frac{1}{a} \sum_j^a \mu(a_j)) - m)/ (1-m)$.
+\\\hline
+loc & lines of code &\\\hline
+max\_cc & maximum McCabe & maximum McCabe's cyclomatic complexity seen
+in class\\\hline
+mfa & functional abstraction & number of methods inherited by a class
+plus number of methods accessible by member methods of the
+class\\\hline
+moa &  aggregation &  count of the number of data declarations (class
+fields) whose types are user defined classes\\\hline
+noc &  number of children &\\\hline
+npm & number of public methods & \\\hline
+rfc & response for a class &number of  methods invoked in response to
+a message to the object.\\\hline
+wmc & weighted methods per class &\\\hline
+\rowcolor{lightgray}
+defect & defect & Boolean: where defects found in post-release bug-tracking systems.
+\end{tabular}
+}
+\end{center}
+\caption{OO measures used in our defect data sets.}\label{fig:ck}
+\end{figure*}
+
+
+
+
+The  good news of this paper  is that {\em tuning is very easy}.
+This result is both novel and unexpected.
+A standard run of such evolutionary optimizers requires   thousands,
+if not millions, of evaluations. However, in a result that we found startling, that  differential evolution can find useful settings for learners generating defect predictors
+in less than 100 evaluations (i.e. very quickly).
+Hence,   the ``problem'' (that
+tuning changes the conclusions) is really
+an exciting opportunity. At least for defect prediction,
+ learners are very   amenable to tuning. Hence, 
+ they are  also very
+amenable to significant performance improvements. Given the low
+number of evaluations required, then we assert that tuning
+  should be standard practice
+for anyone building defect predictors.
+
+That said, the bad news is that, for defect
+prediction, tuning results in dramatic changes in
+  what is learned from that data. Therefore, it is now an open and pressing research issue to check if
 analytics without parameter tuning is considered {\em harmful} or, at the 
 very least, {\em misleading}.
-Clearly, we  now doubt  conclusions based on
+Clearly, we  must now revisit all prior results   based on
 ``off-the-shelf'' tunings.
 Further,
 it is no longer enough to just run a data miner and report the result
 {\em without} first conducting an tuning optimizations study.
-
-Before beginning, we digress for one  clarification.
-This paper is {\bf not} arguing that
-software analytics is somehow wrong-headed or misguided.
-In the age of the Internet and global access to software engineering data,
-there exists the  problem of information overload. {\em Something} must be done to
-allow analysts to make conclusions via an automatic analysis over a lot of data.
-The results of this paper is that for a particular local context
-(a specific data set and a specific goal) there exists  
-methods for optimizing the conclusions reached in that context.  
-Those conclusions
-may not generalize to other contexts but this  is not a council for despair. 
-As shown here, 
-there  exists general methods for finding
-local conclusions in a particular context. Further,
-those
-methods are  very simple to implement and very fast to execute.
-
 
 % \section{Motivating Example}\label{sect:eg}
 
@@ -334,7 +433,6 @@ methods are  very simple to implement and very fast to execute.
 % The rest of this paper repeats the analysis of this section, but for 
 % more complex learners.
 
-
 \section{Background Notes}
  
 
@@ -345,61 +443,6 @@ This section is our standard introduction to defect prediction~\cite{me15:book1}
 plus    some new results from Rahman et al.~\cite{rahman14:icse}. 
  
 
-
-\begin{figure*}[!t]
-\renewcommand{\baselinestretch}{0.8}\begin{center}
-{\scriptsize
-\begin{tabular}{c|l|p{4.7in}}
-amc & average method complexity & e.g. number of JAVA byte codes\\\hline
-avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
-in class\\\hline
-ca & afferent couplings & how many other classes use the specific
-class. \\\hline
-cam & cohesion amongst classes & summation of number of different
-types of method parameters in every method divided by a multiplication
-of number of different method parameter types in whole class and
-number of methods. \\\hline
-cbm &coupling between methods &  total number of new/redefined methods
-to which all the inherited methods are coupled\\\hline
-cbo & coupling between objects & increased when the methods of one
-class access services of another.\\\hline
-ce & efferent couplings & how many other classes is used by the
-specific class. \\\hline
-dam & data access & ratio of the number of private (protected)
-attributes to the total number of attributes\\\hline
-dit & depth of inheritance tree &\\\hline
-ic & inheritance coupling &  number of parent classes to which a given
-class is coupled (includes counts of methods and variables inherited)
-\\\hline
-lcom & lack of cohesion in methods &number of pairs of methods that do
-not share a reference to an instance variable.\\\hline
-locm3 & another lack of cohesion measure & if $m,a$ are  the number of
-$methods,attributes$
-in a class number and $\mu(a)$  is the number of methods accessing an
-attribute, 
-then
-$lcom3=((\frac{1}{a} \sum_j^a \mu(a_j)) - m)/ (1-m)$.
-\\\hline
-loc & lines of code &\\\hline
-max\_cc & maximum McCabe & maximum McCabe's cyclomatic complexity seen
-in class\\\hline
-mfa & functional abstraction & number of methods inherited by a class
-plus number of methods accessible by member methods of the
-class\\\hline
-moa &  aggregation &  count of the number of data declarations (class
-fields) whose types are user defined classes\\\hline
-noc &  number of children &\\\hline
-npm & number of public methods & \\\hline
-rfc & response for a class &number of  methods invoked in response to
-a message to the object.\\\hline
-wmc & weighted methods per class &\\\hline
-\rowcolor{lightgray}
-defect & defect & Boolean: where defects found in post-release bug-tracking systems.
-\end{tabular}
-}
-\end{center}
-\caption{OO measures used in our defect data sets.}\label{fig:ck}
-\end{figure*}
 
 
 \input{dm101}
@@ -434,15 +477,22 @@ it offers an interesting case study on the benefits of tuning.
 
 Our learners use the tuning parameters of \fig{parameters}. This section describes those parameters.
 
-CART, Random Forest, and WHERE-based learner are all  tree learners that divide a data set, then recurse
+CART, Random Forest, and WHERE-based learners are all  tree learners that divide a data set, then recurse
 on each split.
 All these learners
 generate numeric predictions which are converted
-into binary ``yes/no'' decisions via \eq{yesno}. Hence, they all use the {\em threshold} value $T$ discussed in \tion{eg}.
+into binary ``yes/no'' decisions via \eq{yesno}.
 
+\begin{equation}\label{eq:yesno}\scriptsize
+\mathit{inspect}= \left\{
+\begin{array}{ll}
+d_i \ge T \rightarrow \mathit{Yes}\\
+d_i <   T \rightarrow \mathit{No} ,
+\end{array}\right.
+\end{equation}
 The splitting process is controlled by numerous tuning parameters.
 If data contains more than {\em min\_sample\_split}, then a split is attempted.
-On the other hand, if a split contains no more than {\em min\_samples\_leaf}, then recursion stops. For CART and Random Forest use a 
+On the other hand, if a split contains no more than {\em min\_samples\_leaf}, then recursion stops. CART and Random Forest use a 
 user-supplied constant for this parameter while
 WHERE-based learner firstly computes this parameter $m$={\em min\_samples\_leaf} from the size of the data
 sets via  $m=\mathit{size}^\mathit{min\_size}$ to build an initial  clustering tree.
@@ -518,8 +568,6 @@ majority cluster
 
 
 
-
-
 \subsection{Tuning Algorithms}
 
 
@@ -567,7 +615,7 @@ set (to check if that data really requires a more
 complex analysis).
 
 To find our ``scout'',  we used engineering judgement to sort  the above algorithms from simplest to most complex.
-Of the optimizers listed above, the simplest are are simulated annealing (SA)  and 
+Of the optimizers listed above, the simplest are simulated annealing (SA)  and 
 differential evolution (DE), each of which can be coded in less than a page of some high-level scripting language. Our reading of the current literature is that there are more  advocates for
 differential evolution than
   SA:
@@ -584,6 +632,7 @@ The psuedocode for differential evolution is shown in Algorithm~\ref{alg:DE}.
 In the following description, 
     superscript numbers denotes a line in that figure.
 
+\input{algo} 
 
  \begin{figure*}[!t]
 
@@ -612,24 +661,24 @@ In the following description,
 
 DE is an evolutionary algorithm where the next {\em NewGeneration} is learnt from
 a current {\em Population}.  Our DE's lose one ``life''
-when e new is no better than  current (terminating when ``life'' is zero)$^{L5}$.
+when e new is no better than  current (terminating when ``life'' is zero)$^{5}$.
 Each candidate solution in the {\em Population}  
 is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \fig{parameters} and {\em Scores} come from training a learner using those parameters
-and applying it     test data$^{L23-L28}$.
+and applying it     test data$^{23-28}$.
 
 The premise of DE  is that the best way to mutate existing tunings
-is to {\em Extrapolate}$^{L29}$
+is to {\em Extrapolate}$^{29}$
 between current solutions.  Three solutions $a,b,c$ are selected at random.
 For each tuning parameter $i$, at some probability {\em cr}, we replace
 the old tuning $x_i$ with $y_i$:
 \bi
 \item (For numerics) $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
-controlling the cross-over amount.  The {\em trim} function$^{L39}$ limits the new
+controlling the cross-over amount.  The {\em trim} function$^{39}$ limits the new
 value to the legal range min..max of that parameter.
 \item (For booleans) $y_i= \neg x_i$ (see line 37).
 \ei
-The main loop of DE$^{L7}$ runs over the {\em Population}, replacing old items
+The main loop of DE$^{7}$ runs over the {\em Population}, replacing old items
 with new {\em Candidate}s (if the new candidate is better than the old item).
 This means that, as the loop progresses, the {\em Population} is full of increasiningly
 more valuable solutions. This, in turn, also improves  the candidates, which are {\em Extrapolate}d
@@ -637,8 +686,8 @@ from the {\em Population}.
 
 For the experiments of this paper, we collect performance
 values from a data mining, from which a {\em Goal} function extracts one 
-performance value$^{L27}$ (so we run this code many times, each time with
-a different {\em Goal}$^{L2}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
+performance value$^{27}$ (so we run this code many times, each time with
+a different {\em Goal}$^{2}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
 
 
 %\begin{algorithm}
@@ -661,7 +710,6 @@ a different {\em Goal}$^{L2}$).  Technically, this makes a  {\em single objectiv
 
 
 
-\input{algo} 
 
 \section{Experimental Design}\label{sect:design}
 
@@ -788,21 +836,9 @@ relevant (and by ``context'', we mean the optimization goal).
 
 
 
-\section{Experimental Results}
+\subsection{An Aside}
 
-This section offers empirical support for six claims:
-\be
-\item  Tuning    improves the performance scores of a predictor;
-e.g.  precision changes from 2\% to 98\%: see \tion{precision};
-\item Tuning changes conclusions on what learners are better than others: see \tion{rank};
-\item Tuning changes conclusions about what factors are most important: see \tion{import};
-\item  Tuning is easy: see \tion{easy};
-\item Tuning is fast: see \tion{fast};
-\item Data miners should not be used ``off-the-shelf'' with their default tunings: see \tion{variance}.
-\ee
-
-
-One comment before continuing. The following text does not
+One comment before presenting the results. The following text does not
 show results for tuning on recall
 or false alarms. The reason is that false alarm and recall focus on {\em only}
 the non-defective and defective modules (respectively). Hence:
@@ -819,7 +855,7 @@ Accordingly,  this paper  explores performance measures that comment on all
 target classes (i.e. precision and ``F''). 
 
 
-\begin{figure}[!b]
+\begin{figure}[!tb]
 \renewcommand{\baselinestretch}{0.8} 
 
 \scriptsize    
@@ -850,9 +886,12 @@ xercesV1 & {\bf 56} &   & 26 &   & 49 &   & 26 &   & 49 &   & 26 &  \\
 \label{fig:precisionbars}
 \end{figure}
 
-\subsection{Tuning Can  Improves Performance Scores}\label{sect:precision}
 
-\fig{precisionbars} shows precision results before and after tuning using three different learners.
+\section{Experimental Results}
+\subsection{RQ1:  Does  Tuning  Improve Performance? }\label{sect:precision}
+
+\fig{precisionbars} shows precision results before and after tuning with precision as the performance criteria 
+using three different learners.
 For each data set, the maximum precision values for each data set are shown in {\bf bold}.
 
 These results offer support for  prior conclusions that CART is worse than Random Forest. As might have been
@@ -875,7 +914,7 @@ tuned WHERE that scored 89\% and 85\%.
 Finally, note the  {\em jeditV2} result for the WHERE learner.
 Here, tuning changes precision from 2\% to 98\%.
 
-\fig{deltas} shows that tuning usually has a positive effect on performance scores. This figure sorts
+\fig{deltas} shows that the answer to RQ1 is ``yes''; i.e. tuning usually has a positive effect on performance scores. This figure sorts
 the deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
 figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
  
@@ -890,26 +929,22 @@ figure is that, overall, tuning rarely makes performance   worse and usually can
 and \fig{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
  \end{figure}
 
-\subsection{Tuning Changes the Rankings of Learner  }\label{sect:rank}
-Researchers often use performance criteria to assert that one learner is better than another~\cite{lessmann2008benchmarking,hall11,me07b}.
-Such conclusions are   not reliable since they can change when we elect to tune for different goals. 
-For example, given the poor showing of untuned CART and the good performance of tuned WHERE
-in   \fig{precisionbars}, we might recommend
-{\em not} to use CART and {\em always} used tuned WHERE. In turns out that this
-conclusion is not stable across the tuning process.
+\subsection{RQ2:  Does Tuning Change a Learner's Ranking Regarding Different Goals?}\label{sect:rank}
+Researchers often use performance criteria to assert that one learner is better than another~\cite{lessmann2008benchmarking,me07b}. In\cite{me07b}, naive Bayes does better than C4.5 in terms of pd and balance over NASA MDP data sets. In \cite{lessmann2008benchmarking}, Random Forest is considered to be statistically better than CART in terms of the AUC ranking. Such conclusions are not reliable since they can change when we elect to tune for different goals.
 
+22 learners are compared over NASA MDP data sets in terms of the AUC in \cite{lessmann2008benchmarking}. Some learners are tuned using manual methods, like C4.5, CART and Random Forests and some are tuned by searching algorithms, like grid search for SVM-Type learners. In our expeirment, when we tune CART and Random Forests for precisoin and F-measure, the rankings of these two learners are changed.
 
-\fig{fbars} shows what happens when we tune for the f-measure. 
-As before, untuned Random Forest generally beats CART. However:
-\bi
-\item
-In  a result that is the direct opposite of   
- Lessmann et al.~\cite{lessmann2008benchmarking}, tuned CART does better than Random Forest;
- \item 
+In \fig{precisionbars} and \fig{fbars}, the tuned CART are better than or equal to tuned Random Forests over $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
+terms of precision and F-measure, respectively. Results from the non-parametric Kolmogorov-Smirnov Test turn out that the performance 
+scores of tuned CART and tuned Random Forests are not statistically different. This is the pposite of   
+ Lessmann et al.~\cite{lessmann2008benchmarking}, the tuned Random Forest is not significantly better than tuned CART.
  In another result that is the reverse of \fig{precisionbars}, tuned WHERE is not necessarily
  any better than anything else.
- \ei
-The lesson here is that, given a particular task (e.g. optimizing for precision), tuning can offer
+ 
+ Therefore, it's not always safe to say ``LearnerX'' is the best or better than ``learnerY'' without pointing out the performance criteria or applying tuning techniques. That is, the answer to RQ2 is ``yes'' since tuning a set of learners
+ changes the rankings of those learners regarding different criteria.
+ 
+The  important lesson here is that, given a particular task (e.g. optimizing for precision), tuning can offer
 substantial benefits. However, when that task changes (e.g. to optimizing for the F-measure),
 it should not be assumed that conclusions from the previous tuning will hold in the new context.
 In practice, this means that tuning needs to be repeated for each new context.
@@ -948,20 +983,23 @@ xercesV1 & 23 &   & 4 &   & 18 &   & {\bf 47} &   & 18 &   & 40 &  \\
 \end{figure}
 
 
-\subsection{Tuning Changes the Ranking of Project Factors  }\label{sect:import}
+\subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
 
 
 Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
-\fig{counts} shows that such conclusions are not reliable since they can be changed by tuning.
-This figure shows what attributes appeared in WHERE's final decision trees when optimizing for different goals.
-Note that the counts in the {\em tuned} column are   usually
-different to those in the {\em default} columns (the tuned learners used more attributes
-than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column). 
+\fig{features} shows that such conclusions are not reliable since they can be changed by tuning. For space limitation, from each data set, we just select one experiment, like antV0, as representative. 
+This figure shows what attributes appeared in WHERE's final decision trees when optimizing for different goals, precision and F-measure. Note that the attributes selected by tuned WHERE in each row shown in bold are usually different from default WHERE. Meanwhile, Tuning for different goals will usually select different attributes. In $\frac{9}{10}$ representative experiments, tuning select different attributes for precision and F-measure.
+% Note that the counts in the {\em tuned} column are   usually
+% different to those in the {\em default} columns (the tuned learners used more attributes
+% than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column). 
+
+That is, our answer to RQ3 is ``yes'', tuning changes our
+conclusions about what factors are most in important in software engineering.
 
 
 
 
-\subsection{Tuning is Easy}\label{sect:easy}
+\subsection{RQ4: Is Tuning Easy?}\label{sect:easy}
 
 In terms of the search space
 explored via tuning, optimizing defect prediction from static code
@@ -983,6 +1021,54 @@ Another measure showing that tuning is easy
 (for static code defect predictors)
 is the number of evaluations required to complete optimization
 (see next section).
+
+Hence we answer RQ4 as ``yes'', tuning is surprisingly easy (at least
+for defect predictors).
+% list some features
+\begin{figure*}[!ht]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c|l|l}
+    \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline
+  \multirow{2}{*}{antV0} & {\bf mfa} &  {\bf None} \\
+         & mfa, dam, wmc, ic & mfa, dam, wmc, ic\\
+  \hline
+ \multirow{2}{*}{camelV0} & {\bf mfa, rfc, lcom3, cam, amc, loc, ic} &{\bf  mfa, wmc, cam, dam, loc, lcom3, rfc, ic, dit }\\
+        & mfa, rfc, lcom3, cam, dam, loc & mfa, rfc, lcom3, cam, dam, loc\\
+  \hline
+ \multirow{2}{*}{ivy} & {\bf dam, cam} &{\bf  cam, dit, npm, dam, wmc, lcom3 }  \\
+       & cam, dit, dam, ic & cam, dit, dam, ic \\
+  \hline
+ \multirow{2}{*}{jeditV0} &{\bf  mfa, dam, rfc, avg\_cc, lcom3, dit }&{\bf  dam, rfc, mfa, wmc, ce, cam, loc, avg\_cc}\\
+         & mfa, dam, lcom3, dit, ic, cbm & mfa, dam, lcom3, dit, ic, cbm \\
+  \hline
+ \multirow{2}{*}{log4j} & {\bf lcom3, mfa, loc, cbm, wmc }&{\bf  mfa, wmc}\\
+         & lcom3, mfa, loc, cbm, dit & lcom3, mfa, loc, ic \\
+   \hline
+  \multirow{2}{*}{lucene} & {\bf rfc, mfa, npm, cam} & {\bf mfa, dam, wmc, loc, rfc, ic}\\
+         & mfa, lcom3, cam, dam, ic & mfa, lcom3, cam, dam, ic\\
+   \hline
+   \multirow{2}{*}{poiV0} & {\bf loc }& {\bf loc} \\
+        & mfa, loc, amc, wmc, npm, lcom & mfa, loc, amc, wmc,npm, lcom\\
+   \hline
+   \multirow{2}{*}{synapse} &{\bf  dam} & {\bf loc, dam} \\
+        & dam, loc, mfa, cam & dam, loc, mfa, cam\\
+    \hline
+   \multirow{2}{*}{velocity} & {\bf dit, dam, cam, rfc, cbo, lcom3, wmc, ic, cbm }& {\bf dam, dit, loc, amc, lcom3, ic, mfa }\\
+        & dit, dam, lcom3, ic, mfa  & dit, dam, lcom3, ic, mfa\\
+    \hline
+   \multirow{2}{*}{xercesV0} &{\bf  None }&{\bf  dam, rfc, avg\_cc, dit, loc, lcom3, cam }\\
+        & cam, loc, dam, mfa, amc &  cam, loc, dam, mfa, amc \\
+    \hline
+    
+  \end{tabular}
+  
+    \caption{Features selected by different goals(features selected by tuning shown in bold). 
+    }\label{fig:features}
+\end{figure*}
+
 
 
 
@@ -1094,7 +1180,7 @@ one cell in the ``precision'' or ``F'' column is 17.
 
 
 
-\subsection{Tuning is Fast}\label{sect:fast}
+\subsection{RQ5: Is Tuning Impractically Slow?}\label{sect:fast}
  
  
 The number of evaluations/runtimes used by our optimizers is shown in \fig{etimes}
@@ -1113,11 +1199,12 @@ take thousands, if not millions, of evaluations of candidate tunings. Hence, ori
 we used Storn's advise on the size of {\em np} and ran our optimizers for 24 hours. 
 Then, just
 to get a baseline, we tried {\em np=10} and the early stopping rules (number of lives used in
-Algorithm~1 on line 5) and obtained the results of this paper
+Algorithm~1 on line 5) and obtained the results of this paper.
 
+Hence, we answer RQ5 as ``no''. Tuning is so fast that
+it could (and should) be used by anyone using defect predictors.
 
-
-\subsection{Do not use ``off-the-shelf''  Default Tunings}\label{sect:variance}
+\subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
  \fig{preselect} and \fig{fselect} show   tunings learned by DE. 
 The left hand side columns shows some standard default values. Note that:
@@ -1126,8 +1213,7 @@ The left hand side columns shows some standard default values. Note that:
 The tunings learned by DE
 were often very different to the default. That is, to achieve the performance improvements seen in the paper,
 the default tuning parameters required a wide range of adjustments.
-\item The tunings learned by DE were different in different data sets and for different goals.
-That is, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
+\item The tunings learned by DE were different in different data sets and for different goals. Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
 sets are changed.
 \ei
 Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
@@ -1265,7 +1351,7 @@ those repeated runs do not substantively change the above conclusions.
 for other cases, or can be generalized from samples
 to populations.  
 The examples of this paper  only relate to precision, recall, and the F-measure
-but the general principle (that the search bias changes the search conclusions)  holds for all any set if goals. 
+but the general principle (that the search bias changes the search conclusions)  holds for all any set of goals. 
 Also,
 the tuning results shown here only came from one  software analytics task 
 (defect prediction from static code attributes).
@@ -1295,7 +1381,9 @@ it is unfair to hobble one competitor with poor tunings.
 
 \section{Conclusions}
 
-When learning defect predictors for static code
+Our exploration of the six research
+questions listed in the introduction
+show that when learning defect predictors for static code
 attributes,   analytics without parameter tuning is considered {\em harmful} and {\em misleading}:
 \bi
 \item Tuning improves the performance scores of a predictor.
@@ -1305,7 +1393,8 @@ Tuning changes conclusions on what learners are better than others.
 Hence, it is time to revisit numerous prior publications of our own~\cite{me07b}
 and others~\cite{lessmann2008benchmarking,hall11}.
 \item
-Tuning changes also changes conclusions on what factors are most important in software development.
+Also,
+tuning changes  changes conclusions on what factors are most important in software development.
 Once again, this means that old papers may need to be revised including those
 some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
 \ei
@@ -1319,9 +1408,8 @@ whenever data or goals are changed.
 Fortunately, the cost of find good tunings is not excessive since, at least for
 static code defect predictors, tuning is easy and fast.
 
-As to future work:
-\bi
-\item
+\section{Future Work}
+
  As noted by
 F\"{u}rnkranz~\cite{furnkranz05}, data mining is inherently a multi-objective optimization
 problem that seeks the smallest model with the highest performance, 
@@ -1333,7 +1421,7 @@ into one system that learns how to tune itself as it executes. If this view is u
 then instead of adding elaborations to data miners (as done in this paper, or by researchers
 exploring hyper-heuristics~\cite{jia2013learning}), it should be possible to radically simplify optimization and data
 mining with a single system that rapidly performs both tasks.
-\item
+
 Another issue for future work is the implications of these
 conclusions to other kinds of software analytics.
  This paper has explored  {\em some} learners using {\em one}  optimizer. Hence, we can make
@@ -1343,7 +1431,7 @@ whose performance can be dramatically improved by
 at least one simple optimization scheme.  We hope that this work inspires
 much future work as this community develops and debugs best practices for tuning
 software analytics.
-\ei
+ 
  
 
 \section*{Acknowledgments}
