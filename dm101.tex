@@ -13,7 +13,7 @@ exponentially with assessment effort.
 For example, for  black-box testing methods,
 a {\em linear} increase
 in the confidence $C$ of finding  defects
-can take {\em exponentially} more effort)\footnote{A randomly selected 
+can take {\em exponentially} more effort\footnote{A randomly selected 
 input to a program will find a fault with probability $p$.
 After $N$ random black-box tests, the chances of the inputs 
 not revealing any fault 
@@ -26,7 +26,7 @@ Exponential costs quickly exhaust finite resources so
 standard practice is to apply the best
 available  methods on code sections that seem   most critical. 
 But 
-Any method that focuses on parts of the code
+any method that focuses on parts of the code
 can blind us to defects in other areas. Some  {\em
 lightweight sampling policy} should be used to explore the rest of the system.  This
 sampling policy will always be incomplete.
@@ -34,7 +34,7 @@ Nevertheless, it is the recommended option when
 resources do not permit a complete assessment of the whole system.
 
 One such lightweight sampling policy is defect predictors learned from static code attributes.
-Given software described in (e.g.) the attributes of \fig{ck},   data miners can
+Given software described in (e.g.) the attributes of \tab{ck},   data miners can
 learn where the probability of software defects is highest.
 This approach is   {\em easy to
 use}, {\em widely-used}, and {\em useful} to use.
@@ -47,7 +47,7 @@ which can be as large as four or six people~\cite{me02f}.
 
 %%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\arraystretch{1.2}
-\begin{figure*}[t!]
+\begin{table*}[t!]
 \scriptsize
   \centering
 	\begin{tabular}{|c|c|c|c|l|}
@@ -94,8 +94,8 @@ node. \\ \cline{2-5}
 
 	\end{tabular}
     \caption {List of parameters to be tuned.}
-\label{fig:parameters}
-\end{figure*}
+\label{tab:parameters}
+\end{table*}
 {\em Widely used:} Many researchers and industrial practitioners  use static attributes to guide software 
 quality predictions.
  Defect prediction models have been reported
@@ -124,7 +124,7 @@ industrial review methods:   around 50\%
  for full Fagan inspections~\cite{fagan76} to
 21\% for less-structured inspections.
 
-Note only do static code defect predictors perform well compared to manual methods,
+Not only do static code defect predictors perform well compared to manual methods,
 they also are competitive with certain automatic methods.
 A recent study at ICSE'14, Rahman et al.~\cite{rahman14:icse} compared
 (a) static code analysis tools FindBugs, Jlint, and Pmd and (b)
@@ -133,6 +133,6 @@ static code defect predictors
 They found  no significant differences in the cost-effectiveness
 of these  approaches. Given this equivalence, it is significant to note that 
 static code defect prediction can be quickly adapted to new languages by building lightweight
-parsers that find   information like \fig{ck}. The same is not true for   static code analyzers-- these need  extensive modification before they can be used on new
+parsers that find   information like \tab{ck}. The same is not true for   static code analyzers-- these need  extensive modification before they can be used on new
 languages.
 
