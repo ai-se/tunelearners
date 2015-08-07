@@ -987,6 +987,51 @@ xercesV1 & 23 &   & 4 &   & 18 &   & {\bf 47} &   & 18 &   & 40 &  \\
 \label{tab:fbars}
 \end{table}
 
+% list some features
+\begin{table*}[!ht]
+
+\renewcommand{\baselinestretch}{0.8}
+\scriptsize
+\centering
+  \begin{tabular}{c|l|l}
+    \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline
+  \multirow{2}{*}{antV0} & {\bf mfa} &  {\bf None} \\
+         & mfa, dam, wmc, ic & mfa, dam, wmc, ic\\
+  \hline
+ \multirow{2}{*}{camelV0} & {\bf mfa, rfc, lcom3, cam, amc, loc, ic} &{\bf  mfa, wmc, cam, dam, loc, lcom3, rfc, ic, dit }\\
+        & mfa, rfc, lcom3, cam, dam, loc & mfa, rfc, lcom3, cam, dam, loc\\
+  \hline
+ \multirow{2}{*}{ivy} & {\bf dam, cam} &{\bf  cam, dit, npm, dam, wmc, lcom3 }  \\
+       & cam, dit, dam, ic & cam, dit, dam, ic \\
+  \hline
+ \multirow{2}{*}{jeditV0} &{\bf  mfa, dam, rfc, avg\_cc, lcom3, dit }&{\bf  dam, rfc, mfa, wmc, ce, cam, loc, avg\_cc}\\
+         & mfa, dam, lcom3, dit, ic, cbm & mfa, dam, lcom3, dit, ic, cbm \\
+  \hline
+ \multirow{2}{*}{log4j} & {\bf lcom3, mfa, loc, cbm, wmc }&{\bf  mfa, wmc}\\
+         & lcom3, mfa, loc, cbm, dit & lcom3, mfa, loc, ic \\
+   \hline
+  \multirow{2}{*}{lucene} & {\bf rfc, mfa, npm, cam} & {\bf mfa, dam, wmc, loc, rfc, ic}\\
+         & mfa, lcom3, cam, dam, ic & mfa, lcom3, cam, dam, ic\\
+   \hline
+   \multirow{2}{*}{poiV0} & {\bf loc }& {\bf loc} \\
+        & mfa, loc, amc, wmc, npm, lcom & mfa, loc, amc, wmc,npm, lcom\\
+   \hline
+   \multirow{2}{*}{synapse} &{\bf  dam} & {\bf loc, dam} \\
+        & dam, loc, mfa, cam & dam, loc, mfa, cam\\
+    \hline
+   \multirow{2}{*}{velocity} & {\bf dit, dam, cam, rfc, cbo, lcom3, wmc, ic, cbm }& {\bf dam, dit, loc, amc, lcom3, ic, mfa }\\
+        & dit, dam, lcom3, ic, mfa  & dit, dam, lcom3, ic, mfa\\
+    \hline
+   \multirow{2}{*}{xercesV0} &{\bf  None }&{\bf  dam, rfc, avg\_cc, dit, loc, lcom3, cam }\\
+        & cam, loc, dam, mfa, amc &  cam, loc, dam, mfa, amc \\
+    \hline
+    
+  \end{tabular}
+  
+    \caption{Features selected by tuned WHERE with different goals(features selected by tuning shown in bold). 
+    }\label{tab:features}
+\end{table*}
+
 
 \subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
 
@@ -1042,50 +1087,7 @@ is the number of evaluations required to complete optimization
 
 Hence we answer RQ4 as ``yes'', tuning is surprisingly easy (at least
 for defect predictors).
-% list some features
-\begin{table*}[!ht]
 
-\renewcommand{\baselinestretch}{0.8}
-\scriptsize
-\centering
-  \begin{tabular}{c|l|l}
-    \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline
-  \multirow{2}{*}{antV0} & {\bf mfa} &  {\bf None} \\
-         & mfa, dam, wmc, ic & mfa, dam, wmc, ic\\
-  \hline
- \multirow{2}{*}{camelV0} & {\bf mfa, rfc, lcom3, cam, amc, loc, ic} &{\bf  mfa, wmc, cam, dam, loc, lcom3, rfc, ic, dit }\\
-        & mfa, rfc, lcom3, cam, dam, loc & mfa, rfc, lcom3, cam, dam, loc\\
-  \hline
- \multirow{2}{*}{ivy} & {\bf dam, cam} &{\bf  cam, dit, npm, dam, wmc, lcom3 }  \\
-       & cam, dit, dam, ic & cam, dit, dam, ic \\
-  \hline
- \multirow{2}{*}{jeditV0} &{\bf  mfa, dam, rfc, avg\_cc, lcom3, dit }&{\bf  dam, rfc, mfa, wmc, ce, cam, loc, avg\_cc}\\
-         & mfa, dam, lcom3, dit, ic, cbm & mfa, dam, lcom3, dit, ic, cbm \\
-  \hline
- \multirow{2}{*}{log4j} & {\bf lcom3, mfa, loc, cbm, wmc }&{\bf  mfa, wmc}\\
-         & lcom3, mfa, loc, cbm, dit & lcom3, mfa, loc, ic \\
-   \hline
-  \multirow{2}{*}{lucene} & {\bf rfc, mfa, npm, cam} & {\bf mfa, dam, wmc, loc, rfc, ic}\\
-         & mfa, lcom3, cam, dam, ic & mfa, lcom3, cam, dam, ic\\
-   \hline
-   \multirow{2}{*}{poiV0} & {\bf loc }& {\bf loc} \\
-        & mfa, loc, amc, wmc, npm, lcom & mfa, loc, amc, wmc,npm, lcom\\
-   \hline
-   \multirow{2}{*}{synapse} &{\bf  dam} & {\bf loc, dam} \\
-        & dam, loc, mfa, cam & dam, loc, mfa, cam\\
-    \hline
-   \multirow{2}{*}{velocity} & {\bf dit, dam, cam, rfc, cbo, lcom3, wmc, ic, cbm }& {\bf dam, dit, loc, amc, lcom3, ic, mfa }\\
-        & dit, dam, lcom3, ic, mfa  & dit, dam, lcom3, ic, mfa\\
-    \hline
-   \multirow{2}{*}{xercesV0} &{\bf  None }&{\bf  dam, rfc, avg\_cc, dit, loc, lcom3, cam }\\
-        & cam, loc, dam, mfa, amc &  cam, loc, dam, mfa, amc \\
-    \hline
-    
-  \end{tabular}
-  
-    \caption{Features selected by tuned WHERE with different goals(features selected by tuning shown in bold). 
-    }\label{tab:features}
-\end{table*}
 
 
 
