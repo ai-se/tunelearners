@@ -14,6 +14,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
+\usepackage[export]{adjustbox}
 \renewcommand{\footnotesize}{\scriptsize}
 \definecolor{lightgray}{gray}{0.8}
 \definecolor{darkgray}{gray}{0.6}
@@ -1055,7 +1056,10 @@ According to default WHERE, {\it mfa} is considered as the most important factor
 That is, our answer to RQ3 is ``yes'', tuning changes our
 conclusions about what factors are most important in software engineering.
 
-
+\begin{figure}[!b]
+\includegraphics[width=3.5in,left]{np_10_90.eps}
+\caption{Deltas in terms of F when using 10 and 90 as the population in DE. np=90 is better when the deltas are above zero.}\label{fig:deltas_np}
+ \end{figure}
 
 
 \subsection{RQ4: Is Tuning Easy?}\label{sect:easy}
@@ -1076,9 +1080,11 @@ we see that Storn would therefore recommend {\em np} values of
 using a constant {\em np=10}; i.e. $\frac{10}{90}, \frac{10}{50}, \frac{10}{60}$ of the
 recommended search space.
 
-\Menzies{probably, here we should have an experiment to compare np = 10 with np = 90(the recommended population) for at least one learner, to justify np = 10 is enough and tuning is easy }
+\wei{added!} To justify that {\em np=10} is enough, we did another tuning study, 
+where all the settings are the same as before but we chose {\em np=90} as recommended by Storn. 
+The tuning performance of learners is evaluated
+by F. To compare the results of {\em np=10} and {\em np=90}, we plot the delta in the performance as \fig{deltas}. In \fig{deltas_np}, 5 data sets are better but 4 data sets are worse when {\em np = 90} for WHERE. For CART and Random Forest, the numbers of better and worse data sets are both 4. The improvement for those better data sets is negligible to some extent but the deterioration is not. From this study, {\em np = 90}, which is recommended for WHERE and more than the number for CART and Random Forest, does not bring any significant improvement over {\em np=10}. Therefore, the searching space is very simple for tuning defect predictor, which makes tuning very simple.
 
-\Menzies{can we answer why the searching is so easy, what's the reason leading less than 100 evaluations that can find a better solution}
 
 Another measure showing that tuning is easy 
 (for static code defect predictors)
@@ -1222,9 +1228,7 @@ to get a baseline, we tried {\em np=10} and the early stopping rules (number of 
 Algorithm~1 on line 5) and obtained the results of this paper. 
 
 Hence, we answer RQ5 as ``no''. Tuning is so fast that
-it could (and should) be used by anyone using defect predictors.
-
-(\Menzies{do we need to give some empirical answers to WHY?}\wei{added HERE!}) The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set in \tab{parameters}
+it could (and should) be used by anyone using defect predictors. The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set for each parameter in \tab{parameters}. The early stopping rules applied in this study also helps make tuning fast\wei{added HERE!}
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
