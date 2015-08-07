@@ -1232,20 +1232,25 @@ it could (and should) be used by anyone using defect predictors. The possible re
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
- \wei{remove those two figures here! need to complete here}show  tunings learned by DE. 
-The left hand side columns shows some standard default values. Note that:
+ In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representative and all the others can be found in our supporting documents\footnote{\url{https://goo.gl/aHQKtU}}.
+The default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$. Note that:
 \bi
 \item
 The tunings learned by DE
 were often very different to the default. That is, to achieve the performance improvements seen in the paper,
 the default tuning parameters required a wide range of adjustments.
-\item The tunings learned by DE were different in different data sets and for different goals. Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
-sets are changed.
+\item The tunings learned by DE were different in different data sets and for different goals.
 \ei
-Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
+Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
+sets are changed.Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
 tuning is so easy and so fast (at least for defect predictors from static code attributes).
 
-
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=1.5in]{features_precision.eps}\includegraphics[width=1.5in]{features_F.eps}
+ \end{center}
+\caption{Four representative tuning values in WHERE with  precision and F as tuning goal,respectively. }\label{fig:features}
+ \end{figure}
 
 
  
