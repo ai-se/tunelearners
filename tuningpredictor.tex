@@ -480,7 +480,7 @@ it offers an interesting case study on the benefits of tuning.
 
 Our learners use the tuning parameters of \tab{parameters}. This section describes those parameters.
 
-\wei{added HERE!} As shown in \tab{parameters}, default parameters for the Where-based learner are set using authors' engineering judgment and default parameters for CART and Random Forests are set by SciKitLearn. Those default parameters might not be the standard parameters for practical defect learners in reality, but it's a rule of thumb that most researchers would use just use the default parameters in the software without changes\cite{me07b} (\wei{MORE references should be cited here to support this statement}. )The tuning range is set according to the corresponding default parameters. The reason for this is to tell whether tuning with a small range can get a performance improvement (\Menzies{is this correct?})
+As shown in \tab{parameters}, default parameters for the Where-based learner are set using authors' engineering judgment and default parameters for CART and Random Forests are set by SciKitLearn. Those default parameters might not be the standard parameters for practical defect learners in reality, but it's a rule of thumb that most researchers would use just use the default parameters in the software without any tuning\cite{me07b,moser2008comparative,herzig2013predicting,zimmermann2007predicting}. The tuning range is set according to the corresponding default parameters. The reason for this is to justify whether tuning with a small range can get a performance improvement (\Menzies{is this correct?})
 
 
 CART, Random Forest, and WHERE-based learners are all  tree learners that divide a data set, then recur
@@ -1063,9 +1063,9 @@ conclusions about what factors are most important in software engineering.
 
 \begin{figure}[!b]
 \begin{center}
-\includegraphics[width=1.5in]{np_10_90_precision.eps}\includegraphics[width=1.5in]{np_10_90_f.eps}
+\includegraphics[width=1.5in]{np_precision.eps}\includegraphics[width=1.5in]{np_f.eps}
  \end{center}
-\caption{Deltas in terms of precision and F when using 10 and 90 as the population in DE. np=90 is better when the deltas are above zero.}\label{fig:deltas_np}
+\caption{Deltas in performance between {\em np = 10} and the recommended np's. The recommended np is better when deltas are above zero. {\em np = 90, 50 and 60} are recommended population size for WHERE, CART and Random Forest by Storn.}\label{fig:deltas_np}
  \end{figure}
 
 
@@ -1087,11 +1087,11 @@ we see that Storn would therefore recommend {\em np} values of
 using a constant {\em np=10}; i.e. $\frac{10}{90}, \frac{10}{50}, \frac{10}{60}$ of the
 recommended search space.
 
-\wei{added!I will run np=90,50,60 for WHERE, CART and RF,respectively} To justify that {\em np=10} is enough, we did another tuning study, 
-where all the settings are the same as before but we chose {\em np=90} as recommended for tuning WHEREby Storn. 
-To make the study simple, we also set {\em np=90} for CART. The tuning performance of learners is evaluated
-by precision and F. To compare the results of {\em np=10} and {\em np=90}, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, WHERE,CART has been improved in 7 datasets and deteriorated in 2. 5 data sets are better but 4 data sets are worse when {\em np = 90} for WHERE. For CART and Random Forest, the numbers of better and worse data sets are both 4. The improvement for those better data sets is negligible to some extent but the deterioration is not. From this study, {\em np = 90}, which is recommended for WHERE and more than the number for CART and Random Forest, does not bring any significant improvement over {\em np=10}. Therefore, the searching space is very simple for tuning defect predictor, which makes tuning very simple.
+To justify that {\em np=10} is enough, we did another tuning study, 
+where all the settings were the same as before but we set{\em np= 90, 50} and {\em np = 60} for WHERE, CART and Random Forests as recommended by Storn. The tuning performance of learners was evaluated
+by precision and F. To compare performance of each learner with different np's, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, in terms of precision, the recommended {\em np} will improve the performance of WHERE, CART and Random Forests in 2, 5, and 4 data sets. However, in 6, 4, and 4 data sets, those numbers  will deteriorate the performance compared with {\em np = 10}. For F as the tuning goal, we can observe the similar pattern. 
 
+ From this study, with the same experimental condition, the recommended {\em np's} for WHERE, CART and Random Forest, do not bring any significant improvements over {\em np = 10}. We're not arguing that {\em np = 10} is the optimal settings for tuning defect predictors. But it suffices to make tuning easy and generate a competitive performance.
 
 Another measure showing that tuning is easy 
 (for static code defect predictors)
