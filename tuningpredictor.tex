@@ -836,7 +836,8 @@ These two examples are just the tip of the iceberg (see other criteria in \fig{c
 and there is insufficient space in this paper to explore all the above optimization goals.
 
 In this paper, what we can  show are examples of how  changing  optimization goals can also change 
-the conclusions made from that learner on that data. Accordingly, we warn that it is important not to overstate  empirical results from software analytics.
+the conclusions made from that learner on that data. Accordingly, we warn that it is 
+important not to overstate  empirical results from software analytics.
 Rather, those results need to be expressed {\em along with} the context within which they are
 relevant (and by ``context'', we mean the optimization goal).
 
@@ -936,18 +937,40 @@ and \tab{fbars} (right) between tuned and untuned learners. Tuning improves perf
  \end{figure}
 
 \subsection{RQ2:  Does Tuning Change a Learner's Ranking ?}\label{sect:rank}
-Researchers often use performance criteria to assert that one learner is better than another~\cite{lessmann2008benchmarking,me07b}. In\cite{me07b}, naive Bayes does better than C4.5 in terms of pd and balance over NASA MDP data sets. In \cite{lessmann2008benchmarking}, Random Forest is considered to be statistically better than CART in terms of the AUC ranking. Such conclusions are not reliable since they can change when we elect to tune for different goals.
+Researchers often use performance criteria to assert that one learner is better than 
+another~\cite{lessmann2008benchmarking,me07b,hall2012systematic}. In\cite{me07b},
+naive Bayes does better than C4.5 in terms of pd and balance over NASA MDP data sets.
+In \cite{lessmann2008benchmarking}, Random Forest is considered to be statistically 
+better than CART in terms of the AUC ranking. In the systematic literature review 
+\cite{hall2012systematic}, authors claimed that defect predictors based on simple 
+modeling techniques such as Logistic Regress perform well. Such conclusions are 
+not stable across tuning process.
 
-22 learners are compared over NASA MDP data sets in terms of the AUC in \cite{lessmann2008benchmarking}. Some learners are tuned using manual methods, like C4.5, CART and Random Forests and some are tuned by searching algorithms, like grid search for SVM-Type learners. In our expeirment, when we tune CART and Random Forests for precisoin and F-measure, the rankings of these two learners are changed.
+22 learners are compared over NASA MDP data sets in terms of the AUC in \cite{lessmann2008benchmarking}.
+Some learners are tuned using manual methods, like C4.5, CART and Random Forests 
+and some are tuned by searching algorithms, like grid search for SVM-Type learners. 
+In our expeirment, when we tune CART and Random Forests for precisoin and F-measure, 
+the rankings of these two learners are changed.
 
-In \tab{precisionbars} and \tab{fbars}, the tuned CART are better than or equal to tuned Random Forests over $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
-terms of precision and F-measure, respectively. Results from the non-parametric Kolmogorov-Smirnov Test turn out that the performance 
-scores of tuned CART and tuned Random Forests are not statistically different. This is the opposite of   
- Lessmann et al.~\cite{lessmann2008benchmarking}, the tuned Random Forest is not significantly better than tuned CART.
- In another result that is the reverse of \tab{precisionbars}, tuned WHERE is not necessarily
+In \tab{precisionbars} and \tab{fbars}, the tuned CART are better than or equal
+to tuned Random Forests over $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
+terms of precision and F-measure, respectively. Results from the non-parametric
+Kolmogorov-Smirnov Test turn out that the performance 
+scores of tuned CART and tuned Random Forests are not statistically different.
+This is the opposite of Lessmann et al.~\cite{lessmann2008benchmarking}, 
+the tuned Random Forest is not significantly better than tuned CART.
+ 
+\wei{added here!} In \fig{lr}, Logistic Regression performs better than untuned CART and Random
+Forests over 17 data sets in terms of precision, which conforms with the statement
+in \cite{hall2012systematic}: simple modeling techniques just perform well.
+However, if we tuned CART and Random Forests, both of their performance was improved greatly. In some
+data sets, CART and Random Forests are much better than Logistic Regression.
+
+In another result that is the reverse of \tab{precisionbars}, tuned WHERE is not necessarily
  any better than anything else.
  
- Therefore, it's not always safe to say ``LearnerX'' is the best or better than ``learnerY'' without pointing out the performance criteria or applying tuning techniques. That is, the answer to RQ2 is ``yes'' since tuning a set of learners
+ Therefore, it's not always safe to say ``LearnerX'' is the best or better than ``learnerY'' 
+ without applying tuning techniques. That is, the answer to RQ2 is ``yes'' since tuning a set of learners
  changes the rankings of those learners regarding different criteria.
  
 The  important lesson here is that, given a particular task (e.g. optimizing for precision), tuning can offer
@@ -960,7 +983,7 @@ In practice, this means that tuning needs to be repeated for each new context.
 \begin{center}
 \includegraphics[width=1.5in]{LR_untuned.eps}\includegraphics[width=1.5in]{LR_tuned.eps}
  \end{center}
-\caption{Comparison between tuned and naive SVM learners with rbf and sigmoid kernels over the goal of F. }\label{fig:svm}
+\caption{Comparison between Logistic Regression and CART as well as Random Forests before and after tuning. }\label{fig:lr}
  \end{figure}
 
 % \begin{figure}[!t]
@@ -1246,8 +1269,8 @@ it could (and should) be used by anyone using defect predictors. The possible re
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
- In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representative and all the others can be found in our supporting documents\footnote{\url{https://goo.gl/aHQKtU}}.
-The default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$. Note that:
+ In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representative and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
+The default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$ as indicated in \tab{parameters}.  Note that:
 \bi
 \item
 The tunings learned by DE
