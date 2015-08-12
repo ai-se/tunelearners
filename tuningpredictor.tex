@@ -935,7 +935,7 @@ figure is that, overall, tuning rarely makes performance   worse and usually can
 and \tab{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
  \end{figure}
 
-\subsection{RQ2:  Does Tuning Change a Learner's Ranking Regarding Different Goals?}\label{sect:rank}
+\subsection{RQ2:  Does Tuning Change a Learner's Ranking ?}\label{sect:rank}
 Researchers often use performance criteria to assert that one learner is better than another~\cite{lessmann2008benchmarking,me07b}. In\cite{me07b}, naive Bayes does better than C4.5 in terms of pd and balance over NASA MDP data sets. In \cite{lessmann2008benchmarking}, Random Forest is considered to be statistically better than CART in terms of the AUC ranking. Such conclusions are not reliable since they can change when we elect to tune for different goals.
 
 22 learners are compared over NASA MDP data sets in terms of the AUC in \cite{lessmann2008benchmarking}. Some learners are tuned using manual methods, like C4.5, CART and Random Forests and some are tuned by searching algorithms, like grid search for SVM-Type learners. In our expeirment, when we tune CART and Random Forests for precisoin and F-measure, the rankings of these two learners are changed.
@@ -955,6 +955,13 @@ substantial benefits. However, when that task changes (e.g. to optimizing for th
 it should not be assumed that conclusions from the previous tuning will hold in the new context.
 In practice, this means that tuning needs to be repeated for each new context.
 
+
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=1.5in]{LR_untuned.eps}\includegraphics[width=1.5in]{LR_tuned.eps}
+ \end{center}
+\caption{Comparison between tuned and naive SVM learners with rbf and sigmoid kernels over the goal of F. }\label{fig:svm}
+ \end{figure}
 
 % \begin{figure}[!t]
 % \begin{center}
@@ -1089,7 +1096,7 @@ recommended search space.
 
 To justify that {\em np=10} is enough, we did another tuning study, 
 where all the settings were the same as before but we set{\em np= 90, 50} and {\em np = 60} for WHERE, CART and Random Forests as recommended by Storn. The tuning performance of learners was evaluated
-by precision and F. To compare performance of each learner with different np's, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, in terms of precision, the recommended {\em np} will improve the performance of WHERE, CART and Random Forests in 2, 5, and 4 data sets. However, in 6, 4, and 4 data sets, those numbers  will deteriorate the performance compared with {\em np = 10}. For F as the tuning goal, we can observe the similar pattern. 
+by precision and F. To compare performance of each learner with different np's, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, in terms of precision, the recommended {\em np} will improve the performance of WHERE, CART and Random Forests in 2, 5, and 4 data sets. However, in 6, 4, and 4 data sets, those numbers  will degrade the performance compared with {\em np = 10}. For F as the tuning goal, we can observe the similar pattern. 
 
  From this study, with the same experimental condition, the recommended {\em np's} for WHERE, CART and Random Forest, do not bring any significant improvements over {\em np = 10}. We're not arguing that {\em np = 10} is the optimal settings for tuning defect predictors. But it suffices to make tuning easy and generate a competitive performance.
 
