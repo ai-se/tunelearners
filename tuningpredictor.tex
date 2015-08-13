@@ -1120,6 +1120,7 @@ recommended search space.
 To justify that {\em np=10} is enough, we did another tuning study, 
 where all the settings were the same as before but we set{\em np= 90, 50} and {\em np = 60} for WHERE, CART and Random Forests as recommended by Storn. The tuning performance of learners was evaluated
 by precision and F. To compare performance of each learner with different np's, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, in terms of precision, the recommended {\em np} will improve the performance of WHERE, CART and Random Forests in 2, 5, and 4 data sets. However, in 6, 4, and 4 data sets, those numbers  will degrade the performance compared with {\em np = 10}. For F as the tuning goal, we can observe the similar pattern. 
+\Menzies{need to explain why those data sets have better performance np= 50 or 60}
 
  From this study, with the same experimental condition, the recommended {\em np's} for WHERE, CART and Random Forest, do not bring any significant improvements over {\em np = 10}. We're not arguing that {\em np = 10} is the optimal settings for tuning defect predictors. But it suffices to make tuning easy and generate a competitive performance.
 
