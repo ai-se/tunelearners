@@ -30,13 +30,14 @@ any method that focuses on parts of the code
 can blind us to defects in other areas. Some  {\em
 lightweight sampling policy} should be used to explore the rest of the system.  This
 sampling policy will always be incomplete.
-Nevertheless, it is the recommended option when
-resources do not permit a complete assessment of the whole system.
+Nevertheless, it is the only option when
+resources prevent a complete assessment of everything.
 
 One such lightweight sampling policy is defect predictors learned from static code attributes.
 Given software described in (e.g.) the attributes of \tab{ck},   data miners can
 learn where the probability of software defects is highest.
-This approach is   {\em easy to
+
+The rest of this section argues that such defect predictors are   {\em easy to
 use}, {\em widely-used}, and {\em useful} to use.
 
 {\em Easy to use:} Static code attributes can be automatically collected, even for very large systems~\cite{nagappan05}.
@@ -45,64 +46,13 @@ For example, depending on the review methods, 8 to 20 LOC/minute can be
 inspected and this effort repeats for all members of the review team,
 which can be as large as four or six people~\cite{me02f}. 
 
-%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
-\renewcommand\arraystretch{1.2}
-\begin{table*}[t!]
-\scriptsize
-  \centering
-	\begin{tabular}{|c|c|c|c|l|}
-	\cline{1-5}
-	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
-\multicolumn{1}{c|}{Description} \\ \hline
-	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
-	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
-	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider for the best 
-split to build its final decision tree. \\ \cline{2-5} 
-	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
-its final  decision tree. \\ \cline{2-5} 
-	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}Finds min\_samples\_leaf 
-in the initial clustering tree  using  ${n\_samples}^ {min\_Size}$.
-\end{tabular} \\ \cline{2-5} 
-    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  the initial clustering tree to be pruned\\ \cline{2-5}
-	 & depthMin & 2 & [1,6]&The minimum depth of the initial clustering tree below which no pruning for the
-clustering tree. \\ \cline{2-5} 
-	 & depthMax & 10 &[1,20]& The maximum depth of the initial clustering tree. \\ \cline{2-5} 
-	 & wherePrune & False &T/F& Whether or not to prune the initial clustering tree. \\ \cline{2-5}
-	 & treePrune & True &T/F& Whether or not to prune the final decision tree. \\ \cline{2-5} 
-\hline
-\multirow{5}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
-
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{2-5} 
-     & max\_depth & None & [1, 50]& The maximum depth of the tree. \\
-     \cline{1-5}  
-       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
-\cline{2-5} 
-	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
-split. \\ \cline{2-5} 
-	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
-	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
-internal node. \\ \cline{2-5} 
-	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
-node. \\ \cline{2-5} 
-	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
-	 \hline
-
-	\end{tabular}
-    \caption {List of parameters to be tuned.}
-\label{tab:parameters}
-\end{table*}
-{\em Widely used:} Many researchers and industrial practitioners  use static attributes to guide software 
+{\em Widely used:}  Researchers and industrial practitioners  use static attributes to guide software 
 quality predictions.
  Defect prediction models have been reported
-to have been used at Google~\cite{lewis13}.
+  at Google~\cite{lewis13}.
 Verification and validation (V\&V) textbooks
 (\cite{rakitin01}) advise using static code complexity attributes
-to decide which modules are worthy of manual inspections.  
+to decide which modules are worth manual inspections.  
 
 
 {\em Useful:}

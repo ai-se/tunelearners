@@ -71,7 +71,7 @@
 
 \begin{document}
 % \conferenceinfo{FSE}{'15 Bergamo, Italy}
-\title{ Analytics Without  Tuning Considered Harmful?}
+\title{ Tuning for Software Analytics: is it Really Necessary?}
 % \numberofauthors{1}
 \author{\alignauthor Wei Fu, Tim Menzies, Xipeng Shen \\
        \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
@@ -83,14 +83,17 @@
 One of the ``black arts'' of data mining is setting the tuning
 parameters that control  the miner.  We offer a simple,
 automatic, and very effective  method for finding those tunings.
-For the purposes of learning
-software defect predictors this  method can quickly
-find  good tunings that  dramatically change   the performance of a learner.
-For example,
-in this paper we show   tunings that  alter detection  precision  
- from 2\% to 98\%.
 
-These results prompt for a change to standard methods in software analytics.
+Contrary to our prior expectations, finding these tunings
+ was remarkably simple: it only required tens, not thousands, of attempts
+ to obtain very good results.
+For example, when  learning
+software defect predictors this  method can quickly
+found tunings  that  alter detection  precision  
+ from 2\% to 98\%. 
+
+Given that (1)~the improvements are so large, and (2)~the tuning is so simple,
+these results prompt for a change to standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
 {\em without}  conducting a tuning optimization study.
@@ -120,14 +123,14 @@ search-based software engineering.
  
 \section{Introduction}
  
-In the $21^{st}$ century, it is now impossible
-to manually browse all the available software project
+In the $21^{st}$ century, it is  impossible
+to manually browse all  available software project
 data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
 and this is just one of over a dozen open-source repositories
 that are readily available to researchers~\cite{rod12}.
-For example, at the time of this writing (May  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
+For example, at the time of this writing (Aug  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
 
-Faced with this information overload,
+Faced with this data overload,
 researchers in empirical SE
 use  data miners  to generate 
 {\em defect predictors from static code measures}.
@@ -144,8 +147,9 @@ tuning would not lead to large performance improvements).
 Also, we suspected that
 tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
 
-The results of this paper show that neither of these points is supportable, at least when learning
-defect detectors from static code attributes since:
+The results of this paper show that the above points are
+false,  at least for
+defect prediction from  code attributes:
 \be
 \item
 Tuning  defect predictors is {\em remarkably simple};
@@ -157,89 +161,140 @@ this paper explores six research questions about tuning defect predictors for
 static code measures:
 \bi
 \item RQ1: {\em Does   tuning    improve the performance scores of a predictor?} We will show below
- examples of truly dramatic improvement;
-e.g.  precision changes from 2\% to 98\%.
+ examples of truly dramatic improvement:
+ usually by 5 to 20\% and often by much more (in one extreme case, precision improved from 2\% to 98\%);
 \item RQ2: {\em Does tuning change conclusions on what learners are better than others?} 
-Numerous recent SE papers (e.g. \cite{lessmann2008benchmarking,hall11,me07b}) claim that some learners are better than others. We show that at least
-some of those conclusions are completely changed by tuning.
-\item RQ3: {\em Does tuning change conclusions about what factors are most important in software engineering?} Numerous recent SE papers (e.g. ~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,%
+Recent SE papers~\cite{lessmann2008benchmarking,hall11} claim that some learners are better than others. 
+Some of those conclusions are completely changed by tuning. 
+\item RQ3: {\em Does tuning change conclusions about what factors are most important in software engineering?} Numerous recent SE papers (e.g. ~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,%
 herzig2013predicting}) use data miners to conclude that {\em this}
-is more important than {\em that} for (e.g.) reducing software project defects.
+is more important than {\em that} for reducing software project defects.
 Given the  tuning results of this paper, we show that such conclusions need to be revisited.
 \item  RQ4: {\em Is tuning easy?} We show that one of the simpler multi-objective optimizers
 (differential evolution~\cite{storn1997differential}) works very well for tuning defect predictors. 
-\item RQ5: {\em Is tuning impractically slow?}. We achieved dramatic improvements in the performance scores
-of our data miners in less than 100 evaluations (!!); i.e., very
+\item RQ5: {\em Is tuning impractically slow?} We achieved dramatic improvements in the performance scores
+of our data miners in less than 100 evaluations (!); i.e., very
 quickly.
 \item RQ6: {\em Should data miners be used ``off-the-shelf'' with their default tunings?} 
-At least for defect prediction from static code measures, our answer is an emphatic ``no'' (and
-the implication for other kinds of software analytics is now an open and urgent question).
+For defect prediction from static code measures, our answer is an emphatic ``no'' (and
+the implication for other kinds of  analytics is now an open and urgent question).
 \ei
-Before beginning, we digress for one  clarification.
-This paper is {\em not} arguing that
-software analytics is somehow wrong-headed or misguided.
-In the age of the Internet and global access to software engineering data,
-there exists the  problem of information overload. {\em Something} must be done to
-allow analysts to make conclusions via an automatic analysis over a lot of data.
-The results of this paper is that for a particular local context
-(a specific data set and a specific goal) there exists  
-methods for optimizing the conclusions reached in that context.  
-Those conclusions
-may not generalize to other contexts but this  is not a council for despair. 
-As shown here, 
-there  exists general methods for finding
-local conclusions in a particular context. Further,
-those
-methods are  very simple to implement and very fast to execute.
+%Before beginning, we digress for one  clarification.
+%This paper is {\em not} arguing that
+%software analytics is somehow wrong-headed or misguided.
+%In the age of the Internet and global access to software engineering data,
+%there exists the  problem of information overload. {\em Something} must be %done to
+%allow analysts to make conclusions via an automatic analysis over a lot of %data.
+%The results of this paper is that for a particular local context
+%(a specific data set and a specific goal) there exists  
+%methods for optimizing the conclusions reached in that context.  
+%Those conclusions
+%may not generalize to other contexts but this  is not a council for despair. 
+%As shown here, 
+%there  exists general methods for finding
+%local conclusions in a particular context. Further,
+%those
+%methods are  very simple to implement and very fast to execute.
 
 
-\section{But is This a New Result?}
+\section{Background}
 
-
-In  other fields, the impact of tuning is well understood. However, as we argue
-in this section, this result is not properly  acknowledged  in the field of software analytics. 
+\subsection{Issues of Tuning: Important and Ignored?}
+In  other fields, the impact of tuning is well understood~\cite{Bergstra2012}. 
+Yet, as argued in this section, issues of tuning  are rarely or poorly addressed
+in the defect prediction literature.
 
 The formal definitions of data mining stresses that these learners are heuristic explorers
 of a truly   vast space of the possible models within a data set~\cite{mitchell1982generalization}. For example, given 20 columns of boolean variables,
 there are $2^{20}$ possible models. Data mining is practical since various heuristics
 allow automatic algorithms to ignore most of those possibilities. 
-
-While that heuristic search makes data mining possible, it also means that tunings
+While  heuristic search makes data mining possible, it also means that tunings
 can significantly affect what comes out of a data miner.
 When we tune a data miner, what we are really doing is changing how a learner applies
-its heuristics. This means tuned data miners use different heuristics, which means they ignore different possible models, which means they return different models.     
+its heuristics. This means tuned data miners use different heuristics, which means they ignore different possible models, which means they return different models; i.e.  {\em how} we learn changes {\em what} we learn.
 
-The fact that {\em how} we learn changes {\em what} we learn is not acknowledged
-in the field of software analytics.
-There exists many research papers
-that use data miners to   show that certain factors
-are more influential than others for (say)
-predicting defects. As shown below, such conclusions can be dramatically
-changed by the tuning process since those  ``influential'' factors are very different pre- and post- tuning. Also, those factors tend to  change from project to project or if the goal
-of the tuning is altered.
-Hence, many old papers    need to be revisited  and perhaps revised~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}.  
-For example, one of us (Menzies) used data miners
-to assert that some factors were more important than others for predicting
-successful software reuse~\cite{me02k}. That assertion should now be doubted since Menzies did not conduct a tuning study before reporting what factors the data miners
-found were most influential.
+Are the impacts of tuning addressed in the defect prediction literature?
+To answer that question,  in August 2015 we searched scholar.google.com for the conjunction of  "data mining" and "software engineering" and  "defect prediction".
+After sorting by the citation count and discarding the non-SE papers (and those without a pdf link), we read over this sample
+of  50 highly-cited SE defect prediction papers. 
+What we found in that sample was that few authors
+acknowledged the impact of tunings (exceptions: ~\cite{hall11,lessmann2008benchmarking}).
+Overall,  80\% of papers in our sample {\em did not} adjust
+the ``off-the-shelf'' configuration of the data miner (e.g. ~\cite{me07b,Moser:2008,herzig2013predicting,zimmermann2007predicting}). Of the remaining papers:
+\bi
+\item
+Some papers in our sample  explored   data super-sampling~\cite{4271036} or data sub-sampling techniques via  automatic methods (e.g. ~\cite{Gao:2011,me07b,4271036,Kim:2011}) 
+or via some domain principle (e.g. ~\cite{Moser:2008,Nagappan:2008,Hassan:2009}).
+As an example of the latter, Nagappan et al.~\cite{Nagappan:2008} checked if metrics related to organizational structure were relatively more powerful for predicting software defects. 
+However, it should be notes that  these studies varied the input data but
+not the   ``off-the-shelf''   settings of the data miner.
+\item
+A few other papers did acknowledge that one data miner may not be appropriate
+for all data sets.  Those papers tested  different  
+``off-the-shelf'' data miners on the same data set.
+For example, Elish et al.\cite{Elish2008649}  compared support vector
+machines to other data miners for the purposes of defect prediction. SVM's execute via a ``kernel function'' which should be specially selected for different data sets and
+the Elish et al. paper  makes no mention of any SVM tuning study.  
+To be fair to Elish et al., we hasten to add that we
+ourselves have  published
+papers using ``off-the-shelf'' tunings~\cite{me07b} since,
+prior to this paper it was unclear to us how to effectively
+navigate the large space of possible tunings.
+\ei
+Over our entire sample, there was only  one paper that conducted a somewhat extensive tuning study.
+Lessmann et al. tuned parameters for some of their algorithms using  a {\em grid search}; i.e. divide all $C$ configuration
+options into $N$ values, then try all   $N^C$ combinations.
+This is a slow approach-- we have explored grid search for 
+defect prediction and found it takes days to terminate~\cite{me07b}.
+Not only that, we found that grid search can miss
+important optimizations~\cite{baker07}.
+Every grid has ``gaps'' between each grid division which means
+that a supposedly rigorous grid search can still miss
+important configurations~\cite{Bergstra2012}. 
+Bergstra and Bengio~\cite{Bergstra2012} comment for most data sets only a few of the tuning parameters really matter-- which means that
+much of the runtimes associated with grid search is actually wasted.
+Worse still, Bergstra and Bengio  comment that 
+the 
+important tunings are   different   for different
+data sets-- a 
+ phenomenon makes grid search a poor choice for configuring data mining
+ algorithms for new data sets. 
+ 
 
-Further, several  prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
-that learnerX is better than learnerY for some software analytics task.
-For example, a recent IEEE TSE article claimed that the 
-CART decision tree learner was far worse than Random Forests for
-software defect prediction~\cite{lessmann2008benchmarking}. 
-Such conclusions do not survive tuning.
-For example,
-after tuning, the worst learner (CART) can perform just as well as the supposedly
-best learner (Random Forest). Hence, all those prior results that ranked learners for software
-analytics now need to be revisited (and perhaps revised).
 
-Thirdly, it is a standard practice to use the default ``off-the-shelf'' tunings  for data mining tools (previously
-we have defended that approach, arguing that it
-encourages reproducibility~\cite{me15:book1}). That ``off-the-shelf''  policy
-can no longer be condoned. For example, suppose our default
-number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation).
-After tuning, we see that our optimizer often uses $F$ values that are nowhere near that default:
+
+%We found only one paper in our sample from scholar.google.com 
+%%that explored anything like the range of configuation values
+%that we explore in this paper. Lessmann et %al.~\cite{lessmann2008benchmarking
+%}
+%explreod 22 learners
+%Worse, in the rare paper
+%that explores those options, it does so using a method that
+%is known to perform poorly (the {\em grid search} method, discussed %below~\cite{Bergstra2012}).
+ 
+
+
+
+
+%%Further, several  prominent IEEE TSE papers~\cite{lessmann2008benchmarking,hall11,me07b} have claimed 
+%that learnerX is better than learnerY for some software analytics task.
+%For example, a recent IEEE TSE article claimed that the 
+%CART decision tree learner was far worse than Random Forests for
+%software defect prediction~\cite{lessmann2008benchmarking}. 
+%Such conclusions do not survive tuning.
+%For example,
+%after tuning, the worst learner (CART) can perform just as well as the supposedly
+%best learner (Random Forest). Hence, all those prior results that ranked learners for software
+%analytics now need to be revisited (and perhaps revised).
+
+%Returning now to the issue
+%of using  ``off-the-shelf'' tunings  for data mining tools: previously
+%we have defended that approach, arguing that it
+%encourages reproducibility~\cite{me15:book1}. Based on the results
+%of this paper, it must be said that that ``off-the-shelf''  policy
+%can no longer be condoned. For example, suppose our default
+%number of trees in  a Random Forest was   $F=100$ (which is the default in our implementation).
+%After tuning, we see that our optimizer often uses $F$ values that are nowhere near that default:
 
 % {\scriptsize
 % \[F \in \left\{\begin{array}{l} 55,  65, 70,   82, 88, 96, 100,  102,  104, 107,\\
@@ -254,14 +309,6 @@ After tuning, we see that our optimizer often uses $F$ values that are nowhere n
 %                                 131, 132, 135, 140, 141, 141, 150   \end{array}\right\}
 % \]}
 
-
-
-{\scriptsize
-\[F \in \left\{\begin{array}{l} 50, 58, 59, 63, 63, 66, 67, 73, 74, 74, \\
-                                75, 77, 80, 82, 85, 96, 96, 97, 97, 101, \\
-                                103, 107, 111, 111, 112, 120, 125, 125,  \\
-                                130,130, 138, 144, 149, 150   \end{array}\right\}
-\]}
 
 \begin{table*}[t]
 \renewcommand{\baselinestretch}{0.8}\begin{center}
@@ -320,11 +367,13 @@ defect & defect & Boolean: where defects found in post-release bug-tracking syst
 
 
 
-
-The  good news of this paper  is that {\em tuning is very easy}.
+Since the Lessmann et al. paper, much progress has been made in 
+configuration algorithms
+and we can now report that  {\em finding useful tunings is very easy}.
 This result is both novel and unexpected.
-A standard run of such evolutionary optimizers requires   thousands,
-if not millions, of evaluations. However, in a result that we found startling, that  differential evolution can find useful settings for learners generating defect predictors
+A standard run of grid search (and other  evolutionary algorithms)
+is  that optimization requires   thousands,
+if not millions, of evaluations.  However, in a result that we found startling, that  {\em differential evolution} (described below) can find useful settings for learners generating defect predictors
 in less than 100 evaluations (i.e. very quickly).
 Hence,   the ``problem'' (that
 tuning changes the conclusions) is really
@@ -336,16 +385,16 @@ number of evaluations required, then we assert that tuning
   should be standard practice
 for anyone building defect predictors.
 
-That said, the bad news is that, for defect
-prediction, tuning dramatically changes
-  what is learned from that data. Therefore, it is now an open and pressing research issue to check if
-analytics without parameter tuning is considered {\em harmful} or, at the 
-very least, {\em misleading}.
-Clearly, we  must now revisit all prior results   based on
-``off-the-shelf'' tunings.
-Further,
-it is no longer enough to just run a data miner and report the result
-{\em without} first conducting a tuning optimization study.
+%That said, the bad news is that, for defect
+%prediction, tuning dramatically changes
+%  what is learned from that data. Therefore, it is now an open and %pressing research issue to check if
+%analytics without parameter tuning is considered {\em harmful} or, at %the 
+%very least, {\em misleading}.
+%Clearly, we  must now revisit all prior results   based on
+%``off-the-shelf'' tunings.
+%Further,
+%it is no longer enough to just run a data miner and report the result
+%{\em without} first conducting a tuning optimization study.
 
 % \section{Motivating Example}\label{sect:eg}
 
@@ -435,8 +484,7 @@ it is no longer enough to just run a data miner and report the result
 
 % The rest of this paper repeats the analysis of this section, but for 
 % more complex learners.
-
-\section{Background Notes}
+ 
  
 
 \subsection{Defect Prediction}
@@ -452,36 +500,124 @@ plus    some new results from Rahman et al.~\cite{rahman14:icse}.
 
  
 
-\subsection{Data Mining Algorithms}
+ \subsection{Data Mining Algorithms}
  
 There are many ways to build defect predictors
 such as  CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
-and WHERE~\cite{menzies2013local}.
-For this study, we use the CART and Random Forest  from 
+ WHERE~\cite{menzies2013local} and LR (logistic regression).
+For this study, we use WHERE-based learner, CART, Random Forest and LR versions  from 
 SciKitLearn~\cite{scikit-learn} (and
 WHERE is available from
-github.com/ai-se/where).
+github.com/ai-se/where). 
  We use  these algorithms, for the following reasons.
+ 
 CART and Random Forest were mentioned in
-a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that compared 21  
+a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that compared 22  
 learners for  defect prediction.
 That study ranked  CART  worst  and Random Forest as best.
 In a demonstration of the impact of tuning,
 this paper shows  we can {\em reverse} the conclusions of  Lessmann et al. such that CART
 performs just as well as
  Random Forest.
-This
- paper also presents results with WHERE-based learner since, as shown below,
+
+LR was  mentioned by Hall et al.~\cite{hall11}
+as usually being as good or better as more complex learners (e.g.
+Random Forests). In a finding that endorses the Hall et al. result,
+we show that untuned LR performs better than 
+untuned Random Forests (at least, for the data sets studied here). However,
+we will show that tuning raises doubts about the optimality of the
+Hall et al. recommendation.
+
+Finally,  this
+ paper uses WHERE since, as shown below,
 it offers an interesting case study on the benefits of tuning.
+
   
+
+%%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
+\renewcommand\arraystretch{1.2}
+\begin{table*}[t!]
+\scriptsize
+  \centering
+	\begin{tabular}{|c|c|c|c|l|}
+	\cline{1-5}
+	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
+\multicolumn{1}{c|}{Description} \\ \hline
+	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
+	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
+	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider for the best 
+split to build its final decision tree. \\ \cline{2-5} 
+	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
+its final  decision tree. \\ \cline{2-5} 
+	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}Finds min\_samples\_leaf 
+in the initial clustering tree  using  ${n\_samples}^ {min\_Size}$.
+\end{tabular} \\ \cline{2-5} 
+    & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  the initial clustering tree to be pruned\\ \cline{2-5}
+	 & depthMin & 2 & [1,6]&The minimum depth of the initial clustering tree below which no pruning for the
+clustering tree. \\ \cline{2-5} 
+	 & depthMax & 10 &[1,20]& The maximum depth of the initial clustering tree. \\ \cline{2-5} 
+	 & wherePrune & False &T/F& Whether or not to prune the initial clustering tree. \\ \cline{2-5}
+	 & treePrune & True &T/F& Whether or not to prune the final decision tree. \\ \cline{2-5} 
+\hline
+\multirow{5}{*}{CART} & threshold & 0.5 &[0,1]& The value to determine defective or not. \\ \cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 & [1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{2-5} 
+     & max\_depth & None & [1, 50]& The maximum depth of the tree. \\
+     \cline{1-5}  
+       \multirow{5}{*}{\begin{tabular}[c]{@{}c@{}}Random \\ Forests\end{tabular}}  & threshold & 0.5 & [0.01,1] & The value to determine defective or not. \\ 
+\cline{2-5} 
+	 & max\_feature & None &[0.01,1]& The number of features to consider when looking for the best 
+split. \\ \cline{2-5} 
+	 & max\_leaf\_nodes & None &[1,50]& Grow trees with max\_leaf\_nodes in best-first fashion. \\ \cline{2-5} 
+	 & min\_sample\_split & 2 &[2,20]& The minimum number of samples required to split an 
+internal node. \\ \cline{2-5} 
+	 & min\_samples\_leaf & 1 &[1,20]&The minimum number of samples required to be at a leaf 
+node. \\ \cline{2-5} 
+	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
+	 \hline 
+Logistic 	 Regression&\multicolumn{4}{l|}{This study uses untuned LR in order to check
+a conclusion of~\cite{hall11}. }\\\hline
+
+	\end{tabular}
+    \caption {List of parameters tuned by this paper.}
+\label{tab:parameters}
+\end{table*}
 
 \subsection{Learners and Their Tunings}
 
 
 Our learners use the tuning parameters of \tab{parameters}. This section describes those parameters.
+The default parameters for CART and Random Forests are set by 
+the SciKitLearn authors and the
+default parameters for WHERE-based learner are set via our own expert judgement.
+When we say a learner is used ``off-the-shelf'', we mean
+that they use the defaults shown in \tab{parameters}. 
 
-As shown in \tab{parameters}, default parameters for the Where-based learner are set using authors' engineering judgment and default parameters for CART and Random Forests are set by SciKitLearn. Those default parameters might not be the standard parameters for practical defect learners in reality, but it's a rule of thumb that most researchers would use just use the default parameters in the software without any tuning\cite{me07b,moser2008comparative,herzig2013predicting,zimmermann2007predicting}. The tuning range is set according to the corresponding default parameters. The reason for this is to justify whether tuning with a small range can get a performance improvement (\Menzies{is this correct?})
-
+As to the value of those defaults, it could be argued that these defaults are 
+not the best  parameters needed for practical defect prediction.
+That said,  prior to this paper, two things were true:
+\bi
+\item 
+Many data scientists in SE use the standard defaults
+in their data miners, 
+without   tuning (e.g.~\cite{me07b,Moser:2008,herzig2013predicting,zimmermann2007predicting}).
+\item
+The effort involved to adjust those tunings seemed so onerous, that
+many researchers in this field were content to take our prior advice
+of ``do not tune... it is just too hard''~\cite{me15:book1}.
+\ei
+As to the details of these learners, LR is a parametric
+modeling approach. Given $f = \beta_0 + \sum_i\beta_ix_i$,
+where $x_i$ is some measurement in a data set, and $\beta_i$
+is learned via regression, LR
+converts that into a function $0 \le g \le 1$
+using $g=1/\left(1+e^{- f}\right)$. This function reports how much
+we believe in a particular class. 
 
 CART, Random Forest, and WHERE-based learners are all  tree learners that divide a data set, then recur
 on each split.
@@ -560,7 +696,7 @@ of attributes.
   Random Forest.
 \item {\em Max\_depth} is the upper bound on the depth of the CART tree.  
  \item
-WHERE's initial clustering
+WHERE's  
 tree generation will always split up to {\em depthMin} number of branches.
 After that, WHERE will only split data if the mean performance scores of the two halves
 is ``trivially small'' (where ``trivially small'' is set by the   {\em wriggle} parameter). 
@@ -575,63 +711,34 @@ majority cluster
 
 
 \subsection{Tuning Algorithms}
-
-
- \subsubsection{Parametric Tuning Algorithms}
-The  goal of this paper is to adjust the tuning parameters of \tab{parameters}
-in order to   optimize (improve) some particular performance scores
-generated by a particular learner being applied to  a particular data set.
-For this task, we do not use traditional parametric numeric optimizer  
-such as  gradient descent optimizers~\cite{saltelli00} that require models comprised of
-differential functions (i.e. functions of real-valued variables whose derivative exists at each point in its domain).
-This is impractical  for  our learners since their internal states are   not a smoothly differential continuous function.
-Rather, learners being tuned  contain many regions with many different properties (tuning options can
-drive the learner into very different modes with very different performance properties).
-
-
- \subsubsection{Non-Parametric Tuning Algorithms}
- 
-Non-parametric  optimizers   make no assumption
-about the internal structure of the model.
-There are many such optimizers:
-\bi
-\item
-Simulated annealing~\cite{fea02a,me07f};
-\item
-A wide range of genetic algorithms~\cite{goldberg79} augmented by
-techniques such as differential evolution~\cite{storn1997differential}, tabu search and scatter search~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350};
-\item
-Particle swarm optimization~\cite{pan08}; 
-\item 
-Numerous ``decomposition approaches'' that uses
-    heuristics to decompose the total space into   small problems,   then applies a
-    simpler optimizer to each region including \mbox{$\varepsilon$-domination}~\cite{deb05} and MOEA/D ~\cite{zhang07};
-    \item 
-    Response surface methods~\cite{krall15,Zuluaga:13};
-    \item
-    And many others as well.
-    \ei
-From all the above methods, how do we select which optimizers to apply to tuning data miners?
+  
+   
+How should researchers select which optimizers to apply to tuning data miners?
 Cohen~\cite{cohen95} advises comparing new 
  methods against the simplest possible alternative. 
-Holte~\cite{holte93} recommends using very simple  learners
+Similarly, Holte~\cite{holte93} recommends using very simple  learners
  as a
 kind of ``scout'' for a  preliminary analysis of a data
 set (to check if that data really requires a more
 complex analysis).
-
-To find our ``scout'',  we used engineering judgement to sort  the above algorithms from simplest to most complex.
-Of the optimizers listed above, the simplest are simulated annealing (SA)  and 
+Accordingly,
+to find our ``scout'',  we used engineering judgement to sort  candidate algorithms from simplest to  complex. For
+example, here is a list of optimizers used widely in research:
+{\em 
+simulated annealing}~\cite{fea02a,me07f};
+ various {\em genetic algorithms}~\cite{goldberg79} augmented by
+techniques such as {\em differential evolution}~\cite{storn1997differential}, 
+{\em tabu search} and {\em scatter search}~\cite{Glover1986563,Beausoleil2006426,Molina05sspmo:a,4455350};
+{\em particle swarm optimization}~\cite{pan08}; 
+numerous {\em decomposition} approaches that use
+    heuristics to decompose the total space into   small problems,   then apply a
+    {\em response surface methods}~\cite{krall15,Zuluaga:13}.
+Of these,  the simplest are simulated annealing (SA)  and 
 differential evolution (DE), each of which can be coded in less than a page of some high-level scripting language. Our reading of the current literature is that there are more  advocates for
 differential evolution than
-  SA:
-  \bi
-  \item
-  When the MOEA/D community requires a secondary optimizer, they often use  differential evolution~\cite{zhang07,5583335}.
-  \item
- Vesterstrom and Thomsen~\cite{Vesterstrom04} found DE to be competitive with 
-   particle swarm optimization and other GAs.
-   \ei
+  SA. For example,  Vesterstrom and Thomsen~\cite{Vesterstrom04} found DE to be competitive with 
+   particle swarm optimization and other GAs. 
+   
 DEs have been applied before for   parameter tuning (e.g. see~\cite{omran2005differential, chiha2012tuning}) but this is the first time they have been applied to
 optimize defect prediction from static code attributes.  
 The psuedocode for differential evolution is shown in Algorithm~\ref{alg:DE}.
@@ -662,38 +769,35 @@ In the following description,
    \caption{Data used in this experiment. 
    E.g., the top left data set has 20 defective classes out of 125 total.
    See \tion{dataa} for explanation of {\em training, tuning, testing} sets.
-   }\label{fig:data1}
+   }\label{tab:data1}
 \end{table*} 
 
-DE is an evolutionary algorithm where the next {\em NewGeneration} is learnt from
+DE evolves a {\em NewGeneration} of candidates  from
 a current {\em Population}.  Our DE's lose one ``life''
-when e new is no better than  current (terminating when ``life'' is zero)$^{5}$.
+when e new is no better than  current (terminating when ``life'' is zero)$^{4}$.
 Each candidate solution in the {\em Population}  
 is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \tab{parameters} and {\em Scores} come from training a learner using those parameters
-and applying it     test data$^{23-28}$.
+and applying it     test data$^{23-27}$.
 
 The premise of DE  is that the best way to mutate existing tunings
-is to {\em Extrapolate}$^{29}$
+is to {\em Extrapolate}$^{28}$
 between current solutions.  Three solutions $a,b,c$ are selected at random.
 For each tuning parameter $i$, at some probability {\em cr}, we replace
-the old tuning $x_i$ with $y_i$:
-\bi
-\item (For numerics) $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
-controlling the cross-over amount.  The {\em trim} function$^{39}$ limits the new
+the old tuning $x_i$ with $y_i$. For booleans, we use $y_i= \neg x_i$ (see line 36). For numerics, $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
+controlling  cross-over.  The {\em trim} function$^{39}$ limits the new
 value to the legal range min..max of that parameter.
-\item (For booleans) $y_i= \neg x_i$ (see line 37).
-\ei
-The main loop of DE$^{7}$ runs over the {\em Population}, replacing old items
-with new {\em Candidate}s (if the new candidate is better than the old item).
-This means that, as the loop progresses, the {\em Population} is full of increasiningly
+ 
+The main loop of DE$^{6}$ runs over the {\em Population}, replacing old items
+with new {\em Candidate}s (if  new candidate is better).
+This means that, as the loop progresses, the {\em Population} is full of increasingly
 more valuable solutions. This, in turn, also improves  the candidates, which are {\em Extrapolate}d
 from the {\em Population}.
 
 For the experiments of this paper, we collect performance
 values from a data mining, from which a {\em Goal} function extracts one 
-performance value$^{27}$ (so we run this code many times, each time with
-a different {\em Goal}$^{2}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
+performance value$^{26}$ (so we run this code many times, each time with
+a different {\em Goal}$^{1}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
 
 
 %\begin{algorithm}
@@ -751,10 +855,10 @@ consecutive releases  (where release $i+1$ was built after release $i$).
    reported below from (a)~the model generated by the untuned learner or (b)~the
    best model found by differential evolution.
    \ei
-This approach ensures   all treatments 
-are assessed on the same tests. Note that we did consider
-one other experimental design but rejected it for reasons of
-internal validity (see \tion{construct}).
+% This approach ensures   all treatments 
+% are assessed on the same tests. Note that we did consider
+% one other experimental design but rejected it for reasons of
+% internal validity (see \tion{construct}).
 
 Some data sets have more than three releases and, for those data, we could run more
  than one experiment. For example, {\em ant} has five versions in PROMISE so
@@ -764,7 +868,19 @@ Some data sets have more than three releases and, for those data, we could run m
  \item AntV1: first,second,third = versions 2,3,4
  \item AntV2: first,second,third = versions 3,4,5
  \ei 
-These data sets are displayed in \fig{data1}.
+These data sets are displayed in \tab{data1}.
+
+As an aside, an alternate experimental design would be to 
+learn a baseline learner from the first {\em and} second release
+instead of, as shown above,  just the first release. On the one hand,
+this would mean that the baseline could be learned from more data.
+On the other hand, this adds a conflation to our experimental design
+since the optimizer uses the second release for pruning, not growing a data set set.  Happily, from 
+piror work~\cite{Menzies:2008aa} we know that defect predictors usually {\em saturates} (i.e.
+does not generate better predictors) after 100 examples, which is a number smaller than all our first release data sets. Hence, their would
+be little value in generating the baselines using the first and second
+releases. 
+
 
 
 
@@ -797,7 +913,7 @@ and {\em F} refer to {\em both} the defect and non-defective modules. This is di
 refer to either non-defective or defective modules (repsectively).
 
 
-\begin{figure}[!t]
+\begin{figure}[!b]
 \small
 \begin{tabular}{|p{.95\linewidth}|}\hline
 
@@ -835,9 +951,9 @@ managers might be willing to lower the recall somewhat in order to minimize the 
 These two examples are just the tip of the iceberg (see other criteria in \fig{criteria})
 and there is insufficient space in this paper to explore all the above optimization goals.
 
-In this paper, what we can  show are examples of how  changing  optimization goals can also change 
+In this paper, what we can  show  examples where  changing  optimization goals can also change 
 the conclusions made from that learner on that data. Accordingly, we warn that it is 
-important not to overstate  empirical results from software analytics.
+important not to overstate  empirical results from  analytics.
 Rather, those results need to be expressed {\em along with} the context within which they are
 relevant (and by ``context'', we mean the optimization goal).
 
@@ -847,22 +963,71 @@ relevant (and by ``context'', we mean the optimization goal).
 
 One comment before presenting the results. The following text does not
 show results for tuning on recall
-or false alarms. The reason is that false alarm and recall focus on {\em only}
-the non-defective and defective modules (respectively). Hence:
-\bi
-\item
-When DE tunes for recall, we can achieve near
+or false alarms. Those goals focus on {\em only}
+the  defective or non-defective modules (respectively). Hence.
+when DE tunes for recall, we can achieve near
 100\% recall-- but the cost of a near 100\% false alarms.
-\item
 Similarly,  tuning
 can achieve near zero false alarm rates by effectively turning off
 the detector (when recall is zero).
-\ei
 Accordingly,  this paper  explores performance measures that comment on all 
 target classes (i.e. precision and ``F''). 
 
 
-\begin{table}[!tb]
+
+
+\section{Experimental Results}
+
+In the following, we explore the effects of tuning WHERE, Random Forests,
+and CART. LR will be used, untuned, in order to check one of the recommendations
+made by Hall et al.~\cite{hall11}.
+
+\subsection{RQ1:  Does  Tuning  Improve Performance? }\label{sect:precision}
+
+
+\fig{deltas} says  that the answer to RQ1 is ``yes''-- tuning  has a positive effect on performance scores. This figure sorts
+ deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
+figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
+ 
+
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=1.5in]{precision_W.eps}\includegraphics[width=1.5in]{F_W.eps}
+ \end{center}
+\caption{Deltas in performance  seen in \tab{precisionbars} (left)
+and \tab{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
+ \end{figure}
+ 
+ 
+\tab{precisionbars} and \tab{fbars} show the
+the specific values seen before and after tuning (two separate experiments with different tuning goals). 
+For each data set, the maximum precision values for each data set are shown in {\bf bold}.
+As might have been
+ predicted by Lessmann et al.~\cite{lessmann2008benchmarking}, 
+untuned CART is indeed the worst learner (only one of its
+untuned results is best and {\bf bold}). 
+And, 
+in $\frac{13}{17}$ cases, the   untuned Random Forest performs better than or equal to untuned CART.  
+% Some of the data sets in \fig{precisionbars} proved challenging for all learners;
+% e.g. the precision results for {\em ivy} are less
+% that impressive.
+% To some extent, this is due to
+% the properties of   the data set (as shown in \fig{data1}, defective classes in {\em ivy} are very rare in tuning data).
+
+
+
+
+That said,  tuning can improve those poor performing detectors.
+For {\em jeditV2}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 98\% precision.  
+A similar pattern can be seen in results from {\em ivy},   and {\em xercesV0}.
+In those two data sets, nearly all the precision values are   low {\em except} for
+tuned WHERE that scored 89\% and 85\%.
+Finally, note the  {\em jeditV2} result for the WHERE learner.
+Here, tuning changes precision from 2\% to 98\%.
+
+
+ 
+\begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8} 
 
 \scriptsize    
@@ -892,107 +1057,7 @@ xercesV1 & {\bf 56} &   & 26 &   & 49 &   & 26 &   & 49 &   & 26 &  \\
 \caption{Precision results (best results  shown in {\bf bold}).}
 \label{tab:precisionbars}
 \end{table}
-
-
-\section{Experimental Results}
-\subsection{RQ1:  Does  Tuning  Improve Performance? }\label{sect:precision}
-
-\tab{precisionbars} shows precision results before and after tuning with precision as the performance criteria 
-using three different learners.
-For each data set, the maximum precision values for each data set are shown in {\bf bold}.
-
-These results offer support for  prior conclusions that CART is worse than Random Forest. As might have been
- predicted by Lessmann et al.~\cite{lessmann2008benchmarking}, 
-untuned CART is indeed the worst learner (only one of its
-untuned results is best and {\bf bold}). 
-Also, 
-in $\frac{13}{17}$ cases, the performance of untuned Random Forest is better than or equal to untuned CART.  
-% Some of the data sets in \fig{precisionbars} proved challenging for all learners;
-% e.g. the precision results for {\em ivy} are less
-% that impressive.
-% To some extent, this is due to
-% the properties of   the data set (as shown in \fig{data1}, defective classes in {\em ivy} are very rare in tuning data).
-
-That said,  tuning can improve those poor performing detectors.
-For {\em jeditV2}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 98\% precision.  
-A similar pattern can be seen in results from {\em ivy},   and {\em xercesV0}.
-In those two data sets, nearly all the precision values are   low {\em except} for
-tuned WHERE that scored 89\% and 85\%.
-Finally, note the  {\em jeditV2} result for the WHERE learner.
-Here, tuning changes precision from 2\% to 98\%.
-
-\fig{deltas} shows that the answer to RQ1 is ``yes''; i.e. tuning usually has a positive effect on performance scores. This figure sorts
-the deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
-figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
  
-
-
-
-\begin{figure}[!t]
-\begin{center}
-\includegraphics[width=1.5in]{precision_W.eps}\includegraphics[width=1.5in]{F_W.eps}
- \end{center}
-\caption{Deltas in performance  seen in \tab{precisionbars} (left)
-and \tab{fbars} (right) between tuned and untuned learners. Tuning improves performance when the deltas are above zero.}\label{fig:deltas}
- \end{figure}
-
-\subsection{RQ2:  Does Tuning Change a Learner's Ranking ?}\label{sect:rank}
-Researchers often use performance criteria to assert that one learner is better than 
-another~\cite{lessmann2008benchmarking,me07b,hall2012systematic}. In\cite{me07b},
-naive Bayes does better than C4.5 in terms of pd and balance over NASA MDP data sets.
-In \cite{lessmann2008benchmarking}, Random Forest is considered to be statistically 
-better than CART in terms of the AUC ranking. In the systematic literature review 
-\cite{hall2012systematic}, authors claimed that defect predictors based on simple 
-modeling techniques such as Logistic Regress perform well. Such conclusions are 
-not stable across tuning process.
-
-22 learners are compared over NASA MDP data sets in terms of the AUC in \cite{lessmann2008benchmarking}.
-Some learners are tuned using manual methods, like C4.5, CART and Random Forests 
-and some are tuned by searching algorithms, like grid search for SVM-Type learners. 
-In our expeirment, when we tune CART and Random Forests for precisoin and F-measure, 
-the rankings of these two learners are changed.
-
-In \tab{precisionbars} and \tab{fbars}, the tuned CART are better than or equal
-to tuned Random Forests over $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
-terms of precision and F-measure, respectively. Results from the non-parametric
-Kolmogorov-Smirnov Test turn out that the performance 
-scores of tuned CART and tuned Random Forests are not statistically different.
-This is the opposite of Lessmann et al.~\cite{lessmann2008benchmarking}, 
-the tuned Random Forest is not significantly better than tuned CART.
- 
-\wei{added here!} In \fig{lr}, Logistic Regression performs better than untuned CART and Random
-Forests over 17 data sets in terms of precision, which conforms with the statement
-in \cite{hall2012systematic}: simple modeling techniques just perform well.
-However, if we tuned CART and Random Forests, both of their performance was improved greatly. In some
-data sets, CART and Random Forests are much better than Logistic Regression.
-
-In another result that is the reverse of \tab{precisionbars}, tuned WHERE is not necessarily
- any better than anything else.
- 
- Therefore, it's not always safe to say ``LearnerX'' is the best or better than ``learnerY'' 
- without applying tuning techniques. That is, the answer to RQ2 is ``yes'' since tuning a set of learners
- changes the rankings of those learners regarding different criteria.
- 
-The  important lesson here is that, given a particular task (e.g. optimizing for precision), tuning can offer
-substantial benefits. However, when that task changes (e.g. to optimizing for the F-measure),
-it should not be assumed that conclusions from the previous tuning will hold in the new context.
-In practice, this means that tuning needs to be repeated for each new context.
-
-
-\begin{figure}[!t]
-\begin{center}
-\includegraphics[width=1.5in]{LR_untuned.eps}\includegraphics[width=1.5in]{LR_tuned.eps}
- \end{center}
-\caption{Comparison between Logistic Regression and CART as well as Random Forests before and after tuning. }\label{fig:lr}
- \end{figure}
-
-% \begin{figure}[!t]
-% \begin{center}
-% \includegraphics[width=1.5in]{svm_rbf.eps}\includegraphics[width=1.5in]{svm_sigmoid.eps}
-%  \end{center}
-% \caption{Comparison between tuned and naive SVM learners with rbf and sigmoid kernels over the goal of F. }\label{fig:svm}
-%  \end{figure}
-
 
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8} 
@@ -1023,15 +1088,109 @@ xercesV1 & 23 &   & 4 &   & 18 &   & {\bf 47} &   & 18 &   & 40 &  \\
 \label{tab:fbars}
 \end{table}
 
+\subsection{RQ2:  Does Tuning Change a Learner's Ranking ?}\label{sect:rank}
+Researchers often use performance criteria to assert that one learner is better than 
+another~\cite{lessmann2008benchmarking,me07b,hall11}. For example:
+\be
+\item
+Lessmann et al.~\cite{lessmann2008benchmarking} conclude that
+Random Forest is considered to be statistically 
+better than CART. 
+\item
+Also, in Hall et al.'s   systematic literature review\cite{hall11} it is argued 
+that defect predictors based on simple 
+modeling techniques such as LR perform better than complicated techniques such as Random Forests\footnote{By three measures,
+Random Forests
+is the more complicated than LR. Firstly, LR builds one model
+while Random Forests builds many models. Secondly, LR is just
+a model construction tool while Random Forests needs both
+a tool to construct its forests {\em and} a second tool
+to  infer some conclusion from all the members of that forest.
+Thirdly, the LR model can be printed in a few lines while the multiple
+models learned by Random
+Forest model would take up multiple pages of output.}.
+\ee
+Given tuning, how stable are these  conclusions?
+Before answering issue, we digress for two comments.
+
+
+
+Firstly, it is important to comment on why it is  so important to check the conclusions
+of these particular papers. 
+These  papers are prominent publications (to say the least).
+Hall et al.~\cite{hall11} is the fourth most-cited IEEE TSE
+paper for 2009 to 2014 with 176 citations (see goo.gl/MGrGr7)
+while the Lessmann et al. paper~\cite{lessmann2008benchmarking} has 394 citations (see
+goo.gl/khTp97)-- which is quite remarkable for a paper published in 2009.
+Given the prominence
+of these papers, researchers might believe it is
+appropriate to
+  use  their advice without testing that advice on local data sets.
+
+Secondly, while we are critical of the results of
+Lessmann et al. and Hall et al., it needs to be said that  their analysis  was 
+excellent and exemplary given the state-of-the-art of the tools used when those papers were written.  
+While Hall et al. did not perform any new experiments, 
+their
+summarization of so many defect prediction papers have not been equalled
+before (or since).
+As to the Lessmann et al. paper, they  compared
+22 data miners using various   data sets (mostly from NASA)~\cite{lessmann2008benchmarking}.
+In that study, some learners were tuned using manual methods 
+(C4.5, CART and Random Forests)
+and some are tuned automatic  grid search for the SVM-Type learners (for more on grid search, see   {\S}2.1).
+
+That said, our tuning results show that it is time to revise
+the recommendations of those papers. 
+  \fig{lr} comments on the advice from Hall et al. (that LR is better than Random Forests).
+ In a result that might have been predicted Hall et al., Logistic Regression does perform better than untuned Random
+Forests over 17 data sets. 
+However, it turns out that advice is sensitive to the tunings
+used with Random Forests. After tuning, we find that Random Forests
+is often competitive, and sometimes even better, than Logistic Regression. 
+
+
+As to Lessmann et al.'s advice (that Random Forest is better than 
+CART),  
+in \tab{precisionbars} and \tab{fbars}, we saw that counter-examples
+to that statement.
+Recall in those tables,
+tuned CART are better than or equal
+to tuned Random Forests in $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
+terms of precision and F-measure, respectively. Results from the non-parametric
+Kolmogorov-Smirnov Test show that the performance 
+scores of tuned CART and tuned Random Forests are not statistically different.
+Note that this  result that Random Forest is  not significantly better than   CART, would not have been
+predicted by   Lessmann et al.
+  
+
+Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparatively ranked.
+ 
+
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=1.5in]{LR_untuned.eps}\includegraphics[width=1.5in]{LR_tuned.eps}
+ \end{center}
+\caption{Comparison between Logistic Regression and Random Forests before and after tuning. }\label{fig:lr}
+ \end{figure}
+
+% \begin{figure}[!t]
+% \begin{center}
+% \includegraphics[width=1.5in]{svm_rbf.eps}\includegraphics[width=1.5in]{svm_sigmoid.eps}
+%  \end{center}
+% \caption{Comparison between tuned and naive SVM learners with rbf and sigmoid kernels over the goal of F. }\label{fig:svm}
+%  \end{figure}
+
+
 % list some features
-\begin{table*}[!ht]
+\begin{table}[!ht]
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
 \centering
-  \begin{tabular}{c|l|l}
-    \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline
-  \multirow{2}{*}{antV0} & {\bf mfa} &  {\bf None} \\
+  \begin{tabular}{c|p{1in}|p{1in}}
+    \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline 
+ \multirow{2}{*}{antV0} & {\bf mfa} &  {\bf None} \\
          & mfa, dam, wmc, ic & mfa, dam, wmc, ic\\
   \hline
  \multirow{2}{*}{camelV0} & {\bf mfa, rfc, lcom3, cam, amc, loc, ic} &{\bf  mfa, wmc, cam, dam, loc, lcom3, rfc, ic, dit }\\
@@ -1064,39 +1223,50 @@ xercesV1 & 23 &   & 4 &   & 18 &   & {\bf 47} &   & 18 &   & 40 &  \\
     
   \end{tabular}
   
-    \caption{Features selected by tuned WHERE with different goals(features selected by tuning shown in bold). 
+    \caption{Features selected by tuned WHERE with different goals:
+    {\bf bold} features are those found useful by the tuned WHERE.
+    Also, features shown in plain text are those found useful by the untuned WHERE.
     }\label{tab:features}
-\end{table*}
+\end{table}
 
 
 \subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
 
 
-Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
-\tab{features} shows that such conclusions are not reliable since they can be changed by tuning. For space limitation, from each data set, we just select one experiment, like antV0, as representative. 
-This figure shows what attributes appeared in WHERE's final decision trees when optimizing for different goals, precision and F-measure. Note that the attributes selected by tuned WHERE in each row shown in bold are usually different from default WHERE. Meanwhile, in $\frac{9}{10}$ representative experiments, for the same data set, tuning selects different attributes for precision and F-measure.
+Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
+\tab{features} comments that such tests are unreliable since the factors selected by a data miner are much altered before and 
+after tuning.
 
-\Menzies{
-\begin{itemize}
-\item Do you have any insights into this table 6?
-\item like, are there any specific features considered very important in Default WHERE but not showing up in Tuning WHERE? . 
-\item WHY???
-\end{itemize}
-}
-% Note that the counts in the {\em tuned} column are   usually
-% different to those in the {\em default} columns (the tuned learners used more attributes
-% than otherwise as witnessed by the taller columns of numbers in the ``tuned'' column). 
-According to default WHERE, {\it mfa} is considered as the most important factor because it's selected in $\frac{9}{10}$ experiments for both goals. However, in tuning process, this factor has only shown as key factor in $\frac{5}{10}$ experiments for both precision and F-measure. 
+\tab{features} shows what features are found in the trees generated by the WHERE algorithm
+(bold shows the features found by the trees from tuned WHERE; plain text shows the features seen
+in the untuned study). Note that different features are selected depending on whether or not
+we tune an algorithm.
 
-That is, our answer to RQ3 is ``yes'', tuning changes our
+For example, consider {\em mfa} which is the
+number of methods inherited by a class plus the number of methods accessible by member methods of the class.
+For both goals (precision and ``F'') {\em mfa} is selected for nine and five data sets,
+for the untuned and tuned data miner (respectively).
+Similar differences can be seen with other attributes.
+
+As to why different tunings select for different features,  recall from {\S}2.1 that tuning changes how data miners
+heuristically explore a large space of possible models. As we change how that exploration proceeds,
+so we change what features are found by that exploration.
+
+In any case, our answer to RQ3 is ``yes'', tuning changes our
 conclusions about what factors are most important in software engineering.
+Hence, many old papers    need to be revisited  and perhaps revised~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,herzig2013predicting}.  
+For example, one of us (Menzies) used data miners
+to assert that some factors were more important than others for predicting
+successful software reuse~\cite{me02k}. That assertion should now be doubted since Menzies did not conduct a tuning study before reporting what factors the data miners
+found were most influential.
 
-\begin{figure}[!b]
+\begin{figure}[!t]
 \begin{center}
 \includegraphics[width=1.5in]{np_precision.eps}\includegraphics[width=1.5in]{np_f.eps}
  \end{center}
 \caption{Deltas in performance between {\em np = 10} and the recommended np's. The recommended np is better when deltas are above zero. {\em np = 90, 50 and 60} are recommended population size for WHERE, CART and Random Forest by Storn.}\label{fig:deltas_np}
  \end{figure}
+
 
 
 \subsection{RQ4: Is Tuning Easy?}\label{sect:easy}
@@ -1118,21 +1288,27 @@ using a constant {\em np=10}; i.e. $\frac{10}{90}, \frac{10}{50}, \frac{10}{60}$
 recommended search space.
 
 To justify that {\em np=10} is enough, we did another tuning study, 
-where all the settings were the same as before but we set{\em np= 90, 50} and {\em np = 60} for WHERE, CART and Random Forests as recommended by Storn. The tuning performance of learners was evaluated
-by precision and F. To compare performance of each learner with different np's, we plot the delta in the performance as \fig{deltas}. As shown in \fig{deltas_np}, in terms of precision, the recommended {\em np} will improve the performance of WHERE, CART and Random Forests in 2, 5, and 4 data sets. However, in 6, 4, and 4 data sets, those numbers  will degrade the performance compared with {\em np = 10}. For F as the tuning goal, we can observe the similar pattern. 
-\Menzies{need to explain why those data sets have better performance np= 50 or 60}
+where all the settings were the same as before but we set {\em np= 90, 50} and {\em np = 60} for WHERE, CART and Random Forests, respectively (i.e. the settings
+as recommended by Storn). The tuning performance of learners was evaluated
+by precision and F. To compare performance of each learner with different {\em np}'s, we computed the delta in the performance between {\em np=10} and {\em np} using any of \{90,50,60\}.
 
- From this study, with the same experimental condition, the recommended {\em np's} for WHERE, CART and Random Forest, do not bring any significant improvements over {\em np = 10}. We're not arguing that {\em np = 10} is the optimal settings for tuning defect predictors. But it suffices to make tuning easy and generate a competitive performance.
+Those deltas, shown in \fig{deltas_np}, are sorted along the x-axis. In those plots, a zero or negative $y$ value means that {\em np=10} performs as well or better than  {\em np $\in \{90,50,60\}$}. 
+In those
+plots we see:
+\bi
+\item The median improvement is zero; i.e. {\em np=10} usually does as well as anything else;
+\item The plots are nearly {\em balanced}-- for every case where {\em np=10} does worse,
+there is another when it performs as well or better.
+\ei
+One technical note: the data set orderings in \fig{deltas_np} on the x-axis are not the same. That is,
+if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not useful for that data set's F-measure score.
 
+Hence, in these results, there is no consistent pattern showing that {\em np=10} is a poor choice of search space size.
 Another measure showing that tuning is easy 
 (for static code defect predictors)
 is the number of evaluations required to complete optimization
-(see next section).
-
-Hence we answer RQ4 as ``yes'', tuning is surprisingly easy (at least
-for defect predictors).
-
-
+(see next section). That is, we answer RQ4 as ``yes'', tuning is surprisingly easy-- at least
+for defect predictors and using DE.
 
 
 % %%% repalce this table with the new one
@@ -1259,36 +1435,34 @@ improvements reported in this paper.
 Prior to this paper, the authors have conducted numerous explorations of evolutionary algorithms
 for search-based SE applications~\cite{krall15,krall15:hm,fea02a,me07f,Green}. Based
 on that work, our expectations were that non-parametric evolutionary optimization would
-take thousands, if not millions, of evaluations of candidate tunings. Hence, originally,
-we used Storn's advise on the size of {\em np} and ran our optimizers for 24 hours. 
-Then, just
-to get a baseline, we tried {\em np=10} and the early stopping rules (number of lives used in
-Algorithm~1 on line 5) and obtained the results of this paper. 
+take thousands, if not millions, of evaluations of candidate tunings. This turned out not
+to be case.
 
-Hence, we answer RQ5 as ``no''. Tuning is so fast that
-it could (and should) be used by anyone using defect predictors. The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set for each parameter in \tab{parameters}. The early stopping rules applied in this study also helps make tuning fast\wei{added HERE!}
+Hence, we answer RQ5 as ``no'': tuning is so fast that
+it could (and should) be used by anyone using defect predictors. 
+%The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set for each parameter in \tab{parameters}.  
+
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=1.5in]{features_precision.eps}\includegraphics[width=1.5in]{features_F.eps}
+ \end{center}
+\caption{Four representative tuning values in WHERE with  precision and F as the tuning goal, respectively.   }\label{fig:features}
+ \end{figure}
+
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
  In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representative and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
-The default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$ as indicated in \tab{parameters}.  Note that:
-\bi
-\item
-The tunings learned by DE
-were often very different to the default. That is, to achieve the performance improvements seen in the paper,
+ Note that
+ the tunings learned were different in different data sets and for different goals.
+Also, the tunings learned by DE
+were often very different to the default (the default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$, respectively). That is, to achieve the performance improvements seen in the paper,
 the default tuning parameters required a wide range of adjustments.
-\item The tunings learned by DE were different in different data sets and for different goals.
-\ei
-Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
-sets are changed.Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
-tuning is so easy and so fast (at least for defect predictors from static code attributes).
 
-\begin{figure}[!t]
-\begin{center}
-\includegraphics[width=1.5in]{features_precision.eps}\includegraphics[width=1.5in]{features_F.eps}
- \end{center}
-\caption{Four representative tuning values in WHERE with  precision and F as the tuning goal, respectively. The default values for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$.  }\label{fig:features}
- \end{figure}
+Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
+sets are changed. Given this requirement to repeatedly run tuning, it is fortunate that (as shown above)
+tuning is so easy and so fast (at least for defect predictors from static code attributes).
 
 
  
@@ -1377,7 +1551,7 @@ tuning is so easy and so fast (at least for defect predictors from static code a
 % \end{table*}
 
 
-\section{Reliability and Validity}\label{sect:construct}
+\newpage\section{Reliability and Validity}\label{sect:construct}
 
 
 {\em Reliability} refers to the consistency of the results obtained
@@ -1390,32 +1564,7 @@ on-line in the PROMISE code repository and all our algorithms
 are on-line at github.com/ai-se/where.
 
 
-{\em Validity} refers to the extent to which a piece of research actually
-investigates what the researcher purports to investigate.
-{\em Internal validity} checks if the differences found in
-the treatments can be ascribed to the treatments under study. 
-One internal validity issue with our experiments is the choice
-of {\em training, tuning, and testing} data sets discussed in 
-\tion{design}. Recall that while all our learners used the same
-{\em testing} data set, our untuned learners were only given
-access to {\em training} while DEs could get feedback from
-{\em training} and
-{\em tuning}.  This means that, potentially,  the performance increases
-reported above are merely an artificat of the DEs being able to access
-more data. However:
-\bi
-\item Note that
-DEs assess their performance using a model built from {\em training}
-then applied to the {\em tuning} data. If we gave the untuned
-learners double the training data, then this would be inherently
-biased against DEs.
-\item In practice, this is much ado about nothing. We have
-repeated all the experiments of this paper with the untuned
-learners building models from {\em training} + {\em tuning}.
-While the exact numbers found in this way
-may differ from the above in some small way, we can report that 
-those repeated runs do not substantively change the above conclusions.
-\ei
+
 {\em External validity} checks if the results are of relevance
 for other cases, or can be generalized from samples
 to populations.  
@@ -1465,7 +1614,7 @@ and others~\cite{lessmann2008benchmarking,hall11}.
 Also,
 tuning changes conclusions on what factors are most important in software development.
 Once again, this means that old papers may need to be revised including those
-some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,moser2008comparative,zimmermann2007predicting,herzig2013predicting}. 
+some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
 \ei
 Accordingly, we strongly advise that data miners should not be used ``off-the-shelf'' with their default tunings. 
 \fig{features} shows just how much tuning can alter default settings
@@ -1477,6 +1626,7 @@ whenever data or goals are changed.
 Fortunately, the cost of find good tunings is not excessive since, at least for
 static code defect predictors, tuning is easy and fast.
 
+\newpage
 \section{Future Work}
 
  As noted by
