@@ -1182,6 +1182,11 @@ Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparati
 %  \end{figure}
 
 
+
+
+
+
+
 % list some features
 \begin{table}[!ht]
 
@@ -1310,6 +1315,24 @@ is the number of evaluations required to complete optimization
 (see next section). That is, we answer RQ4 as ``yes'', tuning is surprisingly easy-- at least
 for defect predictors and using DE.
 
+
+\begin{table}[!t]
+\centering
+\scriptsize
+\begin{tabular}{|l|c|c|}
+\hline
+Learner & CART & WHERE \\ \hline
+CART    & -    & 0.42  \\ \hline
+R.Forest      & 0.29 & 0.18  \\ \hline
+\end{tabular}
+\begin{tabular}{|l|c|c|}
+\hline
+Learner & CART & WHERE \\ \hline
+CART    & -    & 0.24  \\ \hline
+R.Forest      & 0.24 & 0.29  \\ \hline
+\end{tabular}
+\caption{Kolmogorov-Smirnov Tests for numbers seen in \fig{deltas_np}: Precision(left) and F(right).}
+\end{table}
 
 % %%% repalce this table with the new one
 % \begin{table}[!ht]
@@ -1443,7 +1466,7 @@ it could (and should) be used by anyone using defect predictors.
 %The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set for each parameter in \tab{parameters}.  
 
 
-\begin{figure}
+\begin{figure}[!t]
 \begin{center}
 \includegraphics[width=1.5in]{features_precision.eps}\includegraphics[width=1.5in]{features_F.eps}
  \end{center}
