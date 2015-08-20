@@ -156,9 +156,7 @@ Tuning  defect predictors is {\em remarkably simple};
 \item
 And can {\em dramatically improve the performance}. 
 \ee
-More specifically,
-this paper explores six research questions about tuning defect predictors for
-static code measures:
+Those results were found by   exploring six research questions:
 \bi
 \item RQ1: {\em Does   tuning    improve the performance scores of a predictor?} We will show below
  examples of truly dramatic improvement:
@@ -179,6 +177,25 @@ quickly.
 For defect prediction from static code measures, our answer is an emphatic ``no'' (and
 the implication for other kinds of  analytics is now an open and urgent question).
 \ei
+Based on our answers to these  questions,  we strongly advise that:
+\bi
+\item
+Data miners should not be used ``off-the-shelf'' with their default tunings (since
+we show below just how much tuning can alter default settings
+both for different data sets and for different goals).
+\item
+Any future paper on defect prediction should include a 
+tuning study. Here, we have found  an algorithm called differential
+evolution to be a useful method for conducting such
+tunings.
+\item
+Tuning needs to be repeated
+whenever data or goals are changed.
+Fortunately, the cost of find good tunings is not excessive since, at least for
+static code defect predictors, tuning is easy and fast.
+\ei
+
+
 %Before beginning, we digress for one  clarification.
 %This paper is {\em not} arguing that
 %software analytics is somehow wrong-headed or misguided.
@@ -197,8 +214,7 @@ the implication for other kinds of  analytics is now an open and urgent question
 %methods are  very simple to implement and very fast to execute.
 
 
-\section{Background}
-
+\section{Preliminaries}
 \subsection{Issues of Tuning: Important and Ignored?}
 In  other fields, the impact of tuning is well understood~\cite{Bergstra2012}. 
 Yet, as argued in this section, issues of tuning  are rarely or poorly addressed
@@ -487,7 +503,7 @@ for anyone building defect predictors.
  
  
 
-\subsection{Defect Prediction}
+\subsection{Notes on Defect Prediction}
 
 
 This section is our standard introduction to defect prediction~\cite{me15:book1},
@@ -500,7 +516,7 @@ plus    some new results from Rahman et al.~\cite{rahman14:icse}.
 
  
 
- \subsection{Data Mining Algorithms}
+ \subsection{Notes on Data Miners}
  
 There are many ways to build defect predictors
 such as  CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
@@ -588,7 +604,7 @@ a conclusion of~\cite{hall11}. }\\\hline
 \label{tab:parameters}
 \end{table*}
 
-\subsection{Learners and Their Tunings}
+\subsection{ Learners and Their Tunings}
 
 
 Our learners use the tuning parameters of \tab{parameters}. This section describes those parameters.
@@ -611,6 +627,14 @@ The effort involved to adjust those tunings seemed so onerous, that
 many researchers in this field were content to take our prior advice
 of ``do not tune... it is just too hard''~\cite{me15:book1}.
 \ei
+As to why we used the "Tuning Range" shown in \tab{parameters}, and not some other ranges,
+we note that (1)~those ranges included the defaults; (2)~the results shown below
+show that by exploring those ranges,   we achieved large gains in the performance of our defect predictors.
+This is not to say that {\em larger} tuning ranges might not result in {\em greater} improvements.
+However, for the goals of this paper (to show that some tunings do matter), exploring
+just these ranges shown in \tab{parameters} will suffice.
+
+
 As to the details of these learners, LR is a parametric
 modeling approach. Given $f = \beta_0 + \sum_i\beta_ix_i$,
 where $x_i$ is some measurement in a data set, and $\beta_i$
@@ -822,9 +846,7 @@ a different {\em Goal}$^{1}$).  Technically, this makes a  {\em single objective
 
 
 \section{Experimental Design}\label{sect:design}
-
-The following experiment aims to compare the performance of three learners, tuned and untuned, on 17
-sets of data. 
+ 
 
 \subsection{Data Sets}\label{sect:dataa}
 
@@ -1235,7 +1257,7 @@ Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparati
 \end{table}
 
 
-\subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
+ \subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
 
 
 Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
@@ -1249,9 +1271,9 @@ we tune an algorithm.
 
 For example, consider {\em mfa} which is the
 number of methods inherited by a class plus the number of methods accessible by member methods of the class.
-For both goals (precision and ``F'') {\em mfa} is selected for nine and five data sets,
+For both goals (precision and ``F'') {\em mfa} is selected for 9 and 5 data sets,
 for the untuned and tuned data miner (respectively).
-Similar differences can be seen with other attributes.
+Similar differences are   seen with other attributes.
 
 As to why different tunings select for different features,  recall from {\S}2.1 that tuning changes how data miners
 heuristically explore a large space of possible models. As we change how that exploration proceeds,
@@ -1297,18 +1319,16 @@ where all the settings were the same as before but we set {\em np= 90, 50} and {
 as recommended by Storn). The tuning performance of learners was evaluated
 by precision and F. To compare performance of each learner with different {\em np}'s, we computed the delta in the performance between {\em np=10} and {\em np} using any of \{90,50,60\}.
 
-Those deltas, shown in \fig{deltas_np}, are sorted along the x-axis. In those plots, a zero or negative $y$ value means that {\em np=10} performs as well or better than  {\em np $\in \{90,50,60\}$}. 
-In those
-plots we see:
-\bi
-\item The median improvement is zero; i.e. {\em np=10} usually does as well as anything else;
-\item The plots are nearly {\em balanced}-- for every case where {\em np=10} does worse,
-there is another when it performs as well or better.
-\ei
-One technical note: the data set orderings in \fig{deltas_np} on the x-axis are not the same. That is,
-if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not useful for that data set's F-measure score.
+Those deltas, shown in \fig{deltas_np}, are sorted along the x-axis. In those plots, a zero or negative $y$ value means that {\em np=10} performs as well or better than  {\em np $\in \{90,50,60\}$}. One technical aside: the data set orderings in \fig{deltas_np} on the x-axis are not the same (that is,
+if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not useful for that data set's F-measure score).
 
-Hence, in these results, there is no consistent pattern showing that {\em np=10} is a poor choice of search space size.
+  \fig{deltas_np} shows that
+the median improvement is zero; i.e. {\em np=10} usually does as well as anything else. This observation is
+supported by the   KS
+  results of \tab{ks}. At a 95\% confidence, the
+KS threshold  is $1.36\sqrt{34/(17*17)} = 0.46$ which is greater than  the values in \fig{deltas_np}. That is, no result in  \fig{deltas_np} is significantly different to any other-- which is to say that
+there is no evidence that   {\em np=10} is a poor choice of search space size.
+
 Another measure showing that tuning is easy 
 (for static code defect predictors)
 is the number of evaluations required to complete optimization
@@ -1316,23 +1336,39 @@ is the number of evaluations required to complete optimization
 for defect predictors and using DE.
 
 
+% \begin{table}[!t]
+% \centering
+% \scriptsize
+% \begin{tabular}{|l|c|c|}
+% \hline
+% Learner & CART & WHERE \\ \hline
+% CART    & -    & 0.42  \\ \hline
+% R.Forest      & 0.29 & 0.18  \\ \hline
+% \end{tabular}
+% \begin{tabular}{|l|c|c|}
+% \hline
+% Learner & CART & WHERE \\ \hline
+% CART    & -    & 0.24  \\ \hline
+% R.Forest      & 0.24 & 0.29  \\ \hline
+% \end{tabular}
+% \caption{Kolmogorov-Smirnov Tests for numbers seen in \fig{deltas_np}: Precision(left) and F(right).}
+% \end{table}
+
+
 \begin{table}[!t]
-\centering
+\renewcommand{\baselinestretch}{0.8}
 \scriptsize
-\begin{tabular}{|l|c|c|}
+\centering
+  \begin{tabular}{c|c c|cc}
+    &   \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c}{F} \\ \hline 
+    Learner & CART  & WHERE & CART & WHERE \\
 \hline
-Learner & CART & WHERE \\ \hline
-CART    & -    & 0.42  \\ \hline
-R.Forest      & 0.29 & 0.18  \\ \hline
-\end{tabular}
-\begin{tabular}{|l|c|c|}
-\hline
-Learner & CART & WHERE \\ \hline
-CART    & -    & 0.24  \\ \hline
-R.Forest      & 0.24 & 0.29  \\ \hline
-\end{tabular}
-\caption{Kolmogorov-Smirnov Tests for numbers seen in \fig{deltas_np}: Precision(left) and F(right).}
+    CART & - & 0.42 & - & 0.24 \\
+    R. Forest &  0.29 & 0.18 & 0.24 & 0.29 \\
+  \end{tabular}
+    \caption{Kolmogorov-Smirnov Tests for distributions of  \fig{deltas_np}}\label{tab:ks}
 \end{table}
+
 
 % %%% repalce this table with the new one
 % \begin{table}[!ht]
@@ -1574,7 +1610,7 @@ tuning is so easy and so fast (at least for defect predictors from static code a
 % \end{table*}
 
 
-\newpage\section{Reliability and Validity}\label{sect:construct}
+\section{Reliability and Validity}\label{sect:construct}
 
 
 {\em Reliability} refers to the consistency of the results obtained
@@ -1604,19 +1640,20 @@ However,  those other tasks often use the same kinds of learners
 explored in this paper so it is quite possible that
 the conclusions of this paper apply to other SE analytics tasks as well. 
 
-That said, there exist some class of data mining papers for which
-tuning may not be required. Consider  Le Goues et al.'s 2012
-ICSE paper that used a evolutionary program to learn
-repairs to code~\cite{leGoues12}. The performance criteria
-in that paper was ``can we fix any of the known bugs?''. Note
-that this criteria is a ``{\em competency}'' statement, and
-not a ``{\em better than}'' statement (the difference being that
-one is 
-``can do'' and the other is ``can do better''). For such
-competency claims, tuning is not necessary. However, as soon
-as {\em better than} enters the performance criteria then this
-becomes a race between competing methods. In such a race,
-it is unfair to hobble one competitor with poor tunings.
+%That said, there exist some class of data mining papers for which
+%tuning may not be required. Consider  Le Goues et al.'s 2012
+%ICSE paper that used a evolutionary program to learn
+%repairs to code~\cite{leGoues12}. The performance criteria
+%in that paper was ``can we fix any of the known bugs?''. Note
+%that this criteria is a ``{\em competency}'' statement, and
+%not a ``{\em better than}'' statement (the difference being that
+%one is 
+%``can do'' and the other is ``can do better''). For such
+%competency claims, tuning is not necessary. However, as soon
+%as {\em better than} enters the performance criteria then this
+%becomes a race between competing methods. In such a race,
+%it is unfair to hobble one competitor with poor tunings.
+
 
 
 
@@ -1639,21 +1676,20 @@ tuning changes conclusions on what factors are most important in software develo
 Once again, this means that old papers may need to be revised including those
 some of our own~\cite{me02k} and others~\cite{bell2013limited,rahman2013how,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
 \ei
-Accordingly, we strongly advise that data miners should not be used ``off-the-shelf'' with their default tunings. 
-\fig{features} shows just how much tuning can alter default settings
-both for different data sets and for different goals. 
+As to future work, it is now important
+to explore the implications of these
+conclusions to other kinds of software analytics.
+ This paper has investifated  {\em some} learners using {\em one}  optimizer. Hence, we can make
+no claim that DE is the {\em best} optimizer for {\em all} learners.
+Rather, our point is that there exists at least some learners
+whose performance can be dramatically improved by 
+at least one simple optimization scheme.  We hope that this work inspires
+much future work as this community develops and debugs best practices for tuning
+software analytics.
 
-Since the results from tuning are unstable,
-tuning needs to be repeated
-whenever data or goals are changed.
-Fortunately, the cost of find good tunings is not excessive since, at least for
-static code defect predictors, tuning is easy and fast.
-
-\newpage
-\section{Future Work}
-
- As noted by
-F\"{u}rnkranz~\cite{furnkranz05}, data mining is inherently a multi-objective optimization
+Finally, on a more general note, we point out
+that 
+F\"{u}rnkranz~\cite{furnkranz05} says data mining is inherently a multi-objective optimization
 problem that seeks the smallest model with the highest performance, 
 that generalizes best for
 future examples (perhaps learned in minimal time using the least amount of data).
@@ -1664,15 +1700,7 @@ then instead of adding elaborations to data miners (as done in this paper, or by
 exploring hyper-heuristics~\cite{jia2013learning}), it should be possible to radically simplify optimization and data
 mining with a single system that rapidly performs both tasks.
 
-Another issue for future work is the implications of these
-conclusions to other kinds of software analytics.
- This paper has explored  {\em some} learners using {\em one}  optimizer. Hence, we can make
-no claim that DE is the {\em best} optimizer for {\em all} learners.
-Rather, our point is that there exists at least some learners
-whose performance can be dramatically improved by 
-at least one simple optimization scheme.  We hope that this work inspires
-much future work as this community develops and debugs best practices for tuning
-software analytics.
+
  
  
 
