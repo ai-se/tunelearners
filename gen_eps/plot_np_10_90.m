@@ -17,7 +17,7 @@ hline = refline([0 0]);
 set(hline,'Color','k')
 title('F')
 legend('boxoff')
-xlabel('improvements, sorted')
+xlabel('data sets, sorted')
 
  FigHandle = figure('Position', [220, 300, 200, 400]);
 %plot([1:17],[0:0])
@@ -37,4 +37,4 @@ hline = refline([0 0]);
 set(hline,'Color','k')
 title('Precision')
 legend('boxoff')
-xlabel('improvements, sorted')
+xlabel('data sets, sorted')

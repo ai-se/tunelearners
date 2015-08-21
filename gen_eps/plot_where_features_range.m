@@ -19,7 +19,7 @@ hline = refline([0 0]);
 set(hline,'Color','k')
 title('Precision')
 legend('boxoff')
-xlabel('tuning value, sorted')
+xlabel('data sets, sorted')
 
  FigHandle = figure('Position', [220, 300, 200, 400]);
 x = [1:17]
@@ -40,4 +40,4 @@ hline = refline([0 0]);
 set(hline,'Color','k')
 title('F')
 legend('boxoff')
-xlabel('tuning value, sorted')
+xlabel('data sets, sorted')
