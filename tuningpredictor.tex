@@ -258,7 +258,7 @@ prior to this paper it was unclear to us how to effectively
 navigate the large space of possible tunings.
 \ei
 Over our entire sample, there was only  one paper that conducted a somewhat extensive tuning study.
-Lessmann et al. tuned parameters for some of their algorithms using  a {\em grid search}; i.e. divide all $C$ configuration
+Lessmann et al.\cite{lessmann2008benchmarking} tuned parameters for some of their algorithms using  a {\em grid search}; i.e. divide all $C$ configuration
 options into $N$ values, then try all   $N^C$ combinations.
 This is a slow approach-- we have explored grid search for 
 defect prediction and found it takes days to terminate~\cite{me07b}.
@@ -1165,7 +1165,7 @@ and some are tuned automatic  grid search for the SVM-Type learners (for more on
 That said, our tuning results show that it is time to revise
 the recommendations of those papers. 
   \fig{lr} comments on the advice from Hall et al. (that LR is better than Random Forests).
- In a result that might have been predicted Hall et al., Logistic Regression does perform better than untuned Random
+ In a result that might have been predicted as Hall et al., Logistic Regression does perform better than untuned Random
 Forests over 17 data sets. 
 However, it turns out that advice is sensitive to the tunings
 used with Random Forests. After tuning, we find that Random Forests
@@ -1174,7 +1174,7 @@ is often competitive, and sometimes even better, than Logistic Regression.
 
 As to Lessmann et al.'s advice (that Random Forest is better than 
 CART),  
-in \tab{precisionbars} and \tab{fbars}, we saw that counter-examples
+in \tab{precisionbars} and \tab{fbars}, we saw those counter-examples
 to that statement.
 Recall in those tables,
 tuned CART are better than or equal
@@ -1320,7 +1320,7 @@ as recommended by Storn). The tuning performance of learners was evaluated
 by precision and F. To compare performance of each learner with different {\em np}'s, we computed the delta in the performance between {\em np=10} and {\em np} using any of \{90,50,60\}.
 
 Those deltas, shown in \fig{deltas_np}, are sorted along the x-axis. In those plots, a zero or negative $y$ value means that {\em np=10} performs as well or better than  {\em np $\in \{90,50,60\}$}. One technical aside: the data set orderings in \fig{deltas_np} on the x-axis are not the same (that is,
-if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not useful for that data set's F-measure score).
+if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not necessary for that data set's F-measure score).
 
   \fig{deltas_np} shows that
 the median improvement is zero; i.e. {\em np=10} usually does as well as anything else. This observation is
@@ -1526,7 +1526,7 @@ it could (and should) be used by anyone using defect predictors.
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
- In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representative and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
+ In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representatives and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
  Note that
  the tunings learned were different in different data sets and for different goals.
 Also, the tunings learned by DE
@@ -1624,6 +1624,19 @@ tuning is so easy and so fast (at least for defect predictors from static code a
 % \end{table*}
 
 
+
+\section{Guidelines \wei{added!}}
+
+As discussed above, tuning is helpful and easy to do. Any defect prediction study based on data mining should include a tuning study. However, if tuning is not done properly, performance may not be improved but degraded to some extent. Here're some tips for tuning:
+
+{\em Tuning Data} is important for the whole tuning process. If available data size for the study is very small, k-fold cross evaluation method can be used to split data and generate new training data as well as tuning data. On the other hand, if the study concerns more about chronology, incremental learning approach can be adopted. 
+
+
+{\em Tuning Range} will determine how large the searching space the tuner will explore and how good the parameter got from tuning. The recommended range will set the default value as the median of the range with a reasonable distance. If the performance from tuning dose not better than the default parameter, adjust ranges accordingly.
+
+{\em Searching algorithm} is the engine of the tuning process. Since tuning has to be repeatedly done for different goals and different data sets, simple searching algorithms, like DE and Generic algorithms, are good choice to complete this task. Other more advanced algorithms, like NSGA III \cite{deb2014evolutionary} and GALE\cite{krall15}, can also be used if multi-objective tuning is considered.
+
+
 \section{Reliability and Validity}\label{sect:construct}
 
 
@@ -1671,7 +1684,11 @@ the conclusions of this paper apply to other SE analytics tasks as well.
 
 
 
+
+
+
 \section{Conclusions}
+
 
 Our exploration of the six research
 questions listed in the introduction
