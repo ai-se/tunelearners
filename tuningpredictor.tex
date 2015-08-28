@@ -89,7 +89,7 @@ Contrary to our prior expectations, finding these tunings
  to obtain very good results.
 For example, when  learning
 software defect predictors, this  method can quickly
-found tunings  that  alter detection  precision  
+find tunings  that  alter detection  precision  
  from 2\% to 98\%. 
 
 Given that (1)~the improvements are so large, and (2)~the tuning is so simple,
@@ -145,7 +145,7 @@ since we reasoned
 that a data miner's default tunings have been well-explored by the developers of those algorithms (in which case
 tuning would not lead to large performance improvements).
 Also, we suspected that
-tuning would take so long and be so CPU intensive that the benefits gained   would not be worth effort.
+tuning would take so long time and be so CPU intensive that the benefits gained   would not be worth effort.
 
 The results of this paper show that the above points are
 false,  at least for
@@ -160,7 +160,7 @@ Those results were found by   exploring six research questions:
 \bi
 \item RQ1: {\em Does   tuning    improve the performance scores of a predictor?} We will show below
  examples of truly dramatic improvement:
- usually by 5 to 20\% and often by much more (in one extreme case, precision improved from 2\% to 98\%);
+ usually by 5 to 20\% and often by much more (in one extreme case, precision improved from 2\% to 98\%).
 \item RQ2: {\em Does tuning change conclusions on what learners are better than others?} 
 Recent SE papers~\cite{lessmann2008benchmarking,hall11} claim that some learners are better than others. 
 Some of those conclusions are completely changed by tuning. 
@@ -180,9 +180,7 @@ the implication for other kinds of  analytics is now an open and urgent question
 Based on our answers to these  questions,  we strongly advise that:
 \bi
 \item
-Data miners should not be used ``off-the-shelf'' with their default tunings (since
-we show below just how much tuning can alter default settings
-both for different data sets and for different goals).
+Data miners should not be used ``off-the-shelf'' with default tunings.
 \item
 Any future paper on defect prediction should include a 
 tuning study. Here, we have found  an algorithm called differential
@@ -220,7 +218,7 @@ In  other fields, the impact of tuning is well understood~\cite{Bergstra2012}.
 Yet, as argued in this section, issues of tuning  are rarely or poorly addressed
 in the defect prediction literature.
 
-The formal definitions of data mining stresses that these learners are heuristic explorers
+The formal definition of data mining stresses that these learners are heuristic explorers
 of a truly   vast space of the possible models within a data set~\cite{mitchell1982generalization}. For example, given 20 columns of boolean variables,
 there are $2^{20}$ possible models. Data mining is practical since various heuristics
 allow automatic algorithms to ignore most of those possibilities. While heuristic search makes data mining possible, it also means that tunings
@@ -239,9 +237,9 @@ the ``off-the-shelf'' configuration of the data miner (e.g.~\cite{me07b,Moser:20
 \bi
 \item
 Some papers in our sample  explored   data super-sampling~\cite{4271036} or data sub-sampling techniques via  automatic methods (e.g. ~\cite{Gao:2011,me07b,4271036,Kim:2011}) 
-or via some domain principle (e.g. ~\cite{Moser:2008,Nagappan:2008,Hassan:2009}).
+or via some domain principles (e.g. ~\cite{Moser:2008,Nagappan:2008,Hassan:2009}).
 As an example of the latter, Nagappan et al.~\cite{Nagappan:2008} checked if metrics related to organizational structure were relatively more powerful for predicting software defects. 
-However, it should be notes that  these studies varied the input data but
+However, it should be noted that  these studies varied the input data but
 not the   ``off-the-shelf''   settings of the data miner.
 \item
 A few other papers did acknowledge that one data miner may not be appropriate
@@ -517,13 +515,13 @@ plus    some new results from Rahman et al.~\cite{rahman14:icse}.
 
  \subsection{Notes on Data Miners}
  
-There are many ways to build defect predictors
-such as  CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
+There  are ways to make defect predictors
+using  CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
  WHERE~\cite{menzies2013local} and LR (logistic regression).
-For this study, we use WHERE-based learner, CART, Random Forest and LR versions  from 
-SciKitLearn~\cite{scikit-learn} (and
-WHERE is available from
-github.com/ai-se/where). 
+For this study, we use CART, Random Forest and LR versions  from 
+SciKitLearn~\cite{scikit-learn} and
+WHERE, which is available from
+github.com/ai-se/where. 
  We use  these algorithms for the following reasons.
  
 CART and Random Forest were mentioned in
@@ -531,7 +529,9 @@ a recent IEEE TSE paper by Lessmann et al.~\cite{lessmann2008benchmarking} that 
 learners for  defect prediction.
 That study ranked  CART  worst  and Random Forest as best.
 In a demonstration of the impact of tuning,
-this paper shows  we can {\em reverse} the conclusions of  Lessmann et al. such that CART
+this paper shows  we can {\em refute} the conclusions of  Lessmann et al.
+in the sense that, after tuning,
+CART
 performs just as well as
  Random Forest.
 
@@ -657,7 +657,7 @@ d_i <   T \rightarrow \mathit{No} ,
 \end{equation}
 The splitting process is controlled by numerous tuning parameters.
 If data contains more than {\em min\_sample\_split}, then a split is attempted.
-On the other hand, if a split contains no more than {\em min\_samples\_leaf}, then recursion stops. CART and Random Forest use a 
+On the other hand, if a split contains no more than {\em min\_samples\_leaf}, then the recursion stops. CART and Random Forest use a 
 user-supplied constant for this parameter while
 WHERE-based learner firstly computes this parameter $m$={\em min\_samples\_leaf} from the size of the data
 sets via  $m=\mathit{size}^\mathit{min\_size}$ to build an initial  clustering tree.
@@ -797,7 +797,7 @@ In the following description,
 
 DE evolves a {\em NewGeneration} of candidates  from
 a current {\em Population}.  Our DE's lose one ``life''
-when thee new population is no better than  current one (terminating when ``life'' is zero)$^{4}$.
+when the new population is no better than  current one (terminating when ``life'' is zero)$^{4}$.
 Each candidate solution in the {\em Population}  
 is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \tab{parameters} and {\em Scores} come from training a learner using those parameters
@@ -896,7 +896,7 @@ learn a baseline learner from the first {\em and} second release
 instead of, as shown above,  just the first release. On the one hand,
 this would mean that the baseline could be learned from more data.
 On the other hand, this adds a conflation to our experimental design
-since the optimizer uses the second release for pruning, not growing a data set set.  Happily, from 
+since the optimizer uses the second release for pruning, not growing a data set.  Happily, from 
 piror work~\cite{Menzies:2008aa} we know that defect predictors usually {\em saturates} (i.e.
 does not generate better predictors) after 100 examples, which is a number smaller than all our first release data sets. Hence, their would
 be little value in generating the baselines using the first and second
@@ -985,7 +985,7 @@ relevant (and by ``context'', we mean the optimization goal).
 One comment before presenting the results. The following text does not
 show results for tuning on recall
 or false alarms. Those goals focus on {\em only}
-the  defective or non-defective modules (respectively). Hence.
+the  defective or non-defective modules (respectively). Hence,
 when DE tunes for recall, we can achieve near
 100\% recall-- but the cost of a near 100\% false alarms.
 Similarly,  tuning
@@ -1021,7 +1021,7 @@ and \tab{fbars} (right) between tuned and untuned learners. Tuning improves perf
  
  
 \tab{precisionbars} and \tab{fbars} show the
-the specific values seen before and after tuning (two separate experiments with different tuning goals). 
+the specific values seen before and after tuning (two separate experiments with two different tuning goals: {\em precision} and {\em ``F''}). 
 For each data set, the maximum precision or F values for each data set are shown in {\bf bold}.
 As might have been
  predicted by Lessmann et al.~\cite{lessmann2008benchmarking}, 
@@ -1029,6 +1029,11 @@ untuned CART is indeed the worst learner (only one of its
 untuned results is best and {\bf bold}). 
 And, 
 in $\frac{13}{17}$ cases, the   untuned Random Forest performs better than or equal to untuned CART.  
+% Note that the size of the improvement is sometimes small; e.g. the precision results improve more than the ``F'' measure.
+% But even when the {\em median} change is small, there still may exist
+% interesting (i.e.  exceptionally
+% large) improvements from tuning-- for example, 
+%  see the last  two ``F'' improvements for WHERE in \fig{deltas} where the improvements were greater than 70\%.
 % Some of the data sets in \fig{precisionbars} proved challenging for all learners;
 % e.g. the precision results for {\em ivy} are less
 % that impressive.
@@ -1039,15 +1044,28 @@ in $\frac{13}{17}$ cases, the   untuned Random Forest performs better than or eq
 
 
 That said,  tuning can improve those poor performing detectors.
-For {\em jeditV2}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 98\% precision.  
+In some cases, the median changes may be small (e.g. the ``F'' results for WHERE) but even in
+those cases, there are enough large changes to motivate the use of tuning. For example:
+\bi
+\item
+For WHERE's ``F'' improvement, there are two improvements over 70\%;
+\item
+Regarding precision, 
+for {\em jeditV2}, nearly all learners report precisions of under 20\%. But tuned  WHERE scores a 98\% precision.  
 A similar pattern can be seen in results from {\em ivy},   and {\em xercesV0}.
 In those two data sets, nearly all the precision values are   low {\em except} for
 tuned WHERE that scored 89\% and 85\%.
 Finally, note the  {\em jeditV2} result for the WHERE learner.
 Here, tuning changes precision from 2\% to 98\%.
+\ei
 
+% To complete the discussion in this section, we note that in the Lessmann et al. study,  Random Forest dramatically out-performed CART.
+% In this study, we show that  
+% tuned CART is now comparable to Random Forest. So our new results
+% do not complete reverse the results of Lessmann et al. However, they
+% do show that the Lessmann results are ``brittle'', in the sense that
+% tuning can remove the effect they report.
 
- 
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8} 
 
@@ -1105,7 +1123,7 @@ velocity & 51 &   & 51 &   & 49 &   & {\bf 53} &   & 51 &   & 51 &  \\
 xercesV0 & 22 &   & 23 &   & 21 &   & {\bf 27} &   & 24 &   & 20 &  \\
 xercesV1 & 23 &   & 4 &   & 18 &   & {\bf 47} &   & 18 &   & 40 &  \\
 \end{tabular}
-\caption{F-value results (best results  shown in {\bf bold}).}
+\caption{F-measure results (best results  shown in {\bf bold}).}
 \label{tab:fbars}
 \end{table}
 
@@ -1122,10 +1140,10 @@ Also, in Hall et al.'s   systematic literature review\cite{hall11}, it is argued
 that defect predictors based on simple 
 modeling techniques such as LR perform better than complicated techniques such as Random Forest\footnote{By three measures,
 Random Forest
-is the more complicated than LR. Firstly, LR builds one model
+is more complicated than LR. Firstly, LR builds one model
 while Random Forest builds many models. Secondly, LR is just
 a model construction tool while Random Forest needs both
-a tool to construct its forests {\em and} a second tool
+a tool to construct its forest {\em and} a second tool
 to  infer some conclusion from all the members of that forest.
 Thirdly, the LR model can be printed in a few lines while the multiple
 models learned by Random
@@ -1167,7 +1185,7 @@ As to the Lessmann et al. paper, they  compared
 22 data miners using various   data sets (mostly from NASA)~\cite{lessmann2008benchmarking}.
 In that study, some learners were tuned using manual methods 
 (C4.5, CART and Random Forest)
-and some are tuned automatic  grid search for the SVM-Type learners (for more on grid search, see   {\S}2.1).
+and some, like SVM-Type learners, were tuned by automatic grid search (for more on grid search, see   {\S}2.1).
 
 That said, our tuning results show that it is time to revise
 the recommendations of those papers. 
@@ -1187,7 +1205,7 @@ Recall in those tables,
 tuned CART are better than or equal
 to tuned Random Forest in $\frac{11}{17}$ and $\frac{10}{17}$ data sets in
 terms of precision and F-measure, respectively. Results from the non-parametric
-Kolmogorov-Smirnov Test show that the performance 
+Kolmogorov-Smirnov(KS) Test show that the performance 
 scores of tuned CART and tuned Random Forest are not statistically different.
 Note that Random Forest is  not significantly better than CART, would not have been
 predicted by   Lessmann et al.
@@ -1318,7 +1336,7 @@ recommended search space.
 To justify that {\em np = 10} is enough, we did another tuning study, 
 where all the settings were the same as before but we set {\em np = 90, np = 50} and {\em np = 60} for WHERE, CART and Random Forest, respectively (i.e. the settings
 as recommended by Storn). The tuning performance of learners was evaluated
-by precision and F. To compare performance of each learner with different {\em np}'s, we computed the delta in the performance between {\em np = 10} and {\em np} using any of \{90, 50, 60\}.
+by precision and ``F'' as before. To compare performance of each learner with different {\em np}'s, we computed the delta in the performance between {\em np = 10} and {\em np} using any of \{90, 50, 60\}.
 
 Those deltas, shown in \fig{deltas_np}, are sorted along the x-axis. In those plots, a zero or negative $y$ value means that {\em np = 10} performs as well or better than  {\em np $\in \{90, 50, 60\}$}. One technical aside: the data set orderings in \fig{deltas_np} on the x-axis are not the same (that is,
 if {\em np $>$ 10} was useful for optimizing one data set's precision score, it was not necessary for that data set's F-measure score).
@@ -1327,7 +1345,7 @@ if {\em np $>$ 10} was useful for optimizing one data set's precision score, it 
 the median improvement is zero; i.e. {\em np = 10} usually does as well as anything else. This observation is
 supported by the   KS
   results of \tab{ks}. At a 95\% confidence, the
-KS threshold  is $1.36\sqrt{34/(17*17)} = 0.46$ which is greater than  the values in \fig{deltas_np}. That is, no result in  \fig{deltas_np} is significantly different to any other-- which is to say that
+KS threshold  is $1.36\sqrt{34/(17*17)} = 0.46$, which is greater than  the values in \fig{deltas_np}. That is, no result in  \fig{deltas_np} is significantly different to any other-- which is to say that
 there is no evidence that   {\em np = 10} is a poor choice of search space size.
 
 Another measure showing that tuning is easy 
@@ -1369,6 +1387,13 @@ for defect predictors and using DE.
   \end{tabular}
     \caption{Kolmogorov-Smirnov Tests for distributions of  \fig{deltas_np}}\label{tab:ks}
 \end{table}
+
+\begin{figure}[!t]
+\begin{center}
+\includegraphics[width=1.5in]{./eps/features_precision.eps}\includegraphics[width=1.5in]{./eps/features_F.eps}
+ \end{center}
+\caption{Four representative tuning values in WHERE with  precision and F-measure as the tuning goal, respectively.   }\label{fig:features}
+ \end{figure}
 
 % \begin{table}[!t]
 % \renewcommand{\baselinestretch}{0.8}
@@ -1489,7 +1514,7 @@ for defect predictors and using DE.
     xercesV1 & 50 / 751.92 & 12.98 & 60 / 9.28 & 0.16 & 50 / 12.69 & 0.38\\
 
   \end{tabular}
-  \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for  ``F''.  }\label{tab:ftimes}
+  \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for F-measure.  }\label{tab:ftimes}
 \end{table*}
 
 
@@ -1516,22 +1541,23 @@ Hence, we answer RQ5 as ``no'': tuning is so fast that
 it could (and should) be used by anyone using defect predictors. 
 %The possible reason that tuning is so fast is that the searching space for defect prediction is not complicated, which might result from the tuning range set for each parameter in \tab{parameters}.  
 
-
-\begin{figure}[!t]
-\begin{center}
-\includegraphics[width=1.5in]{./eps/features_precision.eps}\includegraphics[width=1.5in]{./eps/features_F.eps}
- \end{center}
-\caption{Four representative tuning values in WHERE with  precision and F as the tuning goal, respectively.   }\label{fig:features}
- \end{figure}
+As to why DE can tune defect predictors so quickly, that is an
+open question. One possibility is that the search space within
+the control space of these data miners has  many accumulative effects such that one
+decision can cascade into another (and the combination of decisions
+is better than each separate  one). DE would be a natural  tool for reasoning
+about such ``cascades'', due to the way it mashes candidates together,
+then inserts the result back into the frontier (making them available
+for even more mashing at the next step of the inference).
 
 
 \subsection{RQ6: Should we use ``off-the-shelf'' Tunings?}\label{sect:variance}
  
- In \fig{features}, we show how tuning selects the optimal values for parameters. For space limitation, only four parameters from WHERE learner are selected as representatives and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
+ In \fig{features}, we show how tuning selects the optimal values for tuned parameters. For space limitation, only four parameters from WHERE learner are selected as representatives and all the others can be found in our online support documents\footnote{\url{https://goo.gl/aHQKtU}}.
  Note that
  the tunings learned were different in different data sets and for different goals.
 Also, the tunings learned by DE
-were often very different to the default (the default value for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$, respectively). That is, to achieve the performance improvements seen in the paper,
+were often very different to the default (the default values for {\em threshold}, {\em infoPrune}, {\em min\_Size} and {\em wriggle} are $0.5$, $0.33$, $0.5$ and $0.2$, respectively). That is, to achieve the performance improvements seen in the paper,
 the default tuning parameters required a wide range of adjustments.
 
 Hence, we answer RQ6 as ``no'' since, to achieve the improvements seen in this paper, tuning has to be repeated whenever the goals or data
@@ -1626,16 +1652,16 @@ tuning is so easy and so fast (at least for defect predictors from static code a
 
 
 
-\section{Guidelines \wei{added!}}
+% \section{Guidelines \wei{added!}}
 
-As discussed above, tuning is helpful and easy to do. Any defect prediction study based on data mining should include a tuning study. However, if tuning is not done properly, performance may not be improved but degraded to some extent. Here're some tips for tuning:
+% As discussed above, tuning is helpful and easy to do. Any defect prediction study based on data mining should include a tuning study. However, if tuning is not done properly, performance may not be improved but degraded to some extent. Here're some tips for tuning:
 
-{\em Tuning Data} is important for the whole tuning process. If available data size for the study is very small, k-fold cross evaluation method can be used to split data and generate new training data as well as tuning data. On the other hand, if the study concerns more about chronology, incremental learning approach can be adopted. 
+% {\em Tuning Data} is important for the whole tuning process. If available data size for the study is very small, k-fold cross evaluation method can be used to split data and generate new training data as well as tuning data. On the other hand, if the study concerns more about chronology, incremental learning approach can be adopted. 
 
 
-{\em Tuning Range} will determine how large the searching space the tuner will explore and how good the parameter got from tuning. The recommended range will set the default value as the median of the range with a reasonable distance. If the performance from tuning dose not better than the default parameter, adjust ranges accordingly.
+% {\em Tuning Range} will determine how large the searching space the tuner will explore and how good the parameter got from tuning. The recommended range will set the default value as the median of the range with a reasonable distance. If the performance from tuning dose not better than the default parameter, adjust ranges accordingly.
 
-{\em Searching algorithm} is the engine of the tuning process. Since tuning has to be repeatedly done for different goals and different data sets, simple searching algorithms, like DE and Generic algorithms, are good choice to complete this task. Other more advanced algorithms, like NSGA III \cite{deb2014evolutionary} and GALE\cite{krall15}, can also be used if multi-objective tuning is considered.
+% {\em Searching algorithm} is the engine of the tuning process. Since tuning has to be repeatedly done for different goals and different data sets, simple searching algorithms, like DE and Generic algorithms, are good choice to complete this task. Other more advanced algorithms, like NSGA III \cite{deb2014evolutionary} and GALE\cite{krall15}, can also be used if multi-objective tuning is considered.
 
 
 \section{Reliability and Validity}\label{sect:construct}
@@ -1656,7 +1682,7 @@ are on-line at github.com/ai-se/where.
 for other cases, or can be generalized from samples
 to populations.  
 The examples of this paper  only relate to precision, recall, and the F-measure
-but the general principle (that the search bias changes the search conclusions)  holds for all any set of goals. 
+but the general principle (that the search bias changes the search conclusions)  holds for any set of goals. 
 Also,
 the tuning results shown here only came from one  software analytics task 
 (defect prediction from static code attributes).
