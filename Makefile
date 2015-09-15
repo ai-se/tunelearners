@@ -8,7 +8,8 @@ all : dirs tex bib  tex tex embedfonts done
 publish : dirs all
 	cp $(HOME)/tmp/$(Src).pdf pdf/$(Name).pdf
 	chmod a+r pdf/$(Name).pdf
-	scp -p pdf/$(Name).pdf stuff@ttoy.net:menzies.us/pdf
+	cp pdf/$(Name).pdf  $(HOME)/gits/timm/timm.github.io/pdf
+	cd  $(HOME)/gits/timm/timm.github.io/pdf; git add * ; cd ..; make typo
 
 commit:; - git status; git commit -a; git push origin master
 typo:  ; - git status; git commit -am "typo"; git push origin master
