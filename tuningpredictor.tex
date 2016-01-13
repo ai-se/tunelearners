@@ -1,5 +1,6 @@
-\documentclass{sig-alternative}
+% \documentclass{sig-alternative}
 % \documentclass[conference]{IEEEtran}
+\documentclass[smallextended]{svjour3}
 \usepackage{multirow}
 \usepackage{color}
 \usepackage{graphics} 
@@ -70,12 +71,13 @@
 % \setlength{\columnsep}{7mm}
 
 \begin{document}
-% \conferenceinfo{FSE}{'15 Bergamo, Italy}
+
 \title{ Tuning for Software Analytics: is it Really Necessary?}
 % \numberofauthors{1}
-\author{\alignauthor Wei Fu, Tim Menzies, Xipeng Shen \\
-       \affaddr{Computer Science, North Carolina State University, Raleigh, USA}\\
-       fuwei.ee, tim.menzies@gmail.com, xshen5@ncsu.edu }
+\author{Wei Fu \and Tim Menzies \and Xipeng Shen}
+\institute{North Carolina State University, Raleigh, NC, USA
+      Wei Fu \email{w}}
+% \email{fuwei.ee \and tim.menzies@gmail.com \and xshen5@ncsu.edu }
 \maketitle 
 \thispagestyle{plain}
 \pagestyle{plain}
@@ -1070,23 +1072,23 @@ Regarding precision, for {\em antV1, antV2, camelV0} and {\em synapse}, untuned 
 %\begin{tabular}{r@{~}|r@{~}l@{~}|r@{~}l@{~}|r@{~}l|r@{~}l@{~}|r@{~}l@{~}|r@{~}l@{~}r@{~}l}
       &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forest}         \\\hline
   Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
-antV0 & 24 &   & 35 &   & 27 &   & {\bf 60} &   & 28 &   & 44 &  \\
-antV1 & 0 &   & {\bf 60} &   & 36 &   & 56 &   & 41 &   & 50 &  \\
-antV2 & 0 &   & 55 &   & 52 &   & 52 &   & 64 &   & {\bf 67} &  \\
-camelV0 & 0 &   & 30 &   & 26 &   & 50 &   & 50 &   & {\bf 79} &  \\
-camelV1 & 27 &   & {\bf 28} &   & 24 &   & {\bf 28} &   & 25 &   & 27 &  \\
-ivy & 18 &   & 21 &   & 17 &   & {\bf 26} &   & 16 &   & 20 &  \\
-jeditV0 & 35 &   & 37 &   & 49 &   & {\bf 78} &   & 44 &   & 60 &  \\
-jeditV1 & 24 &   & 42 &   & 28 &   & {\bf 64} &   & 28 &   & 37 &  \\
-jeditV2 & 2 &   & {\bf 22} &   & 3 &   & 17 &   & 5 &   & 6 &  \\
-log4j & 94 &   & 91 &   & 97 &   & 98 &   & 99 &   & {\bf 100} &  \\
-lucene & 60 &   & 75 &   & 67 &   & 70 &   & 67 &   & {\bf 77} &  \\
-poiV0 & 72 &   & 70 &   & 79 &   & 71 &   & {\bf 83} &   & 69 &  \\
-poiV1 & 90 &   & 76 &   & 73 &   & 90 &   & 82 &   & {\bf 100} &  \\
-synapse & 0 &   & 50 &   & 71 &   & {\bf 100} &   & 65 &   & 60 &  \\
-velocity & 34 &   & {\bf 44} &   & 34 &   & {\bf 44} &   & 34 &   & 42 &  \\
-xercesV0 & 12 &   & {\bf 17} &   & 14 &   & 14 &   & 15 &   & 14 &  \\
-xercesV1 & 53 &   & 54 &   & 49 &   & {\bf 100} &   & 49 &   & 27 &  \\
+antV0 & 0 &   & 35 &   & 15 &   & {\bf 60} &   & 21 &   & 44 &  \\
+antV1 & 0 &   & 60 &   & 54 &   & 56 &   & {\bf 67} &   & 50 &  \\
+antV2 & 45 &   & 55 &   & 42 &   & 52 &   & 56 &   & {\bf 67} &  \\
+camelV0 & 20 &   & 30 &   & 30 &   & 50 &   & 28 &   & {\bf 79} &  \\
+camelV1 & 27 &   & 28 &   & {\bf 38} &   & 28 &   & 34 &   & 27 &  \\
+ivy & 25 &   & 21 &   & 21 &   & {\bf 26} &   & 23 &   & 20 &  \\
+jeditV0 & 34 &   & 37 &   & 56 &   & {\bf 78} &   & 52 &   & 60 &  \\
+jeditV1 & 30 &   & 42 &   & 32 &   & {\bf 64} &   & 32 &   & 37 &  \\
+jeditV2 & 4 &   & {\bf 22} &   & 6 &   & 17 &   & 4 &   & 6 &  \\
+log4j & 96 &   & 91 &   & 95 &   & 98 &   & 95 &   & {\bf 100} &  \\
+lucene & 61 &   & 75 &   & 67 &   & 70 &   & 63 &   & {\bf 77} &  \\
+poiV0 & 70 &   & 70 &   & 65 &   & {\bf 71} &   &  67 &   & 69 &  \\
+poiV1 & 74 &   & 76 &   & 72 &   & 90 &   & 78 &   & {\bf 100} &  \\
+synapse & 61 &   & 50 &   & 50 &   & {\bf 100} &   & 60 &   & 60 &  \\
+velocity & 34 &   & {\bf 44} &   & 39 &   & {\bf 44} &   & 40 &   & 42 &  \\
+xercesV0 & 14 &   & 17 &   & 17 &   & 14 &   & {\bf 28} &   & 14 &  \\
+xercesV1 & 86 &   & 54 &   & 72 &   & {\bf 100} &   & 78 &   & 27 &  \\
 \end{tabular}
 \caption{Precision results (best results  shown in {\bf bold}).}
 \label{tab:precisionbars}
@@ -1100,23 +1102,23 @@ xercesV1 & 53 &   & 54 &   & 49 &   & {\bf 100} &   & 49 &   & 27 &  \\
 ~~~\begin{tabular}{r|rl|rl|rl|rl|rl|rlrl}
       &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forest}         \\\hline
   Data set   &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}         &   \multicolumn{2}{c}{default}         &   \multicolumn{2}{c|}{Tuned}    &   \multicolumn{2}{c}{default}  &   \multicolumn{2}{c}{Tuned}\\\hline
-antV0 & 23 &   & 20 &   & 32 &   & 40 &   & {\bf 41} &   & 38 &  \\
-antV1 & 0 &   & 38 &   & 38 &   & {\bf 49} &   & 37 &   & {\bf 49} &  \\
-antV2 & 0 &   & 50 &   & 44 &   &  49 &   & 47 &   & {\bf 56} &  \\
-camelV0 & 0 &   & 28 &   & 9 &   & 28 &   & 4 &   & {\bf 30} &  \\
-camelV1 & 35 &   & 34 &   & 31 &   & 32 &   & {\bf 37} &   & 33 &  \\
-ivy & 30 &   & 34 &   & 28 &   & {\bf 40} &   & 27 &   &  33 &  \\
-jeditV0 & 51 &   & 47 &   & 56 &   & 57 &   & 56 &   & {\bf 59} &  \\
-jeditV1 & 35 &   & 44 &   & 36 &   & 47 &   & 43 &   & {\bf 48} &  \\
-jeditV2 & 4 &   & {\bf 11} &   & 5 &   & 10 &   & 9 &   & 9 &  \\
-log4j & 54 &   & 50 &   & 47 &   & 37 &   & {\bf 57} &   & 47 &  \\
-lucene & 72 &   & 73 &   & 56 &   & 72 &   & 70 &   & {\bf 76} &  \\
-poiV0 & 78 &   & 74 &   & {\bf 79} &   & 64 &   & 77 &   & 77 &  \\
-poiV1 & 12 &   & {\bf 78} &   & 21 &   & 69 &   & 19 &   & {\bf 78} &  \\
-synapse & 0 &   & 56 &   & 40 &   & {\bf 60} &   & 41 &   & 53 &  \\
-velocity & 51 &   & {\bf 53} &   & 49 &   & 51 &   & 51 &   & 51 &  \\
-xercesV0 & 20 &   & 22 &   & 21 &   & {\bf 26} &   & 24 &   & 21 &  \\
-xercesV1 & 25 &   & 70 &   & 18 &   & 35 &   & 18 &   & {\bf 71} &  \\
+antV0 & 0 &   & 20 &   & 20 &   & {\bf 40} &   & 28 &   & 38 &  \\
+antV1 & 0 &   & 38 &   & 37 &   & {\bf 49} &   & 38 &   & {\bf 49} &  \\
+antV2 & 47 &   & 50 &   & 45 &   &  49 &   & {\bf 57} &   & 56 &  \\
+camelV0 & 31 &   & 28 &   & 39 &   & 28 &   & {\bf 40} &   & 30 &  \\
+camelV1 & 34 &   & 34 &   & 38 &   & 32 &   & {\bf 42} &   & 33 &  \\
+ivy & 39 &   & 34 &   & 28 &   & {\bf 40} &   & 35 &   &  33 &  \\
+jeditV0 & 45 &   & 47 &   & 56 &   & 57 &   & {\bf 63} &   & 59 &  \\
+jeditV1 & 43 &   & 44 &   & 44 &   & 47 &   & 46 &   & {\bf 48} &  \\
+jeditV2 & 8 &   & {\bf 11} &   & 10 &   & 10 &   & 8 &   & 9 &  \\
+log4j & 47 &   & 50 &   & 53 &   & 37 &   & {\bf 60} &   & 47 &  \\
+lucene & 73 &   & 73 &   & 65 &   & 72 &   & 70 &   & {\bf 76} &  \\
+poiV0 & 50 &   & 74 &   & 31 &   & 64 &   & 45 &   & {\bf 77} &  \\
+poiV1 & 75 &   & {\bf 78} &   & 68 &   & 69 &   & 77 &   & {\bf 78} &  \\
+synapse & 49 &   & 56 &   & 43 &   & {\bf 60} &   & 52 &   & 53 &  \\
+velocity & 51 &   & 53 &   & 53 &   & 51 &   & {\bf 56} &   & 51 &  \\
+xercesV0 & 19 &   & 22 &   & 19 &   & {\bf 26} &   & 34 &   & 21 &  \\
+xercesV1 & 32 &   & 70 &   & 34 &   & 35 &   & 42 &   & {\bf 71} &  \\
 \end{tabular}
 \caption{F-measure results (best results  shown in {\bf bold}).}
 \label{tab:fbars}
