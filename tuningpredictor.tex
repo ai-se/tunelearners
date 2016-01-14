@@ -772,12 +772,37 @@ In the following description,
 
 \input{algo} 
 
+%  \begin{table*}[!t]
+
+% \renewcommand{\baselinestretch}{0.8}
+% \scriptsize
+% \centering
+%   \begin{tabular}{c c c c c c c c c c }\hline
+%   Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
+% \\\hline
+%   training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
+% \\  tuning  &40/178 &32/293 &92/351 &216/608 &145/872 &16/241 &75/306 &79/312 &48/367
+% \\  testing &32/293 &92/351 &166/745 &145/872 &188/965 &40/352 &79/312 &48/367 &11/492
+% \\ \hline
+%   Dataset &log4j&lucene&poiV0&poiV1&synapse&velocity&xercesV0&xercesV1
+% \\\hline
+%   training &34/135 &91/195 &141/237 &37/314 &16/157 &147/196 &77/162 &71/440
+% \\  tuning  &37/109 &144/247 &37/314 &248/385 &60/222 &142/214 &71/440 &69/453
+% \\  testing &189/205 &203/340 &248/385 &281/442 &86/256 &78/229 &69/453 &437/588
+% \\  \end{tabular}
+
+%   \caption{Data used in this experiment. 
+%   E.g., the top left data set has 20 defective classes out of 125 total.
+%   See \tion{dataa} for explanation of {\em training, tuning, testing} sets.
+%   }\label{tab:data1}
+% \end{table*} 
+
  \begin{table*}[!t]
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
 \centering
-  \begin{tabular}{c c c c c c c c c c }\hline
+  \begin{tabular}{p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}}\hline
   Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
 \\\hline
   training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
@@ -1076,7 +1101,7 @@ Regarding precision, for {\em antV0}, and {\em antV1} untuned WHERE reports prec
 
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8} 
-
+% \centering
 \scriptsize    
 
 \begin{tabular}{r|rl|rl|rl|rl|rl|rlrl}
@@ -1108,7 +1133,7 @@ xercesV1 & 86 &   & 54 &   & 72 &   & {\bf 100} &   & 78 &   & 27 &  \\
 
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8} 
-
+% \centering
 \scriptsize  
 ~~~\begin{tabular}{r|rl|rl|rl|rl|rl|rlrl}
       &   \multicolumn{4}{c|}{WHERE}         &   \multicolumn{4}{c|}{CART}         &   \multicolumn{4}{c}{Random Forest}         \\\hline
@@ -1176,9 +1201,9 @@ appropriate to
 
 
 \begin{figure}[!t]
-\begin{center}
+% \begin{center}
 \includegraphics[width=1.5in]{./eps/LR_untuned.eps}\includegraphics[width=1.5in]{./eps/LR_tuned.eps}
- \end{center}
+%  \end{center}
 \caption{Comparison between Logistic Regression and Random Forest before and after tuning. }\label{fig:lr}
  \end{figure}
  
@@ -1199,7 +1224,7 @@ That said, our tuning results show that it is time to revise
 the recommendations of those papers. 
   \fig{lr} comments on the advice from Hall et al. (that LR is better than Random Forest).
  In a result that might have been predicted by Hall et al., Logistic Regression does perform better than untuned Random
-Forests over 17 data sets. 
+Forests over 13 out of 17 data sets. 
 However, it turns out that advice is sensitive to the tunings
 used with Random Forest. After tuning, we find that Random Forest
 is often competitive, and sometimes even better, than Logistic Regression. 
@@ -1242,7 +1267,7 @@ Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparati
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
-\centering
+% \centering
   \begin{tabular}{c|p{1in}|p{1in}}
     \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline 
  \multirow{2}{*}{antV0} & {\bf rfc} &  {\bf None} \\
@@ -1316,9 +1341,9 @@ successful software reuse~\cite{me02k}. That assertion should now be doubted sin
 found were most influential.
 
 \begin{figure}[!t]
-\begin{center}
+% \begin{center}
 \includegraphics[width=1.5in]{./eps/np_precision.eps}\includegraphics[width=1.5in]{./eps/np_f.eps}
- \end{center}
+%  \end{center}
 \caption{Deltas in performance between {\em np = 10} and the recommended np's. The recommended np is better when deltas are above zero. {\em np = 90, 50 and 60} are recommended population size for WHERE, CART and Random Forest by Storn.}\label{fig:deltas_np}
  \end{figure}
 
@@ -1386,7 +1411,7 @@ for defect predictors and using DE.
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
-\centering
+% \centering
   \begin{tabular}{c|c c|cc}
     &   \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c}{F} \\ \hline 
     Learner & CART  & WHERE & CART & WHERE \\
@@ -1398,9 +1423,9 @@ for defect predictors and using DE.
 \end{table}
 
 \begin{figure}[!t]
-\begin{center}
+% \begin{center}
 \includegraphics[width=1.5in]{./eps/features_precision.eps}\includegraphics[width=1.5in]{./eps/features_F.eps}
- \end{center}
+%  \end{center}
 \caption{Four representative tuning values in WHERE with  precision and F-measure as the tuning goal, respectively.   }\label{fig:features}
  \end{figure}
 
