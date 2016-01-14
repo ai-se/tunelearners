@@ -91,8 +91,8 @@ Contrary to our prior expectations, finding these tunings
  to obtain very good results.
 For example, when  learning
 software defect predictors, this  method can quickly
-find tunings  that  alter detection  F-Measure  
- from 12\% to 78\%. 
+find tunings  that  alter detection  precision
+ from 0\% to 60\%. 
 
 Given that (1)~the improvements are so large, and (2)~the tuning is so simple,
 these results prompt for a change to standard methods in software analytics.
@@ -130,7 +130,7 @@ to manually browse all  available software project
 data. The PROMISE repository of SE data has grown to 200+ projects~\cite{promise15}
 and this is just one of over a dozen open-source repositories
 that are readily available to researchers~\cite{rod12}.
-For example, at the time of this writing (Aug  2015), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
+For example, at the time of this writing (Jan 2016), our web searches show that Mozilla Firefox has over 1.1 million bug reports, and platforms such as GitHub host over 14 million projects. 
 
 Faced with this data overload,
 researchers in empirical SE
@@ -162,7 +162,7 @@ Those results were found by   exploring six research questions:
 \bi
 \item RQ1: {\em Does   tuning    improve the performance scores of a predictor?} We will show below
  examples of truly dramatic improvement:
- usually by 5 to 20\% and often by much more (in one extreme case, F-Measure improved from 12\% to 78\%).
+ usually by 5 to 20\% and often by much more (in one extreme case,  precision improved from 0\% to 60\%).
 \item RQ2: {\em Does tuning change conclusions on what learners are better than others?} 
 Recent SE papers~\cite{lessmann2008benchmarking,hall11} claim that some learners are better than others. 
 Some of those conclusions are completely changed by tuning. 
@@ -229,7 +229,7 @@ When we tune a data miner, what we are really doing is changing how a learner ap
 its heuristics. This means tuned data miners use different heuristics, which means they ignore different possible models, which means they return different models; i.e.  {\em how} we learn changes {\em what} we learn.
 
 Are the impacts of tuning addressed in the defect prediction literature?
-To answer that question,  in August 2015 we searched scholar.google.com for the conjunction of  "data mining" and "software engineering" and  "defect prediction"\footnote{https://goo.gl/Inl9nF}.
+To answer that question,  in Jan 2016 we searched scholar.google.com for the conjunction of ``data mining" and ``software engineering" and  ``defect prediction"\footnote{More details can be found at https://goo.gl/Inl9nF}.
 After sorting by the citation count and discarding the non-SE papers (and those without a pdf link), we read over this sample
 of  50 highly-cited SE defect prediction papers. 
 What we found in that sample was that few authors
@@ -328,7 +328,7 @@ data sets-- a
 \begin{table*}[t]
 \renewcommand{\baselinestretch}{0.8}\begin{center}
 {\scriptsize
-\begin{tabular}{c|l|p{4.7in}}
+\begin{tabular}{c|l|p{0.5\textwidth}}
 amc & average method complexity & e.g. number of JAVA byte codes\\\hline
 avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
 in class\\\hline
@@ -517,7 +517,7 @@ plus    some new results from Rahman et al.~\cite{rahman14:icse}.
 
  \subsection{Notes on Data Miners}
  
-There  are ways to make defect predictors
+There are several ways to make defect predictors
 using  CART~\cite{brieman00}, Random Forest~\cite{breiman84}, 
  WHERE~\cite{menzies2013local} and LR (logistic regression).
 For this study, we use CART, Random Forest and LR versions  from 
@@ -550,24 +550,24 @@ Finally,  this
 it offers an interesting case study on the benefits of tuning.
 
   
-
 %%%%%%%%%%%%%%%% list of parameters%%%%%%%%%%%%%%%%%%%%%
 \renewcommand\arraystretch{1.2}
 \begin{table*}[t!]
 \scriptsize
   \centering
-	\begin{tabular}{|c|c|c|c|l|}
+	\begin{tabular}{|c|c|c|c|p{5cm}|}
 	\cline{1-5}
 	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
 \multicolumn{1}{c|}{Description} \\ \hline
-	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}} 
+ 	\multirow{8}{*}{%\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}
+ 	WHERE} 
 	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
 	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider for the best 
 split to build its final decision tree. \\ \cline{2-5} 
 	 & min\_sample\_split & 4& [1,10]& The minimum number of samples required to split an internal node of
 its final  decision tree. \\ \cline{2-5} 
 	 & min\_Size & 0.5 &[0.01,1]& \begin{tabular}[c]{@{}l@{}}Finds min\_samples\_leaf 
-in the initial clustering tree  using  ${n\_samples}^ {min\_Size}$.
+in the initial clustering tree\\  using ${n\_samples}^ {min\_Size}$.
 \end{tabular} \\ \cline{2-5} 
     & wriggle & 0.2 &[0.01, 1] & The threshold to determine which branch in  the initial clustering tree to be pruned\\ \cline{2-5}
 	 & depthMin & 2 & [1,6]&The minimum depth of the initial clustering tree below which no pruning for the
@@ -597,8 +597,8 @@ internal node. \\ \cline{2-5}
 node. \\ \cline{2-5} 
 	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
 	 \hline 
-Logistic 	 Regression&\multicolumn{4}{l|}{This study uses untuned LR in order to check
-a conclusion of~\cite{hall11}. }\\\hline
+% Logistic\\ Regression&\multicolumn{4}{c|}{This study uses untuned LR in order to check
+% a conclusion of~\cite{hall11}. }\\\hline
 
 	\end{tabular}
     \caption {List of parameters tuned by this paper.}
@@ -799,21 +799,21 @@ In the following description,
 
 DE evolves a {\em NewGeneration} of candidates  from
 a current {\em Population}.  Our DE's lose one ``life''
-when the new population is no better than  current one (terminating when ``life'' is zero)$^{4}$.
+when the new population is no better than  current one (terminating when ``life'' is zero)$^{L4}$.
 Each candidate solution in the {\em Population}  
 is a pair of {\em (Tunings, Scores)}.  {\em Tunings} are selected from
 \tab{parameters} and {\em Scores} come from training a learner using those parameters
-and applying it     test data$^{23-27}$.
+and applying it     test data$^{L23-L27}$.
 
-The premise of DE  is that the best way to mutate existing tunings
-is to {\em Extrapolate}$^{28}$
+The premise of DE  is that the best way to mutate the existing tunings
+is to {\em Extrapolate}$^{L28}$
 between current solutions.  Three solutions $a,b,c$ are selected at random.
 For each tuning parameter $i$, at some probability {\em cr}, we replace
 the old tuning $x_i$ with $y_i$. For booleans, we use $y_i= \neg x_i$ (see line 36). For numerics, $y_i = a_i+f \times (b_i - c_i)$   where $f$ is a parameter
-controlling  cross-over.  The {\em trim} function$^{38}$ limits the new
+controlling  cross-over.  The {\em trim} function$^{L38}$ limits the new
 value to the legal range min..max of that parameter.
  
-The main loop of DE$^{6}$ runs over the {\em Population}, replacing old items
+The main loop of DE$^{L6}$ runs over the {\em Population}, replacing old items
 with new {\em Candidate}s (if  new candidate is better).
 This means that, as the loop progresses, the {\em Population} is full of increasingly
 more valuable solutions. This, in turn, also improves  the candidates, which are {\em Extrapolate}d
@@ -821,8 +821,8 @@ from the {\em Population}.
 
 For the experiments of this paper, we collect performance
 values from a data mining, from which a {\em Goal} function extracts one 
-performance value$^{26}$ (so we run this code many times, each time with
-a different {\em Goal}$^{1}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
+performance value$^{L26}$ (so we run this code many times, each time with
+a different {\em Goal}$^{L1}$).  Technically, this makes a  {\em single objective} DE (and for notes on multi-objective DEs, see~\cite{Coello05,zhang07,5583335}).
 
 
 %\begin{algorithm}
@@ -867,17 +867,28 @@ To avoid these problems, we used an incremental learning approach. The following
 experiment ensures that the training data was created at some time before the test
 data.
 For this experiment, we use data sets with at least three  
-consecutive releases  (where release $i+1$ was built after release $i$).
+consecutive releases  (where release $i+1$ was built after release $i$). When tuning a learner,
 \bi 
-\item The {\em first} release was used for some  {\em training}, to collect a baseline
-   using an untuned learner. This release is also used  on line 24 of Algorithm~\ref{alg:DE} to
+% \item {\em Tuned learner}: the {\em first} release is used  on line 24 of Algorithm~\ref{alg:DE} to
+%   build some model using some the tunings found in some {\em Candidate}. The {\em second} release was used on line 25 of Algorithm~\ref{alg:DE} to 
+%   test the model found on line 24. The {\em third} release was used as a testing data to gather the performance statistics
+%   reported below from the best model found by DE.
+% \item {\em untuned learner}:
+
+
+
+\item The {\em first} release was used  on line 24 of Algorithm~\ref{alg:DE} to
    build some model using some the tunings found in some {\em Candidate}.
-   \item The {\em second} release was used on line 25 of Algorithm~\ref{alg:DE} to 
-   test the model found on line 24.
+ \item The {\em second} release was used on line 25 of Algorithm~\ref{alg:DE} to 
+   test the candidate model found on line 24.
    \item Finally the {\em third} release was used to gather the performance statistics
-   reported below from (a)~the model generated by the untuned learner or (b)~the
-   best model found by DE.
-   \ei
+   reported below from the best model found by DE.
+ \ei
+ 
+ To be fair for the untuned learner, the {\em first} and {\em second} releases used in tuning experiments
+ will be combined as the training data to build a model. Then the performance of this untuned learner 
+ will be evaluated by the same {\em third} release.
+ 
 % This approach ensures   all treatments 
 % are assessed on the same tests. Note that we did consider
 % one other experimental design but rejected it for reasons of
@@ -893,16 +904,16 @@ Some data sets have more than three releases and, for those data, we could run m
  \ei 
 These data sets are displayed in \tab{data1}.
 
-As an aside, an alternate experimental design would be to 
-learn a baseline learner from the first {\em and} second release
-instead of, as shown above,  just the first release. On the one hand,
-this would mean that the baseline could be learned from more data.
-On the other hand, this adds a conflation to our experimental design
-since the optimizer uses the second release for pruning, not growing a data set.  Happily, from 
-piror work~\cite{Menzies:2008aa} we know that defect predictors usually {\em saturates} (i.e.
-does not generate better predictors) after 100 examples, which is a number smaller than all our first release data sets. Hence, their would
-be little value in generating the baselines using the first and second
-releases. 
+% As an aside, an alternate experimental design would be to 
+% learn a baseline learner from the first {\em and} second release
+% instead of, as shown above,  just the first release. On the one hand,
+% this would mean that the baseline could be learned from more data.
+% On the other hand, this adds a conflation to our experimental design
+% since the optimizer uses the second release for pruning, not growing a data set.  Happily, from 
+% piror work~\cite{Menzies:2008aa} we know that defect predictors usually {\em saturates} (i.e.
+% does not generate better predictors) after 100 examples, which is a number smaller than all our first release data sets. Hence, their would
+% be little value in generating the baselines using the first and second
+% releases. 
 
 
 
@@ -1030,7 +1041,7 @@ As might have been
 untuned CART is indeed the worst learner (only one of its
 untuned results is best and {\bf bold}). 
 And, 
-in $\frac{14}{17}$ cases, the  untuned Random Forest performs better than or equal to untuned CART in terms of precision.  
+in $\frac{12}{17}$ cases, the  untuned Random Forest performs better than or equal to untuned CART in terms of precision.  
 % Note that the size of the improvement is sometimes small; e.g. the precision results improve more than the ``F'' measure.
 % But even when the {\em median} change is small, there still may exist
 % interesting (i.e.  exceptionally
@@ -1050,9 +1061,9 @@ In some cases, the median changes may be small (e.g. the ``F'' results for WHERE
 those cases, there are enough large changes to motivate the use of tuning. For example:
 \bi
 \item
-For ``F'' improvement, there are two improvements over 50\% for both WHERE and Random Forests. Also, in {\em camelV0}, all untuned learners report ``F'' of under 10\%, tuning changes those scores over 25\%. Finally, note the  {\em poiV1} result for the WHERE learner. Here, tuning changes precision from 12\% to 78\%.
+For ``F'' improvement, there are two improvements over 25\% for both WHERE and Random Forests. Also, in {\em poiV0}, all untuned learners report ``F'' of under 50\%, tuning changes those scores by 25\%. Finally, note the  {\em xercesV1} result for the WHERE learner. Here, tuning changes precision from 32\% to 70\%.
 \item
-Regarding precision, for {\em antV1, antV2, camelV0} and {\em synapse}, untuned WHERE reports precision of 0. But tuned WHERE scores 60, 55, 30 and 50(the similar pattern can seen in ``F'').
+Regarding precision, for {\em antV0}, and {\em antV1} untuned WHERE reports precision of 0. But tuned WHERE scores 35 and 60 (the similar pattern can seen in ``F'').
 
 \ei
 
@@ -1200,8 +1211,9 @@ in \tab{precisionbars} and \tab{fbars}, we saw those counter-examples
 to that statement.
 Recall in those tables,
 tuned CART are better than or equal
-to tuned Random Forest in $\frac{12}{17}$ and $\frac{10}{17}$ data sets in
-terms of precision and F-measure, respectively. Results from the non-parametric
+to tuned Random Forest in $\frac{12}{17}$ and $\frac{7}{17}$ data sets in
+terms of precision and F-measure, respectively. Prior to tuning experiments, those
+numbers are $\frac{5}{17}$ and $\frac{1}{17}$. Results from the non-parametric
 Kolmogorov-Smirnov(KS) Test show that the performance 
 scores of tuned CART and tuned Random Forest are not statistically different.
 Note that Random Forest is  not significantly better than CART, would not have been
@@ -1788,7 +1800,7 @@ attributes,   analytics without parameter tuning are considered {\em harmful} an
 \bi
 \item Tuning improves the performance scores of a predictor.
 That improvement is usually positive (see \fig{deltas}) and sometimes
-it can be quite   dramatic (e.g. ``F'' changing from 12\% to 78\%). \item 
+it can be quite   dramatic (e.g. precision changing from 0 to 60\%). \item 
 Tuning changes conclusions on what learners are better than others.
 Hence, it is time to revisit numerous prior publications of our own~\cite{me07b}
 and others~\cite{lessmann2008benchmarking,hall11}.
