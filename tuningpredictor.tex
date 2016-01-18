@@ -214,17 +214,49 @@ static code defect predictors, tuning is easy and fast.
 %methods are  very simple to implement and very fast to execute.
 
 
-\section{Preliminaries}
+
+\section{Digression}
+
+
+Before starting, we offer the following aside.
+An important principle in tuning is that
+{\em you can't always get \underline{all} you want}.
+In the following, we present tuning as a multi-objective optimization problem
+and, with some problems, it is not always possible to optimize for every goals.
+For example, the following text does not
+show results for tuning on recall
+or false alarms since otpimizing {\em only} for those goals can lead
+to some undesirable side effects. For example: 
+\bi
+\item
+{\em Recall} reports the percentage of  predictions that are actual examples of  what we are looking for.
+When we tune for {\em recall}, we can achieve near
+100\% recall-- but the cost of a near 100\% false alarms.
+\item
+{\em False alarms} is the percentage of other examples that are reported  (by the learner)
+to be part of the targeted examples.
+When we tune for {\em false alarms}, we 
+can achieve near zero percent false alarm rates by effectively turning off
+the detector (so the  recall falls to nearly zero).
+\ei
+Accordingly,  this paper  explores performance measures that comment on all 
+target classes (see the  precision and ``F'' measures discussed in \fig{xxx}). 
+
+
+
+
+\section{Preliminaries} 
+
+
+
+
 \subsection{Issues of Tuning: Important and Ignored?}
 In  other fields, the impact of tuning is well understood~\cite{Bergstra2012}. 
 Yet, as argued in this section, issues of tuning  are rarely or poorly addressed
 in the defect prediction literature.
 
-The formal definition of data mining stresses that these learners are heuristic explorers
-of a truly   vast space of the possible models within a data set~\cite{mitchell1982generalization}. For example, given 20 columns of boolean variables,
-there are $2^{20}$ possible models. Data mining is practical since various heuristics
-allow automatic algorithms to ignore most of those possibilities. While heuristic search makes data mining possible, it also means that tunings
-can significantly affect what comes out of a data miner.
+
+
 When we tune a data miner, what we are really doing is changing how a learner applies
 its heuristics. This means tuned data miners use different heuristics, which means they ignore different possible models, which means they return different models; i.e.  {\em how} we learn changes {\em what} we learn.
 
@@ -1017,23 +1049,7 @@ Rather, those results need to be expressed {\em along with} the context within w
 relevant (and by ``context'', we mean the optimization goal).
 
 
-
-\subsection{An Aside}
-
-One comment before presenting the results. The following text does not
-show results for tuning on recall
-or false alarms. Those goals focus on {\em only}
-the  defective or non-defective modules (respectively). Hence,
-when DE tunes for recall, we can achieve near
-100\% recall-- but the cost of a near 100\% false alarms.
-Similarly,  tuning
-can achieve near zero false alarm rates by effectively turning off
-the detector (when recall is zero).
-Accordingly,  this paper  explores performance measures that comment on all 
-target classes (i.e. precision and ``F''). 
-
-
-
+ 
 
 \section{Experimental Results}
 
@@ -1199,14 +1215,6 @@ of these papers, researchers might believe it is
 appropriate to
   use  their advice without testing that advice on local data sets.
 
-
-\begin{figure}[!t]
-% \begin{center}
-\includegraphics[width=1.5in]{./eps/LR_untuned.eps}\includegraphics[width=1.5in]{./eps/LR_tuned.eps}
-%  \end{center}
-\caption{Comparison between Logistic Regression and Random Forest before and after tuning. }\label{fig:lr}
- \end{figure}
- 
 Secondly, while we are critical of the results of
 Lessmann et al. and Hall et al., it needs to be said that  their analysis  was 
 excellent and exemplary given the state-of-the-art of the tools used when those papers were written.  
@@ -1220,15 +1228,31 @@ In that study, some learners were tuned using manual methods
 (C4.5, CART and Random Forest)
 and some, like SVM-Type learners, were tuned by automatic grid search (for more on grid search, see   {\S}2.1).
 
+
+
+\begin{figure}[!t]
+% \begin{center}
+\includegraphics[width=1.5in]{./eps/LR_untuned.eps}\includegraphics[width=1.5in]{./eps/LR_tuned.eps}
+%  \end{center}
+\caption{Comparison between Logistic Regression and Random Forest before and after tuning. }\label{fig:lr}
+ \end{figure}
+ 
+ 
 That said, our tuning results show that it is time to revise
 the recommendations of those papers. 
-  \fig{lr} comments on the advice from Hall et al. (that LR is better than Random Forest).
- In a result that might have been predicted by Hall et al., Logistic Regression does perform better than untuned Random
-Forests over 13 out of 17 data sets. 
+  \fig{lr} comments on the advice from Hall et al. (that LR is better than Random Forest)L
+  \bi
+  \item
+ In a result that might have been predicted by Hall et al.,  
+ untuned Random
+Forests performs comparatively worse than
+ Logistic Regression. Specifically, untuned
+ Random Forest performs worse than Linear regression in in 13 out of   17 data sets. 
+\item
 However, it turns out that advice is sensitive to the tunings
-used with Random Forest. After tuning, we find that Random Forest
-is often competitive, and sometimes even better, than Logistic Regression. 
-
+used with Random Forest. After tuning, we find that tuned Random Forest
+loses to Logistic Regression in only 6 out of 17 data sets. 
+\ei
 
 As to Lessmann et al.'s advice (that Random Forest is better than 
 CART),  
@@ -1262,8 +1286,22 @@ Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparati
 
 
 
+
+ \subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
+
+
+Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
+\tab{features} comments that such tests are unreliable since the factors selected by a data miner are much altered before and 
+after tuning.
+
+\tab{features} shows what features are found in the trees generated by the WHERE algorithm
+(bold shows the features found by the trees from tuned WHERE; plain text shows the features seen
+in the untuned study). Note that different features are selected depending on whether or not
+we tune an algorithm.
+
+
 % list some features
-\begin{table}[!b]
+\begin{table}[!t]
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
@@ -1310,23 +1348,12 @@ Hence we answer RQ2 as ``yes'': tuning can change how  data miners are comparati
 \end{table}
 
 
- \subsection{RQ3: Does Tuning Select Different Project Factors? }\label{sect:import}
-
-
-Researchers often use data miners to  test what factors have most impact on software projects~\cite{bell2013limited,rahman2013how,me02k,Moser:2008,zimmermann2007predicting,herzig2013predicting}. 
-\tab{features} comments that such tests are unreliable since the factors selected by a data miner are much altered before and 
-after tuning.
-
-\tab{features} shows what features are found in the trees generated by the WHERE algorithm
-(bold shows the features found by the trees from tuned WHERE; plain text shows the features seen
-in the untuned study). Note that different features are selected depending on whether or not
-we tune an algorithm.
-
 For example, consider {\em mfa} which is the
 number of methods inherited by a class plus the number of methods accessible by member methods of the class.
 For both goals (precision and ``F'') {\em mfa} is selected for 8 and 5 data sets,
 for the untuned and tuned data miner (respectively).
 Similar differences are   seen with other attributes.
+
 
 As to why different tunings select for different features,  recall from {\S}2.1 that tuning changes how data miners
 heuristically explore a large space of possible models. As we change how that exploration proceeds,
