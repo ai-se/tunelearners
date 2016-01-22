@@ -12,7 +12,8 @@
 \usepackage{eqparbox}
 \usepackage{graphics}
 \usepackage{colortbl} 
-\usepackage{times}
+%\usepackage{times}
+ \usepackage{mathptmx} \usepackage[scaled=.90]{helvet} \usepackage{courier}
 \usepackage{balance}
 \usepackage{picture}
 \usepackage{algorithm}
@@ -82,7 +83,7 @@
 \ead{tim.menzies@gmail.com}
 \author{Xipeng Shen}
 \ead{ xshen5@ncsu.edu}
-\cortext[cor1]{Corresponding author}
+\cortext[cor1]{Corresponding author: Tel.:+1 304-376-2859 (Tim Menzies)}
 \address{Department of Computer Science, North Carolina State University, Raleigh, NC, USA}
 
 
@@ -96,9 +97,9 @@
 % \pagestyle{plain}
 \begin{abstract}
 \textbf{Context:} Data miners have been widely used to generate defect predictors from static code measures. Static code defect predictors perform well compared to manual methods, and they are easy to use and useful to use.  \\
-\textbf{Objective:} One of the ``black arts'' of data mining is setting the tuning that control the miner. Prior to  this  work,  our  intuition  was  that  tuning  would  change  the behavior  or  a  data  miner, to  some  degree. We offer a simple, automatic, and very effective  method for finding those tunings.\\
-\textbf{Method:} We run differential evolution as an optimizer to explore the tuning space and fit the data miners with the best tunings afterwards.\\
-\textbf{Results:} Contrary to our prior expectations, finding these tunings
+\textbf{Objective:} One of the ``black arts'' of data mining is setting the tuning that control the miner. We offer a simple, automatic, and very effective  method for finding those tunings.\\
+\textbf{Method:} For each experiment with different data sets, we run differential evolution as an optimizer to explore the tuning space as the first step and  fit the data miners with the best tunings afterwards.\\
+\textbf{Results:} Contrary to our prior expectations, we found these tunings
  was remarkably simple: it only required tens, not thousands, of attempts
  to obtain very good results.For example, when  learning software defect predictors, this  method can quickly
  find tunings  that  alter detection  precision
@@ -113,12 +114,12 @@ The implication for other kinds of  analytics is now  an open and pressing issue
 \end{abstract}
 \end{frontmatter}
 
-% A category with the (minimum) three required fields
-\vspace{1mm}
-\noindent
-{\bf Categories/Subject Descriptors:} 
-D.2.8 [Software Engineering]: Product metrics;
-I.2.6 [Artificial Intelligence]: Induction
+% % A category with the (minimum) three required fields
+% \vspace{1mm}
+% \noindent
+% {\bf Categories/Subject Descriptors:} 
+% D.2.8 [Software Engineering]: Product metrics;
+% I.2.6 [Artificial Intelligence]: Induction
 
  
 \vspace{1mm}
@@ -228,72 +229,6 @@ static code defect predictors, tuning is easy and fast.
 \section{Preliminaries} 
 
 
-\subsection{You Can't Always Get What You Want}\label{sect:goals}
-In the following, we present tuning as a multi-objective optimization problem.
-With such optimizations,  it is not always possible to optimize for every goals.
-For example, the following text does not
-show results for tuning on recall
-or false alarms since optimizing {\em only} for those goals can lead
-to some undesirable side effects:
-\bi
-\item
-{\em Recall} reports the percentage of  predictions that are actual examples of  what we are looking for.
-When we tune for {\em recall}, we can achieve near
-100\% recall-- but the cost of a near 100\% false alarms.
-\item
-{\em False alarms} is the percentage of other examples that are reported  (by the learner)
-to be part of the targeted examples.
-When we tune for {\em false alarms}, we 
-can achieve near zero percent false alarm rates by effectively turning off
-the detector (so the  recall falls to nearly zero).
-\ei
-Accordingly,  this paper  explores performance measures that comment on all 
-target classes: see the  precision and ``F'' measures discussed below: see {\em Optimization Goals}.
-That said, we are sometimes asked what good is a learner if it optimizers for (say) precision
-at the expense of (say) recall. 
-
-Our reply is that software engineering is a very diverse enterprise
-and that different kinds of development need to optimize for different goals
-(which may not necessarily be ``optimize for recall''):
-\bi
-\item
-Anda, Sjoberg and Mockus are concerned with {\em reproducibility}  and so
-assess their models using the the ``coefficient of variation'' $C\frac{stddev}{mean}$) ~\cite{anda09}.
-\item
-Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12} are concerned with reducing the work load associated with someone
-else reading a learned model, then applying it. Hence, they assess their models using  {\em reward}; i.e.   the fewest lines of code
-  containing the most bugs.
-\item
-Yin et al. are concerned about
- {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
-These bugs occur  when (say) developers try to fix parts of the code
-where they have very little experience~\cite{yin11}.  Hence, they assess a learned
-model using a measure that selects for  the most number of bugs in regions that {\em the most programmers have worked with before}.
-\item
-For safety critical applications, high false alarm rates are  acceptable if the cost
-of overlooking  critical issues outweighs the inconvenience of   inspecting a few more
-modules. 
-\item
-When rushing a product to market,  there is a business case to 
-avoid the extra rework associated with false alarms.  In that business context, 
-managers might be willing to lower the recall somewhat in order to minimize the false alarms.
-\item
-When the second author worked with contractors at  NASA's software independent verification
-and validation facility, he found  new contractors  
-only reported issues that were most certainly important defects; i.e. they minimized
-  false alarms even if that damaged their precision (since, they felt, 
-it was better to silent than wrong). Later on, once
-those contractors had acquired a reputation of being insightful members of the team,
-they improved their precision scores (even if it means some more false alarms).
-\ei
-Accordingly, this paper does not assume that (e.g.) minimizing false alarms is 
-more important than maximizing   precision. Such a determination 
-depends on   business conditions.
-Rather, what we can  show  examples where  changing  optimization goals can also change 
-the conclusions made from that learner on that data. More generally, we caution that it is 
-important not to overstate  empirical results from  analytics.
-Rather, those results need to be expressed {\em along with} the context within which they are
-relevant (and by ``context'', we mean the optimization goal).
 
 
 \subsection{Tuning: Important and Ignored}
@@ -523,7 +458,74 @@ for anyone building defect predictors.
 % The rest of this paper repeats the analysis of this section, but for 
 % more complex learners.
  
+ \subsection{You Can't Always Get What You Want}\label{sect:goals}
  
+In the following, we present tuning as a multi-objective optimization problem.
+With such optimizations,  it is not always possible to optimize for every goal.
+For example, the following text does not
+show results for tuning on recall
+or false alarms since optimizing {\em only} for those goals can lead
+to some undesirable side effects:
+\bi
+\item
+{\em Recall} reports the percentage of  predictions that are actual examples of  what we are looking for.
+When we tune for {\em recall}, we can achieve near
+100\% recall-- but the cost of a near 100\% false alarms.
+\item
+{\em False alarms} is the percentage of other examples that are reported  (by the learner)
+to be part of the targeted examples.
+When we tune for {\em false alarms}, we 
+can achieve near zero percent false alarm rates by effectively turning off
+the detector (so the  recall falls to nearly zero).
+\ei
+Accordingly,  this paper  explores performance measures that comment on all 
+target classes: see the  precision and ``F'' measures discussed below: see {\em Optimization Goals}.
+That said, we are sometimes asked what good is a learner if it optimizers for (say) precision
+at the expense of (say) recall. 
+
+Our reply is that software engineering is a very diverse enterprise
+and that different kinds of development need to optimize for different goals
+(which may not necessarily be ``optimize for recall''):
+\bi
+\item
+Anda, Sjoberg and Mockus are concerned with {\em reproducibility}  and so
+assess their models using the the ``coefficient of variation'' $C\frac{stddev}{mean}$) ~\cite{anda09}.
+\item
+Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12} are concerned with reducing the work load associated with someone
+else reading a learned model, then applying it. Hence, they assess their models using  {\em reward}; i.e.   the fewest lines of code
+  containing the most bugs.
+\item
+Yin et al. are concerned about
+ {\em incorrect bug fixes}; i.e. those that require subsequent work in order to complete the bug fix.
+These bugs occur  when (say) developers try to fix parts of the code
+where they have very little experience~\cite{yin11}.  Hence, they assess a learned
+model using a measure that selects for  the most number of bugs in regions that {\em the most programmers have worked with before}.
+\item
+For safety critical applications, high false alarm rates are  acceptable if the cost
+of overlooking  critical issues outweighs the inconvenience of   inspecting a few more
+modules. 
+\item
+When rushing a product to market,  there is a business case to 
+avoid the extra rework associated with false alarms.  In that business context, 
+managers might be willing to lower the recall somewhat in order to minimize the false alarms.
+\item
+When the second author worked with contractors at  NASA's software independent verification
+and validation facility, he found  new contractors  
+only reported issues that were most certainly important defects; i.e. they minimized
+  false alarms even if that damaged their precision (since, they felt, 
+it was better to silent than wrong). Later on, once
+those contractors had acquired a reputation of being insightful members of the team,
+they improved their precision scores (even if it means some more false alarms).
+\ei
+Accordingly, this paper does not assume that (e.g.) minimizing false alarms is 
+more important than maximizing   precision. Such a determination 
+depends on   business conditions.
+Rather, what we can  show  examples where  changing  optimization goals can also change 
+the conclusions made from that learner on that data. More generally, we caution that it is 
+important not to overstate  empirical results from  analytics.
+Rather, those results need to be expressed {\em along with} the context within which they are
+relevant (and by ``context'', we mean the optimization goal).
+
 
 \subsection{Notes on Defect Prediction}
 
@@ -580,10 +582,10 @@ it offers an interesting case study on the benefits of tuning.
   \centering
 	\begin{tabular}{|c|c|c|c|l|}
 	\cline{1-5}
-	\begin{tabular}[c]{@{}c@{}}Learner \\ Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
+	\begin{tabular}[c]{@{}c@{}}Learner Name\end{tabular} & Parameters & Default &\begin{tabular}[c]{@{}c@{}}Tuning\\ Range\end{tabular}& 
 \multicolumn{1}{c|}{Description} \\ \hline
- 	\multirow{8}{*}{%\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}
- 	WHERE} 
+ 	\multirow{8}{*}{\begin{tabular}[c]{@{}c@{}}Where-based\\ Learner\end{tabular}}
+%  	WHERE-based  Learner} 
 	& threshold & 0.5 &[0.01,1]& The value to determine defective or not .\\ \cline{2-5} 
 	& infoPrune & 0.33 &[0.01,1]& The percentage of features to consider for the best 
 split to build its final decision tree. \\ \cline{2-5} 
@@ -620,8 +622,8 @@ internal node. \\ \cline{2-5}
 node. \\ \cline{2-5} 
 	 &  n\_estimators & 100 & [50,150]&The number of trees in the forest.\\ \cline{2-5}
 	 \hline 
-% Logistic\\ Regression&\multicolumn{4}{c|}{This study uses untuned LR in order to check
-% a conclusion of~\cite{hall11}. }\\\hline
+Logistic Regression&\multicolumn{4}{c|}{This study uses untuned LR in order to check
+a conclusion of~\cite{hall11}. }\\\hline
 
 	\end{tabular}
     \caption {List of parameters tuned by this paper.}
@@ -935,7 +937,7 @@ consecutive releases  (where release $i+1$ was built after release $i$). When tu
  
  To be fair for the untuned learner, the {\em first} and {\em second} releases used in tuning experiments
  will be combined as the training data to build a model. Then the performance of this untuned learner 
- will be evaluated by the same {\em third} release.
+ will be evaluated by the same {\em third} release as in the tuning experiment.
  
 % This approach ensures   all treatments 
 % are assessed on the same tests. Note that we did consider
@@ -1025,8 +1027,10 @@ and \tab{fbars} (right) between tuned and untuned learners. Tuning improves perf
  
  
 \tab{precisionbars} and \tab{fbars} show the
-the specific values seen before and after tuning (two separate experiments with two different tuning goals: {\em precision} and {\em ``F''}). 
-For each data set, the maximum precision or F values for each data set are shown in {\bf bold}.
+the specific values seen before and after tuning with {\em precision}
+and {\em ``F''} as different optimization goals(the corresponding  ``F'' and precision values for
+\tab{precisionbars} and \tab{fbars} are not provided for the space limitation).
+For each data set, the maximum precision or ``F'' values for each data set are shown in {\bf bold}.
 As might have been
  predicted by Lessmann et al.~\cite{lessmann2008benchmarking}, 
 untuned CART is indeed the worst learner (only one of its
@@ -1255,7 +1259,7 @@ we tune an algorithm.
 
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
-% \centering
+\centering
   \begin{tabular}{c|p{1in}|p{1in}}
     \multicolumn{1}{c|}{ Data set}  &   \multicolumn{1}{c|}{Precision} & \multicolumn{1}{c}{F} \\ \hline 
  \multirow{2}{*}{antV0} & {\bf rfc} &  {\bf None} \\
@@ -1388,7 +1392,7 @@ for defect predictors and using DE.
 \begin{table}[!t]
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
-% \centering
+ \centering
   \begin{tabular}{c|c c|cc}
     &   \multicolumn{2}{c|}{Precision} & \multicolumn{2}{c}{F} \\ \hline 
     Learner & CART  & WHERE & CART & WHERE \\
@@ -1400,9 +1404,9 @@ for defect predictors and using DE.
 \end{table}
 
 \begin{figure}[!t]
-% \begin{center}
+\begin{center}
 \includegraphics[width=1.5in]{./eps/features_precision.eps}\includegraphics[width=1.5in]{./eps/features_F.eps}
-%  \end{center}
+\end{center}
 \caption{Four representative tuning values in WHERE with  precision and F-measure as the tuning goal, respectively.   }\label{fig:features}
  \end{figure}
 
@@ -1897,7 +1901,7 @@ The work has partially funded by a National Science Foundation CISE CCF award \#
 %   \caption{Parameters tuned on different models over the objective of ``F''.}\label{tab:fselect}
 % \end{table*}
 
-
+\balance
   
 
 \end{document}
