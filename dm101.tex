@@ -40,18 +40,74 @@ learn where the probability of software defects is highest.
 The rest of this section argues that such defect predictors are   {\em easy to
 use}, {\em widely-used}, and {\em useful} to use.
 
+
+\begin{table*}[t]
+\renewcommand{\baselinestretch}{0.8}\begin{center}
+{\scriptsize
+\begin{tabular}{c|l|p{4.7in}}
+amc & average method complexity & e.g. number of JAVA byte codes\\\hline
+avg\_cc & average McCabe & average McCabe's cyclomatic complexity seen
+in class\\\hline
+ca & afferent couplings & how many other classes use the specific
+class. \\\hline
+cam & cohesion amongst classes & summation of number of different
+types of method parameters in every method divided by a multiplication
+of number of different method parameter types in whole class and
+number of methods. \\\hline
+cbm &coupling between methods &  total number of new/redefined methods
+to which all the inherited methods are coupled\\\hline
+cbo & coupling between objects & increased when the methods of one
+class access services of another.\\\hline
+ce & efferent couplings & how many other classes is used by the
+specific class. \\\hline
+dam & data access & ratio of the number of private (protected)
+attributes to the total number of attributes\\\hline
+dit & depth of inheritance tree &\\\hline
+ic & inheritance coupling &  number of parent classes to which a given
+class is coupled (includes counts of methods and variables inherited)
+\\\hline
+lcom & lack of cohesion in methods &number of pairs of methods that do
+not share a reference to an instance variable.\\\hline
+locm3 & another lack of cohesion measure & if $m,a$ are  the number of
+$methods,attributes$
+in a class number and $\mu(a)$  is the number of methods accessing an
+attribute, 
+then
+$lcom3=((\frac{1}{a} \sum_j^a \mu(a_j)) - m)/ (1-m)$.
+\\\hline
+loc & lines of code &\\\hline
+max\_cc & maximum McCabe & maximum McCabe's cyclomatic complexity seen
+in class\\\hline
+mfa & functional abstraction & number of methods inherited by a class
+plus number of methods accessible by member methods of the
+class\\\hline
+moa &  aggregation &  count of the number of data declarations (class
+fields) whose types are user defined classes\\\hline
+noc &  number of children &\\\hline
+npm & number of public methods & \\\hline
+rfc & response for a class &number of  methods invoked in response to
+a message to the object.\\\hline
+wmc & weighted methods per class &\\\hline
+\rowcolor{lightgray}
+defect & defect & Boolean: where defects found in post-release bug-tracking systems.
+\end{tabular}
+}
+\end{center}
+\caption{OO measures used in our defect data sets.}\label{tab:ck}
+\end{table*}
+
+
 {\em Easy to use:} Static code attributes can be automatically collected, even for very large systems~\cite{nagappan05}.
 Other methods, like  manual code reviews, are far slower and far more labor-intensive.
 For example, depending on the review methods, 8 to 20 LOC/minute can be
 inspected and this effort repeats for all members of the review team,
 which can be as large as four or six people~\cite{me02f}. 
-
 {\em Widely used:}  Researchers and industrial practitioners  use static attributes to guide software 
 quality predictions.
  Defect prediction models have been reported
   at Google~\cite{lewis13}.
 Verification and validation (V\&V) textbooks
-(\cite{rakitin01}) advise using static code complexity attributes
+\cite{rakitin01} advise using static code complexity attributes
 to decide which modules are worth manual inspections.  
 
 
@@ -60,7 +116,7 @@ Defect predictors often  find the location of  70\% (or more)
 of the defects in code~\cite{me07b}.
 Defect predictors have some level of generality:
 predictors learned at NASA~\cite{me07b} have also been found useful elsewhere
-(e.g. in Turkey~\cite{tosun10,tosun09}.
+(e.g. in Turkey~\cite{tosun10,tosun09}).
 The success of this method in  predictors in finding bugs is   markedly
 higher than other currently-used
 industrial
@@ -68,7 +124,7 @@ methods such as manual code reviews. For example,
 a  panel at {\em IEEE Metrics
 2002}~\cite{shu02} concluded that manual software  reviews can find ${\approx}60\%$ 
 of defects.
-In other work, 
+In another work, 
 Raffo documents the typical    defect detection capability of
 industrial review methods:   around 50\%
  for full Fagan inspections~\cite{fagan76} to
