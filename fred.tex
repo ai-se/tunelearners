@@ -1,0 +1,11 @@
+Not only do static code defect predictors perform well compared to manual methods,
+they also are competitive with certain automatic methods.
+A recent study at ICSE'14, Rahman et al.~\cite{rahman14:icse} compared
+(a) static code analysis tools FindBugs, Jlint, and Pmd and (b)
+static code defect predictors
+(which they called ``statistical defect prediction'') built using logistic regression.
+They found  no significant differences in the cost-effectiveness
+of these  approaches. Given this equivalence, it is significant to note that 
+static code defect prediction can be quickly adapted to new languages by building lightweight
+parsers that find   information like \tab{ck}. The same is not true for   static code analyzers-- these need  extensive modification before they can be used on new
+languages.
