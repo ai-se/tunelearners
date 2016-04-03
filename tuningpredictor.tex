@@ -83,7 +83,7 @@
 \ead{tim.menzies@gmail.com}
 \author{Xipeng Shen}
 \ead{ xshen5@ncsu.edu}
-\cortext[cor1]{Corresponding author: Tel.:+1 304-376-2859 (Tim Menzies)}
+\cortext[cor1]{Corresponding author: Tel:19195345251(Wei)}
 \address{Department of Computer Science, North Carolina State University, Raleigh, NC, USA}
 
 
@@ -96,16 +96,20 @@
 % \thispagestyle{plain}
 % \pagestyle{plain}
 \begin{abstract}
-\textbf{Context:} Data miners have been widely used to generate defect predictors from static code measures. Static code defect predictors perform well compared to manual methods, and they are easy to use and useful to use.  \\
-\textbf{Objective:} One of the ``black arts'' of data mining is setting the tuning that control the miner. We offer a simple, automatic, and very effective  method for finding those tunings.\\
-\textbf{Method:} For each experiment with different data sets, we run differential evolution as an optimizer to explore the tuning space as the first step and  fit the data miners with the best tunings afterwards.\\
+\textbf{Context:} Data miners have been widely used in
+software engineering to, say,  generate defect predictors from static code measures. Such static code defect predictors perform well compared to manual methods, and they are easy to use and useful to use.  But 
+one of the ``black arts'' of data mining is setting the tunings that control the miner. \\
+\textbf{Objective:} We seek  simple, automatic, and very effective  method for finding those tunings.\\
+\textbf{Method:} For each experiment with different data sets (from open source JAVA systems), we ran differential evolution as an optimizer to explore the tuning space
+(as a first step) then tested the tunings
+using hold-out data.\\
 \textbf{Results:} Contrary to our prior expectations, we found these tunings
- was remarkably simple: it only required tens, not thousands, of attempts
- to obtain very good results.For example, when  learning software defect predictors, this  method can quickly
+ were remarkably simple: it only required tens, not thousands, of attempts
+ to obtain very good results. For example, when  learning software defect predictors, this  method can quickly
  find tunings  that  alter detection  precision
  from 0\% to 60\%. \\
-\textbf{Conclusion:} Given that (1)~the improvements are so large, and (2)~the tuning is so simple,
-these results prompt for a change to standard methods in software analytics.
+\textbf{Conclusion:} Since the (1)~the improvements are so large, and (2)~the tuning is so simple, we need 
+to change  standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
 {\em without}  conducting a tuning optimization study.
@@ -158,7 +162,7 @@ Also, we suspected that
 tuning would take so long time and be so CPU intensive that the benefits gained   would not be worth effort.
 
 The results of this paper show that the above points are
-false,  at least for
+false since, at least for
 defect prediction from  code attributes:
 \be
 \item
@@ -232,8 +236,7 @@ static code defect predictors, tuning is easy and fast.
 
 
 \subsection{Tuning: Important and Ignored}
-Having made the business case for tuning with respect to the business context,
-we now show that tuning is an under-explored area in   SE.
+This section argues that   tuning is an under-explored software analytics-- particularly in the apparently  well-explored field of defect prediction.
 
 In  other fields, the impact of tuning is well understood~\cite{Bergstra2012}. 
 Yet issues of tuning  are rarely or poorly addressed
@@ -460,8 +463,15 @@ for anyone building defect predictors.
  
  \subsection{You Can't Always Get What You Want}\label{sect:goals}
  
-In the following, we present tuning as a multi-objective optimization problem.
-With such optimizations,  it is not always possible to optimize for every goal.
+ Having made the case that tuning needs to be explored more,
+ but before we get into the technical details of this
+ paper, this section discusses some
+ general matters about setting goals during tuning
+ experiments.
+ 
+ This paper characterizes tuning as an optimization problem (how to change the settings on the learner
+ in order to best improve the output).
+With such optimizations,  it is not always possible to optimize for all goals at the same time.
 For example, the following text does not
 show results for tuning on recall
 or false alarms since optimizing {\em only} for those goals can lead
@@ -518,20 +528,25 @@ those contractors had acquired a reputation of being insightful members of the t
 they improved their precision scores (even if it means some more false alarms).
 \ei
 Accordingly, this paper does not assume that (e.g.) minimizing false alarms is 
-more important than maximizing   precision. Such a determination 
+more important than maximizing   precision or recall. Such a determination 
 depends on   business conditions.
+
 Rather, what we can  show  examples where  changing  optimization goals can also change 
 the conclusions made from that learner on that data. More generally, we caution that it is 
 important not to overstate  empirical results from  analytics.
-Rather, those results need to be expressed {\em along with} the context within which they are
+Those results need to be expressed {\em along with} the context within which they are
 relevant (and by ``context'', we mean the optimization goal).
 
 
 \subsection{Notes on Defect Prediction}
 
 
-This section is our standard introduction to defect prediction~\cite{me15:book1},
-plus    some new results from Rahman et al.~\cite{rahman14:icse}. 
+This section discusses defect prediction,
+which is the particular
+task explored by our optimizers.
+Note that this section repeats much of 
+our standard introduction to defect prediction~\cite{me15:book1},
+as well as presenting    some new results from Rahman et al.~\cite{rahman14:icse}. 
  
 
 
@@ -827,7 +842,8 @@ In the following description,
 \renewcommand{\baselinestretch}{0.8}
 \scriptsize
 \centering
-  \begin{tabular}{p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}}\hline
+%   \begin{tabular}{p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}p{0.75cm}}\hline
+  \begin{tabular}{c c c c c c c c c c } \hline
   Dataset &antV0&antV1&antV2&camelV0&camelV1&ivy&jeditV0&jeditV1&jeditV2
 \\\hline
   training &20/125 &40/178 &32/293 &13/339 &216/608 &63/111 &90/272 &75/306 &79/312
@@ -1014,7 +1030,7 @@ made by Hall et al.~\cite{hall11}.
 
 \fig{deltas} says  that the answer to RQ1 is ``yes''-- tuning  has a positive effect on performance scores. This figure sorts
  deltas in the precision and the F-measure    between tuned and untuned learners. Our reading of this
-figure is that, overall, tuning rarely makes performance   worse and usually can make it much better. 
+figure is that, overall, tuning rarely makes performance   worse and often can make it much better. 
  
 
 \begin{figure}[!t]
