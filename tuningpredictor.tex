@@ -108,7 +108,7 @@ using hold-out data.\\
  to obtain very good results. For example, when  learning software defect predictors, this  method can quickly
  find tunings  that  alter detection  precision
  from 0\% to 60\%. \\
-\textbf{Conclusion:} Since the (1)~the improvements are so large, and (2)~the tuning is so simple, we need 
+\textbf{Conclusion:} Since (1)~the improvements are so large, and (2)~the tuning is so simple, we need 
 to change  standard methods in software analytics.
 At least for defect prediction, 
 it is no longer enough to just run a data miner and present the result
@@ -283,12 +283,12 @@ Every grid has ``gaps'' between each grid division which means
 that a supposedly rigorous grid search can still miss
 important configurations~\cite{Bergstra2012}. 
 Bergstra and Bengio~\cite{Bergstra2012} comment that for most data sets only a few of the tuning parameters really matter-- which means that
-much of the runtimes associated with grid search is actually wasted.
+much of the runtime associated with grid search is actually wasted.
 Worse still, Bergstra and Bengio  comment that 
 the 
 important tunings are   different   for different
 data sets-- a 
- phenomenon makes grid search a poor choice for configuring data mining
+ phenomenon that makes grid search a poor choice for configuring data mining
  algorithms for new data sets. 
  
 
@@ -480,7 +480,7 @@ to some undesirable side effects:
 \item
 {\em Recall} reports the percentage of  predictions that are actual examples of  what we are looking for.
 When we tune for {\em recall}, we can achieve near
-100\% recall-- but the cost of a near 100\% false alarms.
+100\% recall-- but at the cost of a near 100\% false alarms.
 \item
 {\em False alarms} is the percentage of other examples that are reported  (by the learner)
 to be part of the targeted examples.
@@ -490,7 +490,7 @@ the detector (so the  recall falls to nearly zero).
 \ei
 Accordingly,  this paper  explores performance measures that comment on all 
 target classes: see the  precision and ``F'' measures discussed below: see {\em Optimization Goals}.
-That said, we are sometimes asked what good is a learner if it optimizers for (say) precision
+That said, we are sometimes asked what good is a learner if it optimizes for (say) precision
 at the expense of (say) recall. 
 
 Our reply is that software engineering is a very diverse enterprise
@@ -499,7 +499,7 @@ and that different kinds of development need to optimize for different goals
 \bi
 \item
 Anda, Sjoberg and Mockus are concerned with {\em reproducibility}  and so
-assess their models using the the ``coefficient of variation'' $C\frac{stddev}{mean}$) ~\cite{anda09}.
+assess their models using the the ``coefficient of variation'' ($CV = \frac{stddev}{mean}$) ~\cite{anda09}.
 \item
 Arisholm~\&~Briand~\cite{arisholm06},  Ostrand \& Weyeuker~\cite{ostrand04} and Rahman et al.~\cite{rahman12} are concerned with reducing the work load associated with someone
 else reading a learned model, then applying it. Hence, they assess their models using  {\em reward}; i.e.   the fewest lines of code
@@ -523,7 +523,7 @@ When the second author worked with contractors at  NASA's software independent v
 and validation facility, he found  new contractors  
 only reported issues that were most certainly important defects; i.e. they minimized
   false alarms even if that damaged their precision (since, they felt, 
-it was better to silent than wrong). Later on, once
+it was better to be silent than wrong). Later on, once
 those contractors had acquired a reputation of being insightful members of the team,
 they improved their precision scores (even if it means some more false alarms).
 \ei
@@ -656,7 +656,7 @@ When we say a learner is used ``off-the-shelf'', we mean
 that they use the defaults shown in \tab{parameters}. 
 
 As to the value of those defaults, it could be argued that these defaults are 
-not the best  parameters needed for practical defect prediction.
+not the best  parameters for practical defect prediction.
 That said,  prior to this paper, two things were true:
 \bi
 \item 
@@ -725,25 +725,27 @@ each time using some random subset of
 the attributes. 
 \item
 When building the initial cluster tree, WHERE projects the data on to a dimension it synthesizes from the raw data using
-a process analogous to principle component analysis\footnote{
-PCA  synthesises  new
-attributes $e_i, e_2,...$
-that extends across the dimension of greatest  variance in the data  with attributes $d$.  
-This process  combines
-redundant  variables into a smaller set of variables  (so $e \ll d$) since those
-redundancies become (approximately) parallel lines
-in $e$ space. For all such redundancies \mbox{$i,j \in d$}, we 
-can ignore $j$ 
-since effects that change over $j$ also
-change in the same way over $i$.
-PCA is also useful for skipping over noisy variables from $d$-- these
-variables are effectively ignored since    they  do not contribute to the variance in the data.}.
+a process analogous to principle component analysis~\cite{jolliffe2002principal}
+
+% \footnote{
+% PCA  synthesises  new
+% attributes $e_i, e_2,...$
+% that extends across the dimension of greatest  variance in the data  with attributes $d$.  
+% This process  combines
+% redundant  variables into a smaller set of variables  (so $e \ll d$) since those
+% redundancies become (approximately) parallel lines
+% in $e$ space. For all such redundancies \mbox{$i,j \in d$}, we 
+% can ignore $j$ 
+% since effects that change over $j$ also
+% change in the same way over $i$.
+% PCA is also useful for skipping over noisy variables from $d$-- these
+% variables are effectively ignored since    they  do not contribute to the variance in the data.}.
 WHERE  divides  at the median point of that projection.
 On recursion,
 this generates the initial clustering tree, the leaves of which are clusters of  very similar examples. After that, when building 
 the final decision tree, WHERE pretends its clusters are ``classes'', then 
-asks the InfoGain of the
-Fayyad-Irani discretizer~\cite{FayIra93Multi}, to rank the attriubutes, where {\em infoPrune} is used.
+asks the InfoGain algorithm of the
+Fayyad-Irani discretizer~\cite{FayIra93Multi}, to rank the attributes, where {\em infoPrune} is used.
 WHERE's final decision tree generator then ignores everything except the top   {\em infoPrune} percent of the sorted
 attributes.
 \ei
@@ -767,7 +769,7 @@ After that, WHERE will only split data if the mean performance scores of the two
 is ``trivially small'' (where ``trivially small'' is set by the   {\em wriggle} parameter). 
 \item
 WHERE's   {\em tree\_prune} setting controls how   
-WHERE prunes back superflous parts of the final decision tree. 
+WHERE prunes back superfluous parts of the final decision tree. 
 If a decision sub-tree and its parent have the same 
 majority cluster
 (one that occurs most frequently), then if {\em tree\_prune} is enabled, we prune that decision sub-tree.
@@ -1169,7 +1171,7 @@ models learned by Random
 Forest model would take up multiple pages of output.}.
 \ee
 Given tuning, how stable are these  conclusions?
-Before answering issue, we digress for two comments.
+Before answering this issue, we digress for two comments.
 
 
 
@@ -1190,7 +1192,7 @@ Lessmann et al. and Hall et al., it needs to be said that  their analysis  was
 excellent and exemplary given the state-of-the-art of the tools used when those papers were written.  
 While Hall et al. did not perform any new experiments, 
 their
-summarization of so many defect prediction papers have not been equalled
+summarization of so many defect prediction papers has not been equalled
 before (or since).
 As to the Lessmann et al. paper, they  compared
 22 data miners using various   data sets (mostly from NASA)~\cite{lessmann2008benchmarking}.
@@ -1217,7 +1219,7 @@ the recommendations of those papers.
  untuned Random
 Forests performs comparatively worse than
  Logistic Regression. Specifically, untuned
- Random Forest performs worse than Linear regression in in 13 out of   17 data sets. 
+ Random Forest performs worse than Logistic regression in  13 out of   17 data sets. 
 \item
 However, it turns out that advice is sensitive to the tunings
 used with Random Forest. After tuning, we find that tuned Random Forest
@@ -1235,7 +1237,7 @@ terms of precision and F-measure, respectively. Prior to tuning experiments, tho
 numbers are $\frac{5}{17}$ and $\frac{1}{17}$. Results from the non-parametric
 Kolmogorov-Smirnov(KS) Test show that the performance 
 scores of tuned CART and tuned Random Forest are not statistically different.
-Note that Random Forest is  not significantly better than CART, would not have been
+Note that Random Forest is  not significantly better than CART, which would not have been
 predicted by   Lessmann et al.
   
 
@@ -1516,7 +1518,7 @@ for defect predictors and using DE.
 %     xercesV1 & 50 / 794.50 & 13.37 & 50 / 8.24 & 0.15 & 60 / 14.54 & 0.38\\
 
 %   \end{tabular}
-%   \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for  precision.  }\label{tab:etimes}
+%   \caption{Evaluations/runtime and runtime for tuned and default learners(in sec), optimizing for  precision.  }\label{tab:etimes}
 % \end{table*}
 % %%%%time for F %%%%%%
 % \begin{table*}[!ht]
@@ -1545,7 +1547,7 @@ for defect predictors and using DE.
 %     xercesV1 & 50 / 751.92 & 12.98 & 60 / 9.28 & 0.16 & 50 / 12.69 & 0.38\\
 
 %   \end{tabular}
-%   \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for F-measure.  }\label{tab:ftimes}
+%   \caption{Evaluations/runtime and runtime for tuned and default learners(in sec), optimizing for F-measure.  }\label{tab:ftimes}
 % \end{table*}
 
 
@@ -1577,7 +1579,7 @@ for defect predictors and using DE.
     xercesV0 & 60 / 136.87 & 1.98 & 80 / 9.17 & 0.10 & 70 / 14.17 & 0.22\\
     xercesV1 & 80 / 1173.92 & 12.78 & 60 / 10.47 & 0.16 & 50 / 18.27 & 0.40\\
   \end{tabular}
-  \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for precision.}
+  \caption{Evaluations/runtime and runtime for tuned and default learners(in sec), optimizing for precision.}
   \label{tab:etimes}
 \end{table*}
 
@@ -1609,7 +1611,7 @@ for defect predictors and using DE.
     xercesV0 & 80 / 178.49 & 2.02 & 60 / 7.47 & 0.11 & 80 / 17.31 & 0.28\\
     xercesV1 & 80 / 1370.89 & 14.42 & 60 / 11.07 & 0.19 & 80 / 25.27 & 0.46\\
   \end{tabular}
-  \caption{Evaluations/runtimes and runtimes for tuned and default learners(in sec), optimizing for F-Measure.}
+  \caption{Evaluations/runtime and runtime for tuned and default learners(in sec), optimizing for F-Measure.}
 \label{tab:ftimes}
 \end{table*}
 
@@ -1620,9 +1622,9 @@ for defect predictors and using DE.
 \subsection{RQ5: Is Tuning Impractically Slow?}\label{sect:fast}
  
  
-The number of evaluations/runtimes used by our optimizers is shown in \tab{etimes}
+The number of evaluations/runtime used by our optimizers is shown in \tab{etimes}
 and \tab{ftimes}.
-WHERE's runtimes are slower than CART and Random Forest since WHERE has yet to benefit from decades
+WHERE's runtime are slower than CART and Random Forest since WHERE has yet to benefit from decades
 of implementation experience with these older algorithms. For example, SciKitLearn's  CART and Random Forest
  make extensive use of an underlying C library whereas WHERE is a purely interpreted Python.
 
